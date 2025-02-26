@@ -8,15 +8,11 @@ pygame.init()
 
 #tạo kích thước màn hình
 WIDTH, HEIGHT = 890, 850
-os.environ['SDL_VIDEO_CENTERED'] = '1'
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Pacman with Tom and Jerry")
 font = pygame.font.Font(None, 20)
 
 GRID_SIZE = 30  # Kích thước mỗi ô vuông
-#tốc độ FPS
-timer = pygame.time.Clock()
-FPS = 60
 PI = math.pi
 
 #chọn level 1
@@ -36,16 +32,3 @@ def draw_board():
                 pygame.draw.circle(screen, 'white', (x + GRID_SIZE // 2, y + GRID_SIZE // 2), 5)
             elif boards[row][col] == 3:
                 pygame.draw.circle(screen, 'yellow', (x + GRID_SIZE // 2, y + GRID_SIZE // 2), 10)
-
-running = True
-while running:
-    timer.tick(FPS)
-    screen.fill('black')
-    draw_board()
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-    
-    pygame.display.flip()
-pygame.quit()
