@@ -1,6 +1,9 @@
 import pygame
 import os
-from BoardGame import draw_board2, screen, draw_board1, COLORS
+from BoardGame import draw_board2, screen, draw_board1
+from board_and_color import COLORS
+from menu_functionGame import menu, level_menu
+
 
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 
@@ -8,16 +11,20 @@ os.environ['SDL_VIDEO_CENTERED'] = '1'
 timer = pygame.time.Clock()
 FPS = 60
 
-running = True
-while running:
-    timer.tick(FPS)
-    screen.fill('black')
-    draw_board1()
-    #draw_board2()
+def main():
+    while True:
+        timer.tick(FPS)
+        screen.fill('black')
+        #draw_board1()
+        #draw_board2()
+        menu()
+        #level_menu()
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-    
-    pygame.display.flip()
-pygame.quit()
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+        
+        pygame.display.flip()
+    pygame.quit()
+
+main()

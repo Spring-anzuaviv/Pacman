@@ -1,4 +1,4 @@
-from board import boards2, boards1
+from board_and_color import boards2, boards1, COLORS
 import pygame
 import math
 import os
@@ -15,16 +15,6 @@ font = pygame.font.Font(None, 20)
 GRID_SIZE = 26  # Kích thước mỗi ô vuông
 PI = math.pi
 
-COLORS = {
-    "TOM_GRAY": (166, 166, 166),
-    "JERRY_BROWN": (156, 107, 48),  # Tai và bụng Jerry
-    "BELLY_WHITE": (242, 230, 206), 
-    "BACKGROUND_BLUE": (0, 90, 141),  # Màu nền vintage
-    "LOGO_RED": (224, 60, 49),  # Màu chữ logo
-    "VINTAGE_GREEN": (124, 158, 143),  # Màu nội thất
-    "Brown": (204, 153, 0)
-}
-
 #chọn level 1 - 5
 def draw_board1():
     maze_width = len(boards1[0]) * GRID_SIZE
@@ -36,11 +26,11 @@ def draw_board1():
         for col in range(len(boards1[row])):
             x, y = offset_x + col * GRID_SIZE, offset_y + row * GRID_SIZE
             if boards1[row][col] == 1:
-                pygame.draw.rect(screen, 'pink', (x, y, GRID_SIZE, GRID_SIZE))
+                pygame.draw.rect(screen, COLORS["Pink"], (x, y, GRID_SIZE, GRID_SIZE))
             elif boards1[row][col] == 2:
-                pygame.draw.circle(screen, 'white', (x + GRID_SIZE // 2, y + GRID_SIZE // 2), 5)
+                pygame.draw.circle(screen, COLORS["White"], (x + GRID_SIZE // 2, y + GRID_SIZE // 2), 5)
             elif boards1[row][col] == 3:
-                pygame.draw.circle(screen, 'yellow', (x + GRID_SIZE // 2, y + GRID_SIZE // 2), 10)
+                pygame.draw.circle(screen, COLORS["Yellow"], (x + GRID_SIZE // 2, y + GRID_SIZE // 2), 10)
                 
 
 #level 6
@@ -56,8 +46,8 @@ def draw_board2():
             if boards2[row][col] == 1:
                 pygame.draw.rect(screen, COLORS["BACKGROUND_BLUE"], (x, y, GRID_SIZE, GRID_SIZE))  # Tường màu hồng
             elif boards2[row][col] == 2:
-                pygame.draw.circle(screen, 'white', (x + GRID_SIZE // 2, y + GRID_SIZE // 2), 5)  # Đường đi Pacman
+                pygame.draw.circle(screen, COLORS["White"], (x + GRID_SIZE // 2, y + GRID_SIZE // 2), 5)  # Đường đi Pacman
             elif boards2[row][col] == 3:
-                pygame.draw.circle(screen, 'red', (x + GRID_SIZE // 2, y + GRID_SIZE // 2), 10)  # Power Pellets
+                pygame.draw.circle(screen, COLORS["Red"], (x + GRID_SIZE // 2, y + GRID_SIZE // 2), 10)  # Power Pellets
             elif boards2[row][col] == 4:
                 pygame.draw.rect(screen, COLORS["Brown"], (x, y, GRID_SIZE, GRID_SIZE))  # Tường đặc biệt màu nâu
