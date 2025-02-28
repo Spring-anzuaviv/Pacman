@@ -1,4 +1,4 @@
-from board_and_color import boards2, boards1, COLORS
+from src.board_and_color import boards2, boards1, COLORS
 import pygame
 import math
 import os

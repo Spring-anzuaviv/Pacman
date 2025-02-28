@@ -2,8 +2,8 @@ import pygame
 import sys
 import os
 import time
-from board_and_color import COLORS
-from BoardGame import draw_board1, draw_board2
+from src.board_and_color import COLORS
+from src.BoardGame import draw_board1, draw_board2
 
 #khởi tạo Pygame
 pygame.init()
@@ -14,8 +14,8 @@ screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Pacman with Tom and Jerry")
 font = pygame.font.SysFont("Arial", 50)
 
-background_image1 = pygame.image.load("D:/PACMAN/Pacman/tomandjerry.png")
-background_image2 = pygame.image.load("D:/PACMAN/Pacman/pacman.png")
+background_image1 = pygame.image.load("./img/tomandjerry.png")
+background_image2 = pygame.image.load("./img/pacman.png")
 #phóng to thu nhỏ
 background_image1 = pygame.transform.scale(background_image1, (WIDTH//2.2, HEIGHT//2.2))
 background_image2 = pygame.transform.scale(background_image2, (WIDTH//1.8, HEIGHT//3))
