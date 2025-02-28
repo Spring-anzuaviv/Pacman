@@ -17,7 +17,7 @@ def main():
         screen.fill('black')
         #draw_board1()
         #draw_board2()
-        menu()
+        #menu()
         #level_menu()
 
         for event in pygame.event.get():
