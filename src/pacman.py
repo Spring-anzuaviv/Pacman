@@ -1,0 +1,6 @@
+from specification import *
+
+class Player:
+    def __init__(self): ...
+
+    def draw(self): ...
