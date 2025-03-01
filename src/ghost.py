@@ -1,5 +1,5 @@
-import pygame
-from BoardGame import screen, HEIGHT, WIDTH, boards1, GRID_SIZE
+from specification import *
+from BoardGame import screen
 class Ghost:
     def __init__(self, x_coord, y_coord, target, speed, img, direct, dead, powerup):
         self.x_pos = x_coord

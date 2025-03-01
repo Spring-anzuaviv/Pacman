@@ -1,18 +1,19 @@
+import pygame
+import sys
+import os
+import math
+#import tạm thời
+import psutil
+import time
+
+#Window
+WIDTH, HEIGHT = 1200, 900
+APP_CAPTION = r"Pacman with Tom and Jerry"
+GRID_SIZE = 26  # Kích thước mỗi ô vuông
+PI = math.pi
+
+#Game board 
 #0: empty,  1: wall,    2: path,    3:power pellets   
-
-COLORS = {
-    "BACKGROUND_BLUE": (0, 90, 141),  # Màu nền vintage
-    "Brown": (204, 153, 0),
-    "White": (255, 255, 255),
-    "Red": (244, 67, 54),
-    "Pink": (255, 192, 203),
-    "Yellow": (255, 255, 0),
-    "Green": (0, 255, 0),
-    "Black": (0,0,0), 
-    "Blue": (0, 0, 255),
-    "Purple": (128, 0, 128)
-}
-
 boards1 = [
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
     [1,2,2,2,1,2,3,2,2,2,2,2,2,2,2,2,2,2,1,2,2,2,1],
@@ -70,3 +71,17 @@ boards2 = [
     [1,2,3,2,2,2,1,2,2,2,1,2,2,2,2,2,2,2,2,2,2,2,2,2,3,2,2,2,2,2,2,2,1],
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 ]
+
+#Color
+COLORS = {
+    "BACKGROUND_BLUE": (0, 90, 141),  # Màu nền vintage
+    "Brown": (204, 153, 0),
+    "White": (255, 255, 255),
+    "Red": (244, 67, 54),
+    "Pink": (255, 192, 203),
+    "Yellow": (255, 255, 0),
+    "Green": (0, 255, 0),
+    "Black": (0,0,0), 
+    "Blue": (0, 0, 255),
+    "Purple": (128, 0, 128)
+}

@@ -1,19 +1,12 @@
-from src.board_and_color import boards2, boards1, COLORS
-import pygame
-import math
-import os
+from src.specification import *
 
 #khởi tạo Pygame
 pygame.init()
 
 #tạo kích thước màn hình
-WIDTH, HEIGHT = 1200, 790
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Pacman with Tom and Jerry")
+pygame.display.set_caption(APP_CAPTION)
 font = pygame.font.Font(None, 20)
-
-GRID_SIZE = 26  # Kích thước mỗi ô vuông
-PI = math.pi
 
 #chọn level 1 - 5
 def draw_board1():

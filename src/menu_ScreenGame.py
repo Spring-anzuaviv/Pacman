@@ -1,12 +1,5 @@
-import pygame
-import sys
-import os
-from src.board_and_color import COLORS
+from src.specification import *
 from src.BoardGame import draw_board1, draw_board2
-#import tạm thời
-import psutil
-import time
-
 
 #khởi tạo Pygame
 pygame.init()
