@@ -123,7 +123,7 @@ def screen_game(level):
         time_text = font1.render(f"Score: 0.00", True, COLORS["White"]) 
         screen.blit(time_text, (970, 120))
 
-    draw_button("Back", 1200, 750, 80, 40, COLORS["Red"], lambda: level_menu(), 32)
+    draw_button("Back", 1100, 750, 80, 40, COLORS["Red"], lambda: level_menu(), 32)
 
 #hàm này tạm thời
 def play_game(level):
@@ -165,15 +165,17 @@ def choose_level(level):
     play_game(level)
 
 def level_menu():
-    while True:
+    global screen_running
+    screen_running = True
+    while screen_running:
         screen.fill(COLORS["Black"])
-        draw_button("Level 1", 520, 200, 270, 50, COLORS["Pink"], lambda: choose_level(1), 50)
-        draw_button("Level 2", 520, 300, 270, 50, COLORS["Green"], lambda: choose_level(2), 50)
-        draw_button("Level 3", 520, 400, 270, 50, COLORS["Blue"], lambda: choose_level(3), 50)
-        draw_button("Level 4", 520, 500, 270, 50, COLORS["Yellow"], lambda: choose_level(4), 50)
-        draw_button("Level 5", 520, 600, 270, 50, COLORS["BACKGROUND_BLUE"], lambda: choose_level(5), 50)
-        draw_button("Level 6", 520, 700, 270, 50, COLORS["Purple"], lambda: choose_level(6), 50)
-        #draw_button("Back", 1200, 750, 80, 40, COLORS["Red"], lambda: choose_level(7), 32) 
+        draw_button("Level 1", 480, 120, 270, 50, COLORS["Pink"], lambda: choose_level(1), 50)
+        draw_button("Level 2", 480, 220, 270, 50, COLORS["Green"], lambda: choose_level(2), 50)
+        draw_button("Level 3", 480, 320, 270, 50, COLORS["Blue"], lambda: choose_level(3), 50)
+        draw_button("Level 4", 480, 420, 270, 50, COLORS["Yellow"], lambda: choose_level(4), 50)
+        draw_button("Level 5", 480, 520, 270, 50, COLORS["BACKGROUND_BLUE"], lambda: choose_level(5), 50)
+        draw_button("Level 6", 480, 620, 270, 50, COLORS["Purple"], lambda: choose_level(6), 50)
+        draw_button("Back", 20, 20, 80, 40, COLORS["Red"], lambda: exit_level_menu(), 32) 
 
         level_text = font.render("Choose Your Level", True, COLORS["Yellow"])
         screen.blit(level_text, (WIDTH // 2 - level_text.get_width() // 2, 50))
@@ -185,9 +187,18 @@ def level_menu():
 
         pygame.display.update()
 
+def exit_level_menu():
+    global screen_running
+    screen_running = False
+    if not screen_running:
+        menu()
+
 def start_game():
     print("START GAME")
+    global screen_running
+    screen_running = True
     level_menu()
+   
 
 def exit_game():
     pygame.quit()
@@ -195,11 +206,13 @@ def exit_game():
 
 def menu():
     #di chuyển hình
+    screen.fill(COLORS["Black"])  # Xóa màn hình cũ
     screen.blit(background_image1, (350, 30))
     screen.blit(background_image2, (320, 380))
 
-    draw_button("Start Game", 500, 650, 270, 60, COLORS["Green"], start_game, 50)
-    draw_button("Exit", 500, 750, 270, 60, COLORS["Red"], exit_game, 50)
+    draw_button("Start Game", 200, 650, 270, 60, COLORS["Green"], start_game, 50)
+    draw_button("Exit", 800, 650, 270, 60, COLORS["Red"], exit_game, 50)
 
+    pygame.display.update()  # Cập nhật màn hình menu
 
     

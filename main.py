@@ -1,5 +1,7 @@
-from src.specification import *
+import pygame
+import os
 from src.BoardGame import draw_board2, screen, draw_board1
+from src.specification import COLORS
 from src.menu_ScreenGame import menu, level_menu
 
 

@@ -7,7 +7,7 @@ import psutil
 import time
 
 #Window
-WIDTH, HEIGHT = 1200, 900
+WIDTH, HEIGHT = 1200, 850
 APP_CAPTION = r"Pacman with Tom and Jerry"
 GRID_SIZE = CELL_SIZE = 26  
 PI = math.pi
