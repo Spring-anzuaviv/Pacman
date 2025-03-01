@@ -14,6 +14,7 @@ def draw_board1():
     maze_height = len(boards1) * GRID_SIZE
     offset_x = 100
     offset_y = 100 
+    
 
     for row in range(len(boards1)):
         for col in range(len(boards1[row])):
@@ -24,7 +25,11 @@ def draw_board1():
                 pygame.draw.circle(screen, COLORS["White"], (x + GRID_SIZE // 2, y + GRID_SIZE // 2), 5)
             elif boards1[row][col] == 3:
                 pygame.draw.circle(screen, COLORS["Yellow"], (x + GRID_SIZE // 2, y + GRID_SIZE // 2), 10)
-                
+
+
+                #####################################################
+    #test ghost and pacman
+    screen.blit(GHOST_BLUE, (offset_x + 26, offset_y + 26))           
 
 #level 6
 def draw_board2():

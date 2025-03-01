@@ -5,13 +5,12 @@ from src.BoardGame import draw_board1, draw_board2
 pygame.init()
 
 #tạo kích thước màn hình
-WIDTH, HEIGHT = 1300, 900
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Pacman with Tom and Jerry")
-font = pygame.font.SysFont("timesnewroman", 50)
+pygame.display.set_caption(APP_CAPTION)
+font = pygame.font.SysFont("timesnewroman", 32)
 
-background_image1 = pygame.image.load("./img/tomandjerry.png")
-background_image2 = pygame.image.load("./img/pacman.png")
+background_image1 = pygame.image.load(MENU_LOGO_1)
+background_image2 = pygame.image.load(MENU_LOGO_2)
 #phóng to thu nhỏ
 background_image1 = pygame.transform.scale(background_image1, (WIDTH//2.2, HEIGHT//2.2))
 background_image2 = pygame.transform.scale(background_image2, (WIDTH//1.8, HEIGHT//3))

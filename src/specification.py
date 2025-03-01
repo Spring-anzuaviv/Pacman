@@ -9,10 +9,10 @@ import time
 #Window
 WIDTH, HEIGHT = 1200, 900
 APP_CAPTION = r"Pacman with Tom and Jerry"
-GRID_SIZE = 26  # Kích thước mỗi ô vuông
+GRID_SIZE = CELL_SIZE = 26  
 PI = math.pi
 
-#Game board 
+#Map
 #0: empty,  1: wall,    2: path,    3:power pellets   
 boards1 = [
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -85,3 +85,21 @@ COLORS = {
     "Blue": (0, 0, 255),
     "Purple": (128, 0, 128)
 }
+#Menu logo
+MENU_LOGO_1 = r"img/tomandjerry.png"
+MENU_LOGO_2 = r"img/pacman.png"
+
+#Pacman, ghost animations
+PACMAN_1 = pygame.transform.scale(pygame.image.load(r"img/1.png"), (CELL_SIZE, CELL_SIZE))
+PACMAN_2 = pygame.transform.scale(pygame.image.load(r"img/2.png"), (CELL_SIZE, CELL_SIZE))
+PACMAN_3 = pygame.transform.scale(pygame.image.load(r"img/3.png"), (CELL_SIZE, CELL_SIZE))
+PACMAN_4 = pygame.transform.scale(pygame.image.load(r"img/4.png"), (CELL_SIZE, CELL_SIZE))
+
+GHOST_DEAD = pygame.transform.scale(pygame.image.load(r"img/dead.png"), (CELL_SIZE, CELL_SIZE))
+GHOST_BLUE = pygame.transform.scale(pygame.image.load(r"img/blue.png"), (CELL_SIZE, CELL_SIZE))
+GHOST_PINK = pygame.transform.scale(pygame.image.load(r"img/pink.png"), (CELL_SIZE, CELL_SIZE))
+GHOST_RED = pygame.transform.scale(pygame.image.load(r"img/red.png"), (CELL_SIZE, CELL_SIZE))
+GHOST_YELLOW = pygame.transform.scale(pygame.image.load(r"img/yellow.png"), (CELL_SIZE, CELL_SIZE))
+GHOST_POWERUP = pygame.transform.scale(pygame.image.load(r"img/powerup.png"), (CELL_SIZE, CELL_SIZE))
+
+

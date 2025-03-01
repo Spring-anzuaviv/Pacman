@@ -4,8 +4,8 @@ class Ghost:
     def __init__(self, x_coord, y_coord, target, speed, img, direct, dead, powerup):
         self.x_pos = x_coord
         self.y_pos = y_coord
-        self.center_x = self.x_pos + 22
-        self.center_y = self.y_pos + 22
+        self.center_x = self.x_pos + 13
+        self.center_y = self.y_pos + 13
         self.target = target
         self.speed = speed
         self.img = img
@@ -19,9 +19,11 @@ class Ghost:
         if (not self.powerup and not self.dead):
             screen.blit(self.img, (self.x_pos, self.y_pos))
         #Power up
+        elif(self.powerup and not self.dead):
+            screen.blit(GHOST_POWERUP, (self.x_pos, self.y_pos))
         #Dead
-        #else:
-           # screen.blit(dead_img, (self.x_pos, self.y_pos))
+        else:
+           screen.blit(GHOST_DEAD, (self.x_pos, self.y_pos))
         ghost_rect = pygame.rect.Rect((self.center_x - 18, self.center_y - 18), (36, 36))
         return ghost_rect
     
@@ -34,10 +36,10 @@ class Ghost:
         #Check go up
         
 
-    #def move_bfs(self):
+    def move_bfs(self):...
         
-    #def move_dfs(self):
+    def move_dfs(self):...
 
-    #def move_ucs(self):
+    def move_ucs(self):...
 
-    #def move_astar(self):
+    def move_astar(self):...
