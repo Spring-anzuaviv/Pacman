@@ -1,5 +1,6 @@
 from src.specification import *
 from src.BoardGame import draw_board1, draw_board2
+from src.pacman import *
 
 #khởi tạo Pygame
 pygame.init()
@@ -14,7 +15,7 @@ background_image2 = pygame.image.load(MENU_LOGO_2)
 #phóng to thu nhỏ
 background_image1 = pygame.transform.scale(background_image1, (WIDTH//2.2, HEIGHT//2.2))
 background_image2 = pygame.transform.scale(background_image2, (WIDTH//1.8, HEIGHT//3))
-
+player = Player(x_coord=200, y_coord=200, target=[0, 0], speed=2, img=pacman_images, direct="right", dead=False, powerup=False, board=[])
 
 def draw_button(text, x, y, width, height, color, action=None, fontsize=int):
     pygame.draw.rect(screen, color, (x, y, width, height))
@@ -36,9 +37,11 @@ def screen_game(level):
 
     if(level == 1):
         draw_board1()
+        player.draw()
         font = pygame.font.SysFont("timesnewroman", 50, bold = True)
         level_text = font.render(f"Level {level}", True, COLORS["Pink"])
         screen.blit(level_text, (900, 20))
+        
 
         font1 = pygame.font.SysFont("timesnewroman", 32)
         time_text = font1.render(f"Search Time: 0.00 s", True, COLORS["White"]) 
@@ -52,6 +55,7 @@ def screen_game(level):
 
     elif(level == 2):
         draw_board1()
+        player.draw()
         font = pygame.font.SysFont("timesnewroman", 50, bold = True)
         level_text = font.render(f"Level {level}", True, COLORS["Green"])
         screen.blit(level_text, (900, 20))
@@ -68,6 +72,7 @@ def screen_game(level):
 
     elif(level == 3):
         draw_board1()
+        player.draw()
         font = pygame.font.SysFont("timesnewroman", 50, bold = True)
         level_text = font.render(f"Level {level}", True, COLORS["Blue"])
         screen.blit(level_text, (900, 20))
@@ -84,6 +89,7 @@ def screen_game(level):
 
     elif(level == 4):
         draw_board1()
+        player.draw()
         font = pygame.font.SysFont("timesnewroman", 50, bold = True)
         level_text = font.render(f"Level {level}", True, COLORS["Yellow"])
         screen.blit(level_text, (900, 20))
@@ -100,6 +106,7 @@ def screen_game(level):
 
     elif(level == 5):
         draw_board1()
+        player.draw()
         font = pygame.font.SysFont("timesnewroman", 50, bold = True)
         level_text = font.render(f"Level {level}", True, COLORS["BACKGROUND_BLUE"])
         screen.blit(level_text, (900, 20))
@@ -115,6 +122,7 @@ def screen_game(level):
         screen.blit(expanded_nodes_text, (850, 240))
     elif(level == 6):
         draw_board2()
+        player.draw()
         font = pygame.font.SysFont("timesnewroman", 50, bold = True)
         level_text = font.render(f"Level {level}", True, COLORS["BACKGROUND_BLUE"])
         screen.blit(level_text, (1000, 50))

@@ -94,6 +94,11 @@ PACMAN_1 = pygame.transform.scale(pygame.image.load(r"img/1.png"), (CELL_SIZE, C
 PACMAN_2 = pygame.transform.scale(pygame.image.load(r"img/2.png"), (CELL_SIZE, CELL_SIZE))
 PACMAN_3 = pygame.transform.scale(pygame.image.load(r"img/3.png"), (CELL_SIZE, CELL_SIZE))
 PACMAN_4 = pygame.transform.scale(pygame.image.load(r"img/4.png"), (CELL_SIZE, CELL_SIZE))
+pacman_images = [
+    PACMAN_1,
+    PACMAN_2,
+    PACMAN_3
+]
 
 GHOST_DEAD = pygame.transform.scale(pygame.image.load(r"img/dead.png"), (CELL_SIZE, CELL_SIZE))
 GHOST_BLUE = pygame.transform.scale(pygame.image.load(r"img/blue.png"), (CELL_SIZE, CELL_SIZE))

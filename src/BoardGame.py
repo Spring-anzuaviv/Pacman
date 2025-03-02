@@ -1,5 +1,4 @@
 from src.specification import *
-
 #khởi tạo Pygame
 pygame.init()
 
@@ -30,7 +29,7 @@ def draw_board1():
                 #####################################################
     #test ghost and pacman
     screen.blit(GHOST_BLUE, (offset_x + 26, offset_y + 26))
-    screen.blit(PACMAN_1, (offset_x + 40, offset_y + 40))           
+    #pacman được thêm vô menu_ScreenGame hàm screen_game()
 
 #level 6
 def draw_board2():
