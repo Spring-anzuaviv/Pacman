@@ -34,104 +34,111 @@ def draw_button(text, x, y, width, height, color, action=None, fontsize=int):
 
 def screen_game(level):
     screen.fill(COLORS["Black"])
+    global screen_running
+    screen_running =  True
+    while screen_running:
+        if(level == 1):
+            draw_board1()
+            player.draw()
+            font = pygame.font.SysFont("timesnewroman", 50, bold = True)
+            level_text = font.render(f"Level {level}", True, COLORS["Pink"])
+            screen.blit(level_text, (900, 20))
+            
 
-    if(level == 1):
-        draw_board1()
-        player.draw()
-        font = pygame.font.SysFont("timesnewroman", 50, bold = True)
-        level_text = font.render(f"Level {level}", True, COLORS["Pink"])
-        screen.blit(level_text, (900, 20))
-        
+            font1 = pygame.font.SysFont("timesnewroman", 32)
+            time_text = font1.render(f"Search Time: 0.00 s", True, COLORS["White"]) 
+            screen.blit(time_text, (830, 120))
 
-        font1 = pygame.font.SysFont("timesnewroman", 32)
-        time_text = font1.render(f"Search Time: 0.00 s", True, COLORS["White"]) 
-        screen.blit(time_text, (830, 120))
+            memory_text = font1.render(f"Memory Usage: 0 MB", True, COLORS["White"]) 
+            screen.blit(memory_text, (830, 180))
 
-        memory_text = font1.render(f"Memory Usage: 0 MB", True, COLORS["White"]) 
-        screen.blit(memory_text, (830, 180))
+            expanded_nodes_text = font1.render(f"Expanded Nodes: 0", True, COLORS["White"])  
+            screen.blit(expanded_nodes_text, (830, 240))
 
-        expanded_nodes_text = font1.render(f"Expanded Nodes: 0", True, COLORS["White"])  
-        screen.blit(expanded_nodes_text, (830, 240))
+        elif(level == 2):
+            draw_board1()
+            player.draw()
+            font = pygame.font.SysFont("timesnewroman", 50, bold = True)
+            level_text = font.render(f"Level {level}", True, COLORS["Green"])
+            screen.blit(level_text, (900, 20))
 
-    elif(level == 2):
-        draw_board1()
-        player.draw()
-        font = pygame.font.SysFont("timesnewroman", 50, bold = True)
-        level_text = font.render(f"Level {level}", True, COLORS["Green"])
-        screen.blit(level_text, (900, 20))
+            font1 = pygame.font.SysFont("timesnewroman", 32)
+            time_text = font1.render(f"Search Time: 0.00 s", True, COLORS["White"]) 
+            screen.blit(time_text, (830, 120))
 
-        font1 = pygame.font.SysFont("timesnewroman", 32)
-        time_text = font1.render(f"Search Time: 0.00 s", True, COLORS["White"]) 
-        screen.blit(time_text, (830, 120))
+            memory_text = font1.render(f"Memory Usage: 0 MB", True, COLORS["White"]) 
+            screen.blit(memory_text, (830, 180))
 
-        memory_text = font1.render(f"Memory Usage: 0 MB", True, COLORS["White"]) 
-        screen.blit(memory_text, (830, 180))
+            expanded_nodes_text = font1.render(f"Expanded Nodes: 0", True, COLORS["White"])  
+            screen.blit(expanded_nodes_text, (830, 240))
 
-        expanded_nodes_text = font1.render(f"Expanded Nodes: 0", True, COLORS["White"])  
-        screen.blit(expanded_nodes_text, (830, 240))
+        elif(level == 3):
+            draw_board1()
+            player.draw()
+            font = pygame.font.SysFont("timesnewroman", 50, bold = True)
+            level_text = font.render(f"Level {level}", True, COLORS["Blue"])
+            screen.blit(level_text, (900, 20))
 
-    elif(level == 3):
-        draw_board1()
-        player.draw()
-        font = pygame.font.SysFont("timesnewroman", 50, bold = True)
-        level_text = font.render(f"Level {level}", True, COLORS["Blue"])
-        screen.blit(level_text, (900, 20))
+            font1 = pygame.font.SysFont("timesnewroman", 32)
+            time_text = font1.render(f"Search Time: 0.00 s", True, COLORS["White"]) 
+            screen.blit(time_text, (850, 120))
 
-        font1 = pygame.font.SysFont("timesnewroman", 32)
-        time_text = font1.render(f"Search Time: 0.00 s", True, COLORS["White"]) 
-        screen.blit(time_text, (850, 120))
+            memory_text = font1.render(f"Memory Usage: 0 MB", True, COLORS["White"]) 
+            screen.blit(memory_text, (850, 180))
 
-        memory_text = font1.render(f"Memory Usage: 0 MB", True, COLORS["White"]) 
-        screen.blit(memory_text, (850, 180))
+            expanded_nodes_text = font1.render(f"Expanded Nodes: 0", True, COLORS["White"])  
+            screen.blit(expanded_nodes_text, (850, 240))
 
-        expanded_nodes_text = font1.render(f"Expanded Nodes: 0", True, COLORS["White"])  
-        screen.blit(expanded_nodes_text, (850, 240))
+        elif(level == 4):
+            draw_board1()
+            player.draw()
+            font = pygame.font.SysFont("timesnewroman", 50, bold = True)
+            level_text = font.render(f"Level {level}", True, COLORS["Yellow"])
+            screen.blit(level_text, (900, 20))
 
-    elif(level == 4):
-        draw_board1()
-        player.draw()
-        font = pygame.font.SysFont("timesnewroman", 50, bold = True)
-        level_text = font.render(f"Level {level}", True, COLORS["Yellow"])
-        screen.blit(level_text, (900, 20))
+            font1 = pygame.font.SysFont("timesnewroman", 32)
+            time_text = font1.render(f"Search Time: 0.00 s", True, COLORS["White"]) 
+            screen.blit(time_text, (850, 120))
 
-        font1 = pygame.font.SysFont("timesnewroman", 32)
-        time_text = font1.render(f"Search Time: 0.00 s", True, COLORS["White"]) 
-        screen.blit(time_text, (850, 120))
+            memory_text = font1.render(f"Memory Usage: 0 MB", True, COLORS["White"]) 
+            screen.blit(memory_text, (850, 180))
 
-        memory_text = font1.render(f"Memory Usage: 0 MB", True, COLORS["White"]) 
-        screen.blit(memory_text, (850, 180))
+            expanded_nodes_text = font1.render(f"Expanded Nodes: 0", True, COLORS["White"])  
+            screen.blit(expanded_nodes_text, (850, 240))
 
-        expanded_nodes_text = font1.render(f"Expanded Nodes: 0", True, COLORS["White"])  
-        screen.blit(expanded_nodes_text, (850, 240))
+        elif(level == 5):
+            draw_board1()
+            player.draw()
+            font = pygame.font.SysFont("timesnewroman", 50, bold = True)
+            level_text = font.render(f"Level {level}", True, COLORS["BACKGROUND_BLUE"])
+            screen.blit(level_text, (900, 20))
 
-    elif(level == 5):
-        draw_board1()
-        player.draw()
-        font = pygame.font.SysFont("timesnewroman", 50, bold = True)
-        level_text = font.render(f"Level {level}", True, COLORS["BACKGROUND_BLUE"])
-        screen.blit(level_text, (900, 20))
+            font1 = pygame.font.SysFont("timesnewroman", 32)
+            time_text = font1.render(f"Search Time: 0.00 s", True, COLORS["White"]) 
+            screen.blit(time_text, (850, 120))
 
-        font1 = pygame.font.SysFont("timesnewroman", 32)
-        time_text = font1.render(f"Search Time: 0.00 s", True, COLORS["White"]) 
-        screen.blit(time_text, (850, 120))
+            memory_text = font1.render(f"Memory Usage: 0 MB", True, COLORS["White"]) 
+            screen.blit(memory_text, (850, 180))
 
-        memory_text = font1.render(f"Memory Usage: 0 MB", True, COLORS["White"]) 
-        screen.blit(memory_text, (850, 180))
+            expanded_nodes_text = font1.render(f"Expanded Nodes: 0", True, COLORS["White"])  
+            screen.blit(expanded_nodes_text, (850, 240))
+        elif(level == 6):
+            draw_board2()
+            player.draw()
+            font = pygame.font.SysFont("timesnewroman", 50, bold = True)
+            level_text = font.render(f"Level {level}", True, COLORS["BACKGROUND_BLUE"])
+            screen.blit(level_text, (1000, 50))
 
-        expanded_nodes_text = font1.render(f"Expanded Nodes: 0", True, COLORS["White"])  
-        screen.blit(expanded_nodes_text, (850, 240))
-    elif(level == 6):
-        draw_board2()
-        player.draw()
-        font = pygame.font.SysFont("timesnewroman", 50, bold = True)
-        level_text = font.render(f"Level {level}", True, COLORS["BACKGROUND_BLUE"])
-        screen.blit(level_text, (1000, 50))
+            font1 = pygame.font.SysFont("timesnewroman", 32)
+            time_text = font1.render(f"Score: 0.00", True, COLORS["White"]) 
+            screen.blit(time_text, (970, 120))
 
-        font1 = pygame.font.SysFont("timesnewroman", 32)
-        time_text = font1.render(f"Score: 0.00", True, COLORS["White"]) 
-        screen.blit(time_text, (970, 120))
-
-    draw_button("Back", 1100, 750, 80, 40, COLORS["Red"], lambda: level_menu(), 32)
+        draw_button("Back", 1100, 750, 80, 40, COLORS["Red"], lambda: level_menu(), 32)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+        pygame.display.update()
 
 #hàm này tạm thời
 def play_game(level):
@@ -148,41 +155,20 @@ def play_game(level):
         #vẽ lại các obj game khi chơi
         pygame.display.update()
 
-    pygame.quit()
-    sys.exit()
-
-def choose_level(level):
-    screen.fill(COLORS["Black"])
-
-    if(level == 1):
-        draw_board1()
-    elif(level == 2):
-        draw_board1()
-    elif(level == 3):
-        draw_board1()
-    elif(level == 4):
-        draw_board1()
-    elif(level == 5):
-        draw_board1()
-    elif(level == 6):
-        draw_board2()
-    #elif(level == 7):
-    #    menu()
-
-    pygame.display.update()
-    play_game(level)
+    # pygame.quit()
+    # sys.exit()
 
 def level_menu():
     global screen_running
     screen_running = True
     while screen_running:
         screen.fill(COLORS["Black"])
-        draw_button("Level 1", 480, 120, 270, 50, COLORS["Pink"], lambda: choose_level(1), 50)
-        draw_button("Level 2", 480, 220, 270, 50, COLORS["Green"], lambda: choose_level(2), 50)
-        draw_button("Level 3", 480, 320, 270, 50, COLORS["Blue"], lambda: choose_level(3), 50)
-        draw_button("Level 4", 480, 420, 270, 50, COLORS["Yellow"], lambda: choose_level(4), 50)
-        draw_button("Level 5", 480, 520, 270, 50, COLORS["BACKGROUND_BLUE"], lambda: choose_level(5), 50)
-        draw_button("Level 6", 480, 620, 270, 50, COLORS["Purple"], lambda: choose_level(6), 50)
+        draw_button("Level 1", 480, 120, 270, 50, COLORS["Pink"], lambda: screen_game(1), 50)
+        draw_button("Level 2", 480, 220, 270, 50, COLORS["Green"], lambda: screen_game(2), 50)
+        draw_button("Level 3", 480, 320, 270, 50, COLORS["Blue"], lambda: screen_game(3), 50)
+        draw_button("Level 4", 480, 420, 270, 50, COLORS["Yellow"], lambda: screen_game(4), 50)
+        draw_button("Level 5", 480, 520, 270, 50, COLORS["BACKGROUND_BLUE"], lambda: screen_game(5), 50)
+        draw_button("Level 6", 480, 620, 270, 50, COLORS["Purple"], lambda: screen_game(6), 50)
         draw_button("Back", 20, 20, 80, 40, COLORS["Red"], lambda: exit_level_menu(), 32) 
 
         level_text = font.render("Choose Your Level", True, COLORS["Yellow"])
@@ -192,14 +178,13 @@ def level_menu():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-
         pygame.display.update()
+    
 
 def exit_level_menu():
     global screen_running
     screen_running = False
-    if not screen_running:
-        menu()
+    menu()
 
 def start_game():
     print("START GAME")
@@ -207,7 +192,6 @@ def start_game():
     screen_running = True
     level_menu()
    
-
 def exit_game():
     pygame.quit()
     sys.exit()
