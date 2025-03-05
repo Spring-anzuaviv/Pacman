@@ -204,7 +204,7 @@ def menu():
 
     draw_button("Start Game", 200, 650, 270, 60, COLORS["Green"], start_game, 50)
     draw_button("Exit", 800, 650, 270, 60, COLORS["Red"], exit_game, 50)
-
+    
     pygame.display.update()  # Cập nhật màn hình menu
 
     
