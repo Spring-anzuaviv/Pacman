@@ -1,5 +1,6 @@
 import sys
-sys.path.append("D:/Pacman/src")
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'src')))
 from src.BoardGame import draw_board2, screen, draw_board1
 from src.specification import *
 from src.ghost import *
