@@ -34,9 +34,8 @@ class Ghost:
     def draw_path(self):
         # Pacman's position changes
         print(self.path)
-
+        end = self.target
         for x, y in self.path:
-            end = self.target
             if(self.target != end):
                 self.x_pos, self.y_pos = x, y # New start
                 self.path = self.move_bfs() 
@@ -44,7 +43,8 @@ class Ghost:
             else:
                 screen.fill((0, 0, 0))  
                 draw_board1() # Màn hình cũ
-                screen.blit(self.img, (x * 26 + 100, y * 26 + 100))  
+                print((x, y))
+                screen.blit(self.img, (y * 26 + 100, x * 26 + 100))  
                 pygame.display.update()
                 time.sleep(0.5)  
 
@@ -162,9 +162,9 @@ class Ghost:
 
             for dx, dy in [(1, 0), (0, 1), (-1, 0), (0, -1)]:
                 next_x, next_y = x + dx, y + dy
-                if 0 <= next_x < len(self.map) and 0 <= next_y < len(self.map[0]) and \
-                self.map[next_x][next_y] != 1 and (next_x, next_y) not in visited:
+                if 0 <= next_x < len(self.map) and 0 <= next_y < len(self.map[0]) and self.map[next_x][next_y] != 1 and (next_x, next_y) not in visited:
                     new_path = path + [(next_x, next_y)]
+                    print(f"Checking node: ({next_x}, {next_y}), Value: {self.map[next_x][next_y]}")
 
                     if (next_x, next_y) == end:
                         elapsed_time = time.time() - start_time

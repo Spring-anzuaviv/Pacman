@@ -3,7 +3,6 @@ class Game:
     def __init__(self): ...
     # Menu screen
 
-    
     # Level 1:  Implement the Blue Ghost using Breadth-First Search (BFS) algorithm to chase Pac-Man
 
     # Level 2: Implement the Pink Ghost using the Depth-First Search (DFS) algorithm to chase Pac-Man.
