@@ -105,6 +105,8 @@ PACMAN_1 = pygame.transform.scale(pygame.image.load(r"img/1.png"), (CELL_SIZE, C
 PACMAN_2 = pygame.transform.scale(pygame.image.load(r"img/2.png"), (CELL_SIZE, CELL_SIZE))
 PACMAN_3 = pygame.transform.scale(pygame.image.load(r"img/3.png"), (CELL_SIZE, CELL_SIZE))
 PACMAN_4 = pygame.transform.scale(pygame.image.load(r"img/4.png"), (CELL_SIZE, CELL_SIZE))
+POWERUP = pygame.transform.scale(pygame.image.load(r"img/powerup.png"), (CELL_SIZE, CELL_SIZE))
+DEAD = pygame.transform.scale(pygame.image.load(r"img/dead.png"), (CELL_SIZE, CELL_SIZE))
 pacman_images = [
     PACMAN_1,
     PACMAN_2,
