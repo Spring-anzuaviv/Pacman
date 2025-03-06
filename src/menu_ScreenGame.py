@@ -15,7 +15,8 @@ background_image2 = pygame.image.load(MENU_LOGO_2)
 #phóng to thu nhỏ
 background_image1 = pygame.transform.scale(background_image1, (WIDTH//2.2, HEIGHT//2.2))
 background_image2 = pygame.transform.scale(background_image2, (WIDTH//1.8, HEIGHT//3))
-player = Player(x_coord=200, y_coord=200, target=[0, 0], speed=2, img=pacman_images, direct="right", dead=False, powerup=False, board=[])
+
+player = Player(x_coord=10+26, y_coord=10+26, target=[0, 0], speed=2, img=pacman_images, direct="right", dead=False, powerup=False, board=boards2)
 
 def draw_button(text, x, y, width, height, color, action=None, fontsize=int):
     pygame.draw.rect(screen, color, (x, y, width, height))
@@ -31,6 +32,18 @@ def draw_button(text, x, y, width, height, color, action=None, fontsize=int):
         if click[0] == 1 and action:
             action()
 
+#xử lí phím cho player ở level 6
+def handle_input():
+    # Xử lý di chuyển của Pac-Man khi nhấn các phím mũi tên
+    keys = pygame.key.get_pressed()  # Lấy trạng thái tất cả các phím
+    if keys[pygame.K_RIGHT]:
+        player.move("right")
+    elif keys[pygame.K_LEFT]:
+        player.move("left")
+    elif keys[pygame.K_UP]:
+        player.move("up")
+    elif keys[pygame.K_DOWN]:
+        player.move("down")
 
 def screen_game(level):
     screen.fill(COLORS["Black"])
@@ -125,6 +138,8 @@ def screen_game(level):
         elif(level == 6):
             draw_board2()
             player.draw()
+           # player.reset_position(10,120)
+            handle_input()
             font = pygame.font.SysFont("timesnewroman", 50, bold = True)
             level_text = font.render(f"Level {level}", True, COLORS["BACKGROUND_BLUE"])
             screen.blit(level_text, (1000, 50))

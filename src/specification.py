@@ -50,6 +50,7 @@ boards1 = [
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 ]
 
+#29x33
 boards2 = [
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
     [1,2,2,2,2,2,2,1,2,2,2,1,2,1,2,2,2,3,2,2,2,2,2,1,2,2,2,2,2,2,2,2,1],
@@ -107,7 +108,8 @@ PACMAN_4 = pygame.transform.scale(pygame.image.load(r"img/4.png"), (CELL_SIZE, C
 pacman_images = [
     PACMAN_1,
     PACMAN_2,
-    PACMAN_3
+    PACMAN_3,
+    PACMAN_4
 ]
 
 GHOST_DEAD = pygame.transform.scale(pygame.image.load(r"img/dead.png"), (CELL_SIZE, CELL_SIZE))
