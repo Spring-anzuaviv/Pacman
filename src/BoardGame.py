@@ -29,8 +29,8 @@ def draw_board1():
 
                 #####################################################
     #test ghost and pacman
-    #screen.blit(GHOST_BLUE, (offset_x + 26, offset_y + 26))
-    
+    #screen.blit(GHOST_BLUE, (offset_x + 26*2, offset_y + 26))
+   
     #pacman được thêm vô menu_ScreenGame hàm screen_game()
 
 #level 6

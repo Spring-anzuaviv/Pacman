@@ -2,7 +2,7 @@ from specification import *
 import copy
 import time
 from collections import deque
-from BoardGame import screen
+from BoardGame import screen, draw_board1
 class Ghost:
     def __init__(self, x_coord, y_coord, target, speed, img, direct, dead, powerup, board):
         self.x_pos = x_coord
@@ -30,7 +30,28 @@ class Ghost:
         else:
            screen.blit(GHOST_DEAD, (self.x_pos, self.y_pos))
         pygame.display.update()
-    
+
+    def draw_path(self):
+        # Pacman's position changes
+        print(self.path)
+        end = self.target
+        for x, y in self.path:
+            if(self.target != end):
+                self.x_pos, self.y_pos = x, y # New start
+                self.path = self.move_bfs() 
+                self.draw_path()
+            else:
+                screen.fill((0, 0, 0))  
+                draw_board1() # Màn hình cũ
+                print((x, y))
+                screen.blit(self.img, (y * 26 + 100, x * 26 + 100))  
+                pygame.display.update()
+                time.sleep(0.5)  
+
+    def draw_ghost(self, x, y):
+        screen.blit(self.img, (x * 26 + 100, y * 26 + 100))
+        pygame.display.update()
+
     # Không cần này 
     def check_collisions(self):
         cell_h = GRID_SIZE
@@ -58,7 +79,7 @@ class Ghost:
         
         return turns
 
-    def move_bfs(self):  # chưa làm target thay đổi khi pacman di chuyển, chưa implement hàm vẽ 
+    def move_bfs(self):  
         start_time = time.time()
 
         start = (self.x_pos // GRID_SIZE, self.y_pos // GRID_SIZE)
@@ -80,14 +101,8 @@ class Ghost:
             max_queue_size = max(max_queue_size, sys.getsizeof(queue))
             path = queue.popleft()  # Lấy đường đi hiện tại từ hàng đợi
             x, y = path[-1]  # Lấy vị trí cuối cùng trong đường đi
-            
             expanded.append((x, y))  
             print(f"Expanding: {x}, {y}")
-
-            # current_end = (self.target[0] // GRID_SIZE, self.target[1] // GRID_SIZE)
-            # if current_end != end:  # Nếu end thay đổi, tính lại BFS
-            # print(f"Target changed! Recomputing BFS with new end: {current_end}")
-            # return self.move_bfs()
 
             if (x, y) == end:
                 self.path = path 
@@ -101,8 +116,9 @@ class Ghost:
                 next_x, next_y = x + dx, y + dy
 
                 #Generate node
-                if 0 <= next_x < len(self.map) and 0 <= next_y < len(self.map[0]) and self.map[next_x][next_y] != '1' and (next_x, next_y) not in visited:
+                if 0 <= next_x < len(self.map) and 0 <= next_y < len(self.map[0]) and self.map[next_x][next_y] != 1  and (next_x, next_y) not in visited:
                     new_path = path + [(next_x, next_y)]  
+                    
                     #Early stopping 
                     if (next_x, next_y) == end:
                         self.path = new_path  
@@ -117,8 +133,53 @@ class Ghost:
         self.path = []  
         return None  
 
+    def move_dfs(self):
+        start_time = time.time()  
 
-    def move_dfs(self):...
+        start = (self.x_pos // GRID_SIZE, self.y_pos // GRID_SIZE)
+        end = (self.target[0] // GRID_SIZE, self.target[1] // GRID_SIZE)
+
+        stack = [(start, [start])]
+        visited = set()
+        expanded = []  
+        max_stack_size = 0  
+
+        while stack:
+            max_stack_size = max(max_stack_size, sys.getsizeof(stack)) 
+            (x, y), path = stack.pop()
+            
+            expanded.append((x, y))  
+            print(f"Expanding: {x}, {y}")
+
+            if (x, y) == end:
+                elapsed_time = time.time() - start_time  
+                memory_used = sys.getsizeof(visited) + max_stack_size  
+                print(f"Path found! Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes, Nodes expanded: {len(expanded)}")
+                self.path = path
+                return path
+
+            visited.add((x, y))
+
+            for dx, dy in [(1, 0), (0, 1), (-1, 0), (0, -1)]:
+                next_x, next_y = x + dx, y + dy
+                if 0 <= next_x < len(self.map) and 0 <= next_y < len(self.map[0]) and self.map[next_x][next_y] != 1 and (next_x, next_y) not in visited:
+                    new_path = path + [(next_x, next_y)]
+                    print(f"Checking node: ({next_x}, {next_y}), Value: {self.map[next_x][next_y]}")
+
+                    if (next_x, next_y) == end:
+                        elapsed_time = time.time() - start_time
+                        memory_used = sys.getsizeof(visited) + max_stack_size
+                        print(f"Goal generated! Early stopping. Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes, Nodes expanded: {len(expanded)}")
+                        self.path = path
+                        return new_path
+
+                    stack.append(((next_x, next_y), new_path))
+
+        elapsed_time = time.time() - start_time
+        memory_used = sys.getsizeof(visited) + max_stack_size
+        print(f"No path found. Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes, Nodes expanded: {len(expanded)}")
+        return []
+    
 
     def move_ucs(self):...
 
