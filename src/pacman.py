@@ -1,121 +1,52 @@
+import pygame
 from src.specification import *
-import copy
+from src.BoardGame import *
 
 class Player:
-    def __init__(self, screen, x_coord, y_coord, target, speed, direct, dead, powerup, board):
+    def __init__(self, x_coord, y_coord, target, speed, images, direct, dead, powerup, board):
         self.x_pos = x_coord
         self.y_pos = y_coord
-        self.gamescreen = screen
-        self.target = target #position [x, y]
+        self.center_x = self.x_pos + 13
+        self.center_y = self.y_pos + 13
+        self.target = target
         self.speed = speed  
-        # self.img = img 
-        self.direction = direct  #"left", "right", "up", "down"
+        self.img = images
+        self.img_powerup = [POWERUP]  # Hình Powerup
+        self.img_dead = DEAD  # Hình Dead
+        self.direction = direct
         self.dead = dead
         self.map = board  
-        self.powerup = powerup  # Nếu True, Pac-Man có thể ăn ma
-        self.lives = 3  # Số mạng của Pac-Man
-        self.score = 0  # Điểm số
-        self.frame_count = 0 #thay đổi hình
-        self.turns = [False, False, False, False] #R, L, U, D
-        self.x_board_pos = (self.x_pos - 10) // CELL_SIZE ######################### Sửa lại offset
-        self.y_board_pos = (self.y_pos - 10) // CELL_SIZE
-        self.open_mouth = False
-        self.powerup_timer = 0
- 
+        self.powerup = powerup  
+        self.lives = 3  
+        self.score = 0  
+        self.frame_count = 0  
+        self.turns = [False, False, False, False]  
+
     def draw(self):
-        if self.open_mouth:
-            self.open_mouth = False
-            if self.direction == "Left":
-                rect = self.gamescreen.blit(PACMAN_LEFT_1, (self.x_pos, self.y_pos))
-                pygame.display.update(rect)
-            if self.direction == "Right":
-                rect = self.gamescreen.blit(PACMAN_RIGHT_1, (self.x_pos, self.y_pos))
-                pygame.display.update(rect)
-            if self.direction == "Up":
-                rect = self.gamescreen.blit(PACMAN_UP_1, (self.x_pos, self.y_pos))
-                pygame.display.update(rect)
-            if self.direction == "Down":
-                rect = self.gamescreen.blit(PACMAN_DOWN_1, (self.x_pos, self.y_pos))
-                pygame.display.update(rect) 
+        # Chế độ Dead
+        if self.dead:
+            screen.blit(self.img_dead, (self.x_pos, self.y_pos))
+
+        # Chế độ Powerup
+        elif self.powerup:
+            current_image = self.img_powerup[0]
+            screen.blit(current_image, (self.x_pos, self.y_pos))
+
+        # Bình thường
         else:
-            self.open_mouth = True
-            if self.direction == "Left":
-                rect = self.gamescreen.blit(PACMAN_LEFT_2, (self.x_pos, self.y_pos))
-                pygame.display.update(rect)
-            if self.direction == "Right":
-                rect = self.gamescreen.blit(PACMAN_RIGHT_2, (self.x_pos, self.y_pos))
-                pygame.display.update(rect)
-            if self.direction == "Up":
-                rect = self.gamescreen.blit(PACMAN_UP_2, (self.x_pos, self.y_pos))
-                pygame.display.update(rect)
-            if self.direction == "Down":
-                rect = self.gamescreen.blit(PACMAN_DOWN_2, (self.x_pos, self.y_pos))
-                pygame.display.update(rect)
-    
-    def check_collision(self, x, y):
-        if((0 <= (x - 10) // 26 < len(self.map[0]) and 0 <= (y - 10) // 26 < len(self.map) and self.map[(y - 10) // 26 ][(x - 10) // 26 ] == 1) 
-           or (0 <= (x - 10) // 26 < len(self.map[0]) and 0 <= (y - 10) // 26 < len(self.map) and self.map[(y - 10) // 26 ][(x - 10) // 26 ] == 4)):
-            return 0
-        elif ((0 <= (x - 10) // 26 < len(self.map[0]) and 0 <= (y - 10) // 26 < len(self.map)) 
-           or (0 <= (x - 10) // 26 < len(self.map[0]) and 0 <= (y - 10) // 26 < len(self.map))):
-            return 1
-    
-    def move(self, event):
-        """Chỉ di chuyển Pac-Man khi có sự kiện nhấn phím"""
-        if event.type == pygame.KEYDOWN:  
-            if event.key == pygame.K_LEFT:
-                self.direction = "Left"
-                new_pos_x = self.x_pos - CELL_SIZE
-                new_pos_y = self.y_pos
-            elif event.key == pygame.K_RIGHT:
-                self.direction = "Right"
-                new_pos_x = self.x_pos + CELL_SIZE
-                new_pos_y = self.y_pos
-            elif event.key == pygame.K_UP:
-                self.direction = "Up"
-                new_pos_y = self.y_pos - CELL_SIZE
-                new_pos_x = self.x_pos
-            elif event.key == pygame.K_DOWN:
-                self.direction = "Down"
-                new_pos_y = self.y_pos + CELL_SIZE
-                new_pos_x = self.x_pos
+            current_image = self.img[(self.frame_count // 10) % len(self.img)]
+            if self.direction == "right":
+                screen.blit(current_image, (self.x_pos, self.y_pos))
+            elif self.direction == "left":
+                flipped_image = pygame.transform.flip(current_image, True, False)
+                screen.blit(flipped_image, (self.x_pos, self.y_pos))
+            elif self.direction == "up":
+                rotated_image = pygame.transform.rotate(current_image, 90)
+                screen.blit(rotated_image, (self.x_pos, self.y_pos))
+            elif self.direction == "down":
+                rotated_image = pygame.transform.rotate(current_image, 270)
+                screen.blit(rotated_image, (self.x_pos, self.y_pos))
 
-            if self.check_collision(new_pos_x, new_pos_y) == 1:
-                self.x_pos = new_pos_x
-                self.y_pos = new_pos_y
-                self.update_board_pos()
-            self.eat_food()
-            #self.draw()
-
-    def update_board_pos(self):
-        self.x_board_pos = (self.y_pos - 10) // 26
-        self.y_board_pos = (self.x_pos - 10) // 26
-    
-    def eat_food(self):
-        if(self.map[self.x_board_pos][self.y_board_pos] == 2):
-            self.score += 10
-            self.map[self.x_board_pos][self.y_board_pos] = 5
-        if(self.map[self.x_board_pos][self.y_board_pos] == 3):
-            self.score += 30
-            self.powerup = True
-            self.powerup_timer = pygame.time.get_ticks() + 7000  # Power-up tồn tại trong 7 giây
-            self.map[self.x_board_pos][self.y_board_pos] = 5 # No food on path
-    
-    def get_score(self):
-        return self.score
-
-    def get_lives(self):
-        return self.lives
-
-def check_win_condition(map):
-    for row in map:
-        if 2 in row or 3 in row:  # Nếu vẫn còn thức ăn (2) hoặc viên năng lượng (3)
-            return False
-    return True
-
-    # Power up: chỉnh trạng thái dead của ma
-
-    # Thắng: num đếm thức ăn, = 0 hiện mhinh thắng
-    
-    # Thua: chạm ma, dead = True, nếu còn mạng, vẽ lại vị trí bắt đầu
-    # ko còn mạng thì hiển thị màn hình thua
+            self.frame_count += 1
+            if self.frame_count >= 100:
+                self.frame_count = 0
