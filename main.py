@@ -14,19 +14,19 @@ FPS = 60
 
 def main():
     ghost = Ghost(x_coord = 26 , y_coord = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_PINK, direct=0, dead=False, powerup=False, board=boards1)
-    '''path = ghost.move_dfs()
-    ghost.draw_path()'''
+    path = ghost.move_ucs()
+    ghost.draw_path()
     #print(path)
-    while True:
-        timer.tick(FPS)
-        screen.fill('black')
-        menu()
+    # while True:
+    #     timer.tick(FPS)
+    #     screen.fill('black')
+    #     menu()
         
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
+    #     for event in pygame.event.get():
+    #         if event.type == pygame.QUIT:
+    #             running = False
         
-        pygame.display.flip()
-    pygame.quit()
+    #     pygame.display.flip()
+    # pygame.quit()
     
 main()
