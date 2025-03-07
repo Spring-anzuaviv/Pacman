@@ -61,7 +61,6 @@ def screen_game(level):
             level_text = font.render(f"Level {level}", True, COLORS["Pink"])
             screen.blit(level_text, (900, 20))
             
-
             font1 = pygame.font.SysFont("timesnewroman", 32)
             time_text = font1.render(f"Search Time: 0.00 s", True, COLORS["White"]) 
             screen.blit(time_text, (830, 120))
