@@ -2,10 +2,11 @@ import pygame
 import sys
 import os
 import math
-#import tạm thời
 import psutil
+import copy
 import time
-
+import heapq
+from collections import deque
 #Window
 WIDTH, HEIGHT = 1200, 850
 APP_CAPTION = r"Pacman with Tom and Jerry"

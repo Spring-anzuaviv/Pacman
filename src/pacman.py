@@ -1,5 +1,4 @@
 from src.specification import *
-import copy
 
 class Player:
     def __init__(self, screen, x_coord, y_coord, speed, direct, dead, powerup, board, board_offset):

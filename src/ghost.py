@@ -1,11 +1,6 @@
 from specification import *
-import copy
-import time
-import heapq
-from collections import deque
-from BoardGame import screen, draw_board1
 class Ghost:
-    def __init__(self, x_coord, y_coord, target, speed, img, direct, dead, powerup, board, board_offset):
+    def __init__(self, game, x_coord, y_coord, target, speed, img, direct, dead, powerup, board, board_offset):
         self.x_pos = x_coord
         self.y_pos = y_coord
         # self.center_x = self.x_pos + 13
@@ -20,17 +15,18 @@ class Ghost:
         self.map = copy.deepcopy(board)
         self.path = [] #Path found by search algorithm
         self.offset = board_offset
+        self.game = game
 
     def draw(self):
         #Normal state
         if (not self.powerup and not self.dead):
-            screen.blit(self.img, (self.x_pos + self.offset, self.y_pos + self.offset))
+            self.game.screen.blit(self.img, (self.x_pos + self.offset, self.y_pos + self.offset))
         #Power up
         elif(self.powerup and not self.dead):
-            screen.blit(GHOST_POWERUP, (self.x_pos + self.offset, self.y_pos + self.offset))
+            self.game.screen.blit(GHOST_POWERUP, (self.x_pos + self.offset, self.y_pos + self.offset))
         #Dead
         else:
-           screen.blit(GHOST_DEAD, (self.x_pos, self.y_pos))
+           self.game.screen.blit(GHOST_DEAD, (self.x_pos, self.y_pos))
         pygame.display.update()
 
     def draw_path(self):
@@ -40,22 +36,17 @@ class Ghost:
         for x, y in self.path:
             self.x_pos = y * CELL_SIZE + self.offset
             self.y_pos = x * CELL_SIZE + self.offset
-            if(self.target != end):
-                # New start
-                self.path = self.move_bfs() 
-                self.draw_path()
-            else:
-                screen.fill((0, 0, 0))  
-                draw_board1() # Màn hình cũ
-                
-                screen.blit(self.img, (self.x_pos , self.y_pos )) 
-                # print((self.target[1], self.target[0]))
-                screen.blit(PACMAN_LEFT_1, (self.target[0], self.target[1])) 
-                pygame.display.update()
-                time.sleep(0.5)  
+            self.game.screen.fill((0, 0, 0))  
+            self.game.draw_board1() # Màn hình cũ
+            
+            self.game.screen.blit(self.img, (self.x_pos , self.y_pos )) 
+            # print((self.target[1], self.target[0]))
+            self.game.screen.blit(PACMAN_LEFT_1, (self.target[0], self.target[1])) 
+            pygame.display.update()
+            time.sleep(0.5)  
 
     def draw_ghost(self, x, y):
-        screen.blit(self.img, (y * CELL_SIZE + self.offset, x * CELL_SIZE + self.offset))
+        self.game.screen.blit(self.img, (y * CELL_SIZE + self.offset, x * CELL_SIZE + self.offset))
         pygame.display.update()
 
     # Không cần này 
