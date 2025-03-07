@@ -1,6 +1,7 @@
 from specification import *
 import copy
 import time
+import heapq
 from collections import deque
 from BoardGame import screen, draw_board1
 class Ghost:
@@ -181,6 +182,107 @@ class Ghost:
         return []
     
 
-    def move_ucs(self):...
+    def move_ucs(self):
+        start_time = time.time()
 
-    def move_astar(self):...
+        start = (self.x_pos // GRID_SIZE, self.y_pos // GRID_SIZE)
+        end = (self.target[0] // GRID_SIZE, self.target[1] // GRID_SIZE)
+
+        pq = [(0, start, [start])]  # (cost, position, path)
+        visited = set()
+        expanded = []
+        max_pq_size = 0
+
+        while pq:
+            max_pq_size = max(max_pq_size, sys.getsizeof(pq))  
+            cost, (x, y), path = heapq.heappop(pq)
+
+            if (x, y) in visited:  # Nếu nút đã từng mở rộng thì bỏ qua
+                continue  
+
+            visited.add((x, y))  # Đánh dấu đã thăm khi lấy ra khỏi hàng đợi
+
+            expanded.append((x, y))  
+            print(f"Expanding: {x}, {y}, Cost: {cost}")
+
+            if (x, y) == end:
+                elapsed_time = time.time() - start_time
+                memory_used = sys.getsizeof(visited) + max_pq_size
+                print(f"Path found! Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes, Nodes expanded: {len(expanded)}")
+                self.path = path
+                return path
+
+            for dx, dy in [(1, 0), (0, 1), (-1, 0), (0, -1)]:
+                next_x, next_y = x + dx, y + dy
+                if 0 <= next_x < len(self.map) and 0 <= next_y < len(self.map[0]) and self.map[next_x][next_y] != 1:
+                    new_cost = cost + 1  # Mỗi bước đi có chi phí cố định là 1
+                    new_path = path + [(next_x, next_y)]
+                    heapq.heappush(pq, (new_cost, (next_x, next_y), new_path))
+        elapsed_time = time.time() - start_time
+        memory_used = sys.getsizeof(visited) + max_pq_size
+        print(f"No path found. Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes, Nodes expanded: {len(expanded)}")
+        return []
+
+    def move_astar(self):
+        print("A*")
+
+        def heuristic(x, y):
+            manhatta = (abs(x - self.target[0] // GRID_SIZE) + abs(y - self.target[1]//GRID_SIZE))
+            return manhatta
+
+        start_time = time.time()
+        start = (self.x_pos // GRID_SIZE, self.y_pos // GRID_SIZE)
+        end = (self.target[0] // GRID_SIZE, self.target[1] // GRID_SIZE)
+
+        g_n = {start: 0}
+        f_n = {start: heuristic(*start)}
+
+        pq = [(heuristic(*start), start, [start])]
+        visited = set()
+        expanded = []
+        max_pq_size = 0
+
+       
+
+        while pq:
+            max_pq_size = max(max_pq_size, len(pq))
+            cost, (x, y), path = heapq.heappop(pq) 
+
+            if (x, y) in visited:  # Bỏ qua nếu đã thăm
+                continue
+            
+            visited.add((x, y))
+            expanded.append((x, y))
+            print(f"Expanding: {x}, {y}, cost: {cost}, h_n: {heuristic(x,y)}, g_n: {g_n[(x, y)]}")
+
+            if (x, y) == end:
+                elapsed_time = time.time() - start_time
+                print(f"Path found! Time: {elapsed_time:.6f}s, Memory: {sys.getsizeof(visited)} bytes")
+                return path  
+
+            for dx, dy in [(1, 0), (0, 1), (-1, 0), (0, -1)]:
+                next_x, next_y = x + dx, y + dy
+                if 0 <= next_x < len(self.map) and 0 <= next_y < len(self.map[0]) and self.map[next_x][next_y] != 1 and (next_x, next_y) not in visited:
+                    new_g = g_n[(x, y)] + 1
+                    new_f = new_g + heuristic(next_x, next_y)
+
+                    if (next_x, next_y) not in g_n or new_g < g_n[(next_x, next_y)]:
+                        g_n[(next_x, next_y)] = new_g
+                        f_n[(next_x, next_y)] = new_f
+                        new_path = path + [(next_x, next_y)]
+                        heapq.heappush(pq, (new_f, (next_x, next_y), new_path))
+
+        elapsed_time = time.time() - start_time
+        memory_used = sys.getsizeof(visited) + max_pq_size
+        print(f"No path found. Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes, Nodes expanded: {len(expanded)}")
+        return []
+
+
+class AStarSolver:
+    def __init__(self, x_pos, y_pos, target, map_data):
+        self.x_pos = x_pos
+        self.y_pos = y_pos
+        self.target = target
+        self.map = map_data
+    
+
