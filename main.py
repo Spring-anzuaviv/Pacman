@@ -67,5 +67,9 @@ ghost = Ghost(x_coord = 26 , y_coord = 26, target = [26 * 20, 26 * 19], speed = 
 
 results = test_algorithms(ghost)
 
+
 for algo, data in results.items():
     print(f"{algo}: Time = {data['time']:.6f}s, Memory = {data['memory']} bytes, Path = {data['path']}")
+
+print( "start ", ghost.x_pos, ghost.y_pos)
+print("end ", ghost.target)

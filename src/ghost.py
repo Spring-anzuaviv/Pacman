@@ -227,7 +227,8 @@ class Ghost:
         print("A*")
 
         def heuristic(x, y):
-            return abs(x - self.target[0]) + abs(y - self.target[1])
+            manhatta = (abs(x - self.target[0] // GRID_SIZE) + abs(y - self.target[1]//GRID_SIZE))
+            return manhatta
 
         start_time = time.time()
         start = (self.x_pos // GRID_SIZE, self.y_pos // GRID_SIZE)
@@ -252,7 +253,7 @@ class Ghost:
             
             visited.add((x, y))
             expanded.append((x, y))
-            print(f"Expanding: {x}, {y}, cost: {cost}")
+            print(f"Expanding: {x}, {y}, cost: {cost}, h_n: {heuristic(x,y)}, g_n: {g_n[(x, y)]}")
 
             if (x, y) == end:
                 elapsed_time = time.time() - start_time
