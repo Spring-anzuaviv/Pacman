@@ -20,10 +20,13 @@ class Player:
         self.x_board_pos = (self.x_pos - self.offset) // CELL_SIZE ######################### Sửa lại offset
         self.y_board_pos = (self.y_pos - self.offset) // CELL_SIZE
         self.open_mouth = False
+        self.powerup_timer = 0
+
 
     def appear(self):
         self.direction = "Left"
         self.draw()
+
 
     def draw(self):
         if self.open_mouth:
@@ -105,7 +108,20 @@ class Player:
         if(self.map[self.x_board_pos][self.y_board_pos] == 3):
             self.score += 30
             self.powerup = True
+            self.powerup_timer = pygame.time.get_ticks() + 7000  # Power-up tồn tại trong 7 giây
             self.map[self.x_board_pos][self.y_board_pos] = 5 # No food on path
+    
+    def get_score(self):
+        return self.score
+
+    def get_lives(self):
+        return self.lives
+
+def check_win_condition(map):
+    for row in map:
+        if 2 in row or 3 in row:  # Nếu vẫn còn thức ăn (2) hoặc viên năng lượng (3)
+            return False
+    return True
 
     # Power up: chỉnh trạng thái dead của ma
 
