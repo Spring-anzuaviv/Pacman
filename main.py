@@ -5,6 +5,7 @@ from src.BoardGame import draw_board2, screen, draw_board1
 from src.specification import *
 from src.ghost import *
 from src.menu_ScreenGame import menu, level_menu
+from src.pacman import *
 
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 
@@ -13,20 +14,35 @@ timer = pygame.time.Clock()
 FPS = 60
 
 def main():
-    ghost = Ghost(x_coord = 26 , y_coord = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_PINK, direct=0, dead=False, powerup=False, board=boards1)
-    path = ghost.move_ucs()
-    ghost.draw_path()
+    # ghost = Ghost(x_coord = 26 , y_coord = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_PINK, direct=0, dead=False, powerup=False, board=boards1)
+    # path = ghost.move_ucs()
+    # ghost.draw_path()
     #print(path)
-    # while True:
+    map = copy.deepcopy(boards2)
+    player = Player(screen = screen, x_coord=10 + 26, y_coord=10 + 26,  target=[0, 0], speed=2, direct="", dead=False, powerup=False, board=map)
+    
+    running = True
+    while running:
     #     timer.tick(FPS)
     #     screen.fill('black')
-    #     menu()
-        
-    #     for event in pygame.event.get():
-    #         if event.type == pygame.QUIT:
-    #             running = False
-        
-    #     pygame.display.flip()
-    # pygame.quit()
-    
+    #    # menu()
+        #     player.move()
+            
+        #     for event in pygame.event.get():
+        #         if event.type == pygame.QUIT:
+        #             running = False
+            
+        #     pygame.display.flip()
+        # pygame.quit()
+        screen.fill("black")  # Xóa màn hình cũ
+        draw_board2(map)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            player.move(event)  # Gọi hàm move() để cập nhật vị trí Pac-Man liên tục
+        player.draw()  # Vẽ Pac-Man ở vị trí mới
+
+        pygame.display.flip()  # Cập nhật màn hình
+    pygame.quit()
+   
 main()

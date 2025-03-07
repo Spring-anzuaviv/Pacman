@@ -16,7 +16,7 @@ background_image2 = pygame.image.load(MENU_LOGO_2)
 background_image1 = pygame.transform.scale(background_image1, (WIDTH//2.2, HEIGHT//2.2))
 background_image2 = pygame.transform.scale(background_image2, (WIDTH//1.8, HEIGHT//3))
 
-player = Player(x_coord=10+26, y_coord=10+26, target=[0, 0], speed=2, img=pacman_images, direct="right", dead=False, powerup=False, board=boards2)
+player = Player(screen = screen, x_coord=10+26, y_coord=10+26,  target=[0, 0], speed=2, direct="", dead=False, powerup=False, board=boards2)
 
 def draw_button(text, x, y, width, height, color, action=None, fontsize=int):
     pygame.draw.rect(screen, color, (x, y, width, height))
@@ -37,18 +37,22 @@ def handle_input():
     # Xử lý di chuyển của Pac-Man khi nhấn các phím mũi tên
     keys = pygame.key.get_pressed()  # Lấy trạng thái tất cả các phím
     if keys[pygame.K_RIGHT]:
-        player.move("right")
+        player.direction = "right"
+        player.move()
     elif keys[pygame.K_LEFT]:
-        player.move("left")
+        player.direction = "left"
+        player.move()
     elif keys[pygame.K_UP]:
-        player.move("up")
+        player.direction = "up"
+        player.move()
     elif keys[pygame.K_DOWN]:
-        player.move("down")
+        player.direction = "down"
+        player.move()
 
 def screen_game(level):
     screen.fill(COLORS["Black"])
     global screen_running
-    screen_running =  True
+    screen_running = True
     while screen_running:
         if(level == 1):
             draw_board1()
@@ -136,10 +140,19 @@ def screen_game(level):
             expanded_nodes_text = font1.render(f"Expanded Nodes: 0", True, COLORS["White"])  
             screen.blit(expanded_nodes_text, (850, 240))
         elif(level == 6):
+            screen.fill((0, 0, 0))
             draw_board2()
+            keys = pygame.key.get_pressed()  # Kiểm tra phím đang được giữ
+            if keys[pygame.K_LEFT]:
+                player.direction = "left"
+            elif keys[pygame.K_RIGHT]:
+                player.direction = "right"
+            elif keys[pygame.K_UP]:
+                player.direction = "up"
+            elif keys[pygame.K_DOWN]:
+                player.direction = "down"
+            player.move()
             player.draw()
-           # player.reset_position(10,120)
-            handle_input()
             font = pygame.font.SysFont("timesnewroman", 50, bold = True)
             level_text = font.render(f"Level {level}", True, COLORS["BACKGROUND_BLUE"])
             screen.blit(level_text, (1000, 50))
@@ -147,6 +160,7 @@ def screen_game(level):
             font1 = pygame.font.SysFont("timesnewroman", 32)
             time_text = font1.render(f"Score: 0.00", True, COLORS["White"]) 
             screen.blit(time_text, (970, 120))
+            pygame.display.update()
 
         draw_button("Back", 1100, 750, 80, 40, COLORS["Red"], lambda: level_menu(), 32)
         for event in pygame.event.get():

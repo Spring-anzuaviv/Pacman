@@ -37,15 +37,17 @@ class Ghost:
         print(self.path)
         end = self.target
         for x, y in self.path:
+            self.x_pos = x
+            self.y_pos = y
             if(self.target != end):
-                self.x_pos, self.y_pos = x, y # New start
+                # New start
                 self.path = self.move_bfs() 
                 self.draw_path()
             else:
                 screen.fill((0, 0, 0))  
                 draw_board1() # Màn hình cũ
                 print((x, y))
-                screen.blit(self.img, (y * 26 + 100, x * 26 + 100))  
+                screen.blit(self.img, (self.y_pos * 26 + 100, self.x_pos * 26 + 100))  
                 pygame.display.update()
                 time.sleep(0.5)  
 

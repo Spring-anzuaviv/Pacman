@@ -25,7 +25,8 @@ def draw_board1():
                 pygame.draw.circle(screen, COLORS["White"], (x + GRID_SIZE // 2, y + GRID_SIZE // 2), 5)
             elif boards1[row][col] == 3:
                 pygame.draw.circle(screen, COLORS["Yellow"], (x + GRID_SIZE // 2, y + GRID_SIZE // 2), 10)
-
+            elif boards1[row][col] == 5:
+                pygame.draw.rect(screen, COLORS["Black"], (x, y, GRID_SIZE, GRID_SIZE))
 
                 #####################################################
     #test ghost and pacman
@@ -34,7 +35,7 @@ def draw_board1():
     #pacman được thêm vô menu_ScreenGame hàm screen_game()
 
 #level 6
-def draw_board2():
+def draw_board2(boards2):
     maze_width = (len(boards2[0]) * GRID_SIZE)//5
     maze_height = (len(boards2) * GRID_SIZE)//15
     offset_x = 10
@@ -51,3 +52,5 @@ def draw_board2():
                 pygame.draw.circle(screen, COLORS["Red"], (x + GRID_SIZE // 2, y + GRID_SIZE // 2), 10)  # Power Pellets
             elif boards2[row][col] == 4:
                 pygame.draw.rect(screen, COLORS["Brown"], (x, y, GRID_SIZE, GRID_SIZE))  # Tường đặc biệt màu nâu
+            elif boards2[row][col] == 5:
+                pygame.draw.rect(screen, COLORS["Black"], (x, y, GRID_SIZE, GRID_SIZE ))
