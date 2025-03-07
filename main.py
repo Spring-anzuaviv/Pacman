@@ -4,7 +4,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), 'src')))
 from src.BoardGame import draw_board2, screen, draw_board1
 from src.specification import *
 from src.ghost import *
-from src.menu_ScreenGame import menu, level_menu
+from src.menu_ScreenGame import *
 from src.pacman import *
 
 os.environ['SDL_VIDEO_CENTERED'] = '1'
@@ -40,6 +40,14 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             player.move(event)  # Gọi hàm move() để cập nhật vị trí Pac-Man liên tục
+
+        if check_win_condition(map):
+            show_victory_screen(screen)
+            pygame.quit()
+            sys.exit()
+
+        if player.powerup and pygame.time.get_ticks() > player.powerup_timer:
+            player.powerup = False
         player.draw()  # Vẽ Pac-Man ở vị trí mới
 
         pygame.display.flip()  # Cập nhật màn hình

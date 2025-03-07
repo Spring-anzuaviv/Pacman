@@ -152,13 +152,19 @@ def screen_game(level):
                 player.direction = "down"
             player.move()
             player.draw()
+
             font = pygame.font.SysFont("timesnewroman", 50, bold = True)
             level_text = font.render(f"Level {level}", True, COLORS["BACKGROUND_BLUE"])
             screen.blit(level_text, (1000, 50))
 
             font1 = pygame.font.SysFont("timesnewroman", 32)
-            time_text = font1.render(f"Score: 0.00", True, COLORS["White"]) 
+            time_text = font1.render(f"Score: {player.get_score()}", True, COLORS["White"]) 
             screen.blit(time_text, (970, 120))
+
+            font1 = pygame.font.SysFont("timesnewroman", 32)
+            time_text = font1.render(f"Lives: {player.get_lives()}", True, COLORS["White"]) 
+            screen.blit(time_text, (970, 160))
+
             pygame.display.update()
 
         draw_button("Back", 1100, 750, 80, 40, COLORS["Red"], lambda: level_menu(), 32)
@@ -235,4 +241,56 @@ def menu():
     
     pygame.display.update()  # Cập nhật màn hình menu
 
+
+def show_victory_screen(screen):
+    screen.fill((0, 0, 0))  # Đặt nền màu đen
+    font = pygame.font.SysFont("timesnewroman", 50, bold=True)
+    win_text = font.render("YOU WIN!", True, (255, 255, 0))
+    screen.blit(EMOJI_WIN_1, (425, 345))
+    screen.blit(EMOJI_WIN_2, (725, 345))
+
+    text_rect = win_text.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2 - 50))
     
+    sub_text = font.render("Press ENTER to Play Again", True, (255, 255, 255))
+    sub_text_rect = sub_text.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2 + 50))
+
+    screen.blit(win_text, text_rect)
+    screen.blit(sub_text, sub_text_rect)
+    pygame.display.flip()
+
+    waiting = True
+    while waiting:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:  # Nhấn ENTER để chơi lại
+                    waiting = False
+
+
+def show_game_over_screen(screen):
+    screen.fill((0, 0, 0))  # Đặt nền màu đen
+    font = pygame.font.SysFont("timesnewroman", 50, bold=True)
+    text = font.render("GAME OVER", True, (255, 0, 0))
+    screen.blit(EMOJI_LOSE, (390, 345))
+    screen.blit(EMOJI_LOSE, (760, 345))
+
+    text_rect = text.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2 - 50))
+    
+    sub_text = font.render("Press ENTER to Try Again", True, (255, 255, 255))
+    sub_text_rect = sub_text.get_rect(center=(screen.get_width() // 2, screen.get_height() // 2 + 50))
+
+    screen.blit(text, text_rect)
+    screen.blit(sub_text, sub_text_rect)
+    pygame.display.flip()
+
+    waiting = True
+    while waiting:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:  # Nhấn ENTER để chơi lại
+                    waiting = False

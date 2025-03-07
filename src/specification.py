@@ -96,6 +96,11 @@ COLORS = {
     "Blue": (0, 0, 255),
     "Purple": (128, 0, 128)
 }
+#emoji
+EMOJI_LOSE = pygame.transform.scale(pygame.image.load(r"img/emoji_lose.png"), (50, 50))
+EMOJI_WIN_1 = pygame.transform.scale(pygame.image.load(r"img/emoji_win_1.png"), (50, 50))
+EMOJI_WIN_2 = pygame.transform.scale(pygame.image.load(r"img/emoji_win_2.png"), (50, 50))
+
 #Menu logo
 MENU_LOGO_1 = r"img/tomandjerry.png"
 MENU_LOGO_2 = r"img/pacman.png"
@@ -111,7 +116,6 @@ PACMAN_RIGHT_1 = pygame.transform.scale(pygame.image.load(r"img/PACMAN_RIGHT_1.p
 PACMAN_RIGHT_2 = pygame.transform.scale(pygame.image.load(r"img/PACMAN_RIGHT_2.png"), (CELL_SIZE, CELL_SIZE))
 POWERUP = pygame.transform.scale(pygame.image.load(r"img/powerup.png"), (CELL_SIZE, CELL_SIZE))
 DEAD = pygame.transform.scale(pygame.image.load(r"img/dead.png"), (CELL_SIZE, CELL_SIZE))
-
 
 GHOST_DEAD = pygame.transform.scale(pygame.image.load(r"img/dead.png"), (CELL_SIZE, CELL_SIZE))
 GHOST_BLUE = pygame.transform.scale(pygame.image.load(r"img/blue.png"), (CELL_SIZE, CELL_SIZE))
