@@ -52,10 +52,12 @@ class Player:
                 pygame.display.update(rect)
     
     def check_collision(self, x, y):
-        if((0 <= (x - 10) // 26 < len(self.map) and 0 <= (y - 10) // 26 < len(self.map) and self.map[(y - 10) // 26 ][(x - 10) // 26 ] == 1) 
-           or self.map[(y - 10) // 26 ][(x - 10) // 26 ] == 4):
+        if((0 <= (x - 10) // 26 < len(self.map[0]) and 0 <= (y - 10) // 26 < len(self.map) and self.map[(y - 10) // 26 ][(x - 10) // 26 ] == 1) 
+           or (0 <= (x - 10) // 26 < len(self.map[0]) and 0 <= (y - 10) // 26 < len(self.map) and self.map[(y - 10) // 26 ][(x - 10) // 26 ] == 4)):
             return 0
-        return 1
+        elif ((0 <= (x - 10) // 26 < len(self.map[0]) and 0 <= (y - 10) // 26 < len(self.map)) 
+           or (0 <= (x - 10) // 26 < len(self.map[0]) and 0 <= (y - 10) // 26 < len(self.map))):
+            return 1
     
     def move(self, event):
         """Chỉ di chuyển Pac-Man khi có sự kiện nhấn phím"""
