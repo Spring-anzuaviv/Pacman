@@ -5,7 +5,7 @@ import heapq
 from collections import deque
 from BoardGame import screen, draw_board1
 class Ghost:
-    def __init__(self, x_coord, y_coord, target, speed, img, direct, dead, powerup, board):
+    def __init__(self, x_coord, y_coord, target, speed, img, direct, dead, powerup, board, board_offset):
         self.x_pos = x_coord
         self.y_pos = y_coord
         # self.center_x = self.x_pos + 13
@@ -19,14 +19,15 @@ class Ghost:
         self.powerup = powerup #player can eat ghost
         self.map = copy.deepcopy(board)
         self.path = [] #Path found by search algorithm
+        self.offset = board_offset
 
     def draw(self):
         #Normal state
         if (not self.powerup and not self.dead):
-            screen.blit(self.img, (self.x_pos + 100, self.y_pos + 100))
+            screen.blit(self.img, (self.x_pos + self.offset, self.y_pos + self.offset))
         #Power up
         elif(self.powerup and not self.dead):
-            screen.blit(GHOST_POWERUP, (self.x_pos + 100, self.y_pos + 100))
+            screen.blit(GHOST_POWERUP, (self.x_pos + self.offset, self.y_pos + self.offset))
         #Dead
         else:
            screen.blit(GHOST_DEAD, (self.x_pos, self.y_pos))
@@ -37,8 +38,8 @@ class Ghost:
         print(self.path)
         end = self.target
         for x, y in self.path:
-            self.x_pos = x
-            self.y_pos = y
+            self.x_pos = y * CELL_SIZE + self.offset
+            self.y_pos = x * CELL_SIZE + self.offset
             if(self.target != end):
                 # New start
                 self.path = self.move_bfs() 
@@ -46,13 +47,15 @@ class Ghost:
             else:
                 screen.fill((0, 0, 0))  
                 draw_board1() # Màn hình cũ
-                print((x, y))
-                screen.blit(self.img, (self.y_pos * 26 + 100, self.x_pos * 26 + 100))  
+                
+                screen.blit(self.img, (self.x_pos , self.y_pos )) 
+                # print((self.target[1], self.target[0]))
+                screen.blit(PACMAN_LEFT_1, (self.target[0], self.target[1])) 
                 pygame.display.update()
                 time.sleep(0.5)  
 
     def draw_ghost(self, x, y):
-        screen.blit(self.img, (x * 26 + 100, y * 26 + 100))
+        screen.blit(self.img, (y * CELL_SIZE + self.offset, x * CELL_SIZE + self.offset))
         pygame.display.update()
 
     # Không cần này 
@@ -85,11 +88,11 @@ class Ghost:
     def move_bfs(self):  
         start_time = time.time()
 
-        start = (self.x_pos // GRID_SIZE, self.y_pos // GRID_SIZE)
+        start = ((self.y_pos - self.offset) // GRID_SIZE, (self.x_pos - self.offset) // GRID_SIZE)
         print("Start node:", start)
-        end = (self.target[0] // GRID_SIZE, self.target[1] // GRID_SIZE)  # Pac-Man
+        end = ((self.target[1] - self.offset) // GRID_SIZE, (self.target[0] - self.offset) // GRID_SIZE)  # Pac-Man
         print("Goal node: ", end)
-        if self.path and (self.path[-1] == [self.target_x, self.target_y]):
+        if self.path and (self.path[-1] == [self.target[0], self.target[1]]):
             return  
         
         queue = deque([[start]])  
@@ -114,14 +117,15 @@ class Ghost:
                 print(f"Path found! Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes")
 
                 return path  
-
             for dx, dy in [(1, 0), (0, 1), (-1, 0), (0, -1)]:  # Các hướng di chuyển
                 next_x, next_y = x + dx, y + dy
-
                 #Generate node
                 if 0 <= next_x < len(self.map) and 0 <= next_y < len(self.map[0]) and self.map[next_x][next_y] != 1  and (next_x, next_y) not in visited:
                     new_path = path + [(next_x, next_y)]  
-                    
+                    print("THOA")
+                    print((next_x, next_y))
+                    print("Value: ", self.map[next_x][next_y])
+
                     #Early stopping 
                     if (next_x, next_y) == end:
                         self.path = new_path  
@@ -132,15 +136,15 @@ class Ghost:
                     
                     queue.append(new_path) 
                     visited.add((next_x, next_y))  
-
+        print("END")
         self.path = []  
         return None  
 
     def move_dfs(self):
         start_time = time.time()  
 
-        start = (self.x_pos // GRID_SIZE, self.y_pos // GRID_SIZE)
-        end = (self.target[0] // GRID_SIZE, self.target[1] // GRID_SIZE)
+        start = ((self.y_pos - self.offset) // GRID_SIZE, (self.x_pos - self.offset) // GRID_SIZE)
+        end = ((self.target[1] - self.offset) // GRID_SIZE, (self.target[0] - self.offset) // GRID_SIZE)
 
         stack = [(start, [start])]
         visited = set()
@@ -187,8 +191,8 @@ class Ghost:
     def move_ucs(self):
         start_time = time.time()
 
-        start = (self.x_pos // GRID_SIZE, self.y_pos // GRID_SIZE)
-        end = (self.target[0] // GRID_SIZE, self.target[1] // GRID_SIZE)
+        start = ((self.y_pos - self.offset) // GRID_SIZE, (self.x_pos - self.offset) // GRID_SIZE)
+        end = ((self.target[1] - self.offset) // GRID_SIZE, (self.target[0] - self.offset) // GRID_SIZE)
 
         pq = [(0, start, [start])]  # (cost, position, path)
         visited = set()
@@ -233,8 +237,8 @@ class Ghost:
             return manhatta
 
         start_time = time.time()
-        start = (self.x_pos // GRID_SIZE, self.y_pos // GRID_SIZE)
-        end = (self.target[0] // GRID_SIZE, self.target[1] // GRID_SIZE)
+        start = ((self.y_pos - self.offset) // GRID_SIZE, (self.x_pos - self.offset) // GRID_SIZE)
+        end = ((self.target[1] - self.offset) // GRID_SIZE, (self.target[0] - self.offset) // GRID_SIZE)
 
         g_n = {start: 0}
         f_n = {start: heuristic(*start)}
@@ -278,7 +282,10 @@ class Ghost:
         memory_used = sys.getsizeof(visited) + max_pq_size
         print(f"No path found. Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes, Nodes expanded: {len(expanded)}")
         return []
-
+    
+    def update_position(self, x, y):
+        self.x_pos = x
+        self.y_pos = y
 
 class AStarSolver:
     def __init__(self, x_pos, y_pos, target, map_data):
@@ -288,4 +295,4 @@ class AStarSolver:
         self.map = map_data
 
     # Power up: đổi ảnh, nếu bị ăn thì dead, trở về vị trí bắt dâu
-    
+ 

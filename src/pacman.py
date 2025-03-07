@@ -2,11 +2,10 @@ from src.specification import *
 import copy
 
 class Player:
-    def __init__(self, screen, x_coord, y_coord, target, speed, direct, dead, powerup, board):
+    def __init__(self, screen, x_coord, y_coord, speed, direct, dead, powerup, board, board_offset):
         self.x_pos = x_coord
         self.y_pos = y_coord
         self.gamescreen = screen
-        self.target = target #position [x, y]
         self.speed = speed  
         # self.img = img 
         self.direction = direct  #"left", "right", "up", "down"
@@ -17,10 +16,15 @@ class Player:
         self.score = 0  # Điểm số
         self.frame_count = 0 #thay đổi hình
         self.turns = [False, False, False, False] #R, L, U, D
-        self.x_board_pos = (self.x_pos - 10) // CELL_SIZE ######################### Sửa lại offset
-        self.y_board_pos = (self.y_pos - 10) // CELL_SIZE
+        self.offset = board_offset
+        self.x_board_pos = (self.x_pos - self.offset) // CELL_SIZE ######################### Sửa lại offset
+        self.y_board_pos = (self.y_pos - self.offset) // CELL_SIZE
         self.open_mouth = False
- 
+
+    def appear(self):
+        self.direction = "Left"
+        self.draw()
+
     def draw(self):
         if self.open_mouth:
             self.open_mouth = False
@@ -52,11 +56,11 @@ class Player:
                 pygame.display.update(rect)
     
     def check_collision(self, x, y):
-        if((0 <= (x - 10) // 26 < len(self.map[0]) and 0 <= (y - 10) // 26 < len(self.map) and self.map[(y - 10) // 26 ][(x - 10) // 26 ] == 1) 
-           or (0 <= (x - 10) // 26 < len(self.map[0]) and 0 <= (y - 10) // 26 < len(self.map) and self.map[(y - 10) // 26 ][(x - 10) // 26 ] == 4)):
+        if((0 <= (x - self.offset) // CELL_SIZE < len(self.map[0]) and 0 <= (y - self.offset) // CELL_SIZE < len(self.map) and self.map[(y - self.offset) // CELL_SIZE ][(x - self.offset) // CELL_SIZE ] == 1) 
+           or (0 <= (x - self.offset) // CELL_SIZE < len(self.map[0]) and 0 <= (y - self.offset) // CELL_SIZE < len(self.map) and self.map[(y - self.offset) // CELL_SIZE ][(x - self.offset) // CELL_SIZE ] == 4)):
             return 0
-        elif ((0 <= (x - 10) // 26 < len(self.map[0]) and 0 <= (y - 10) // 26 < len(self.map)) 
-           or (0 <= (x - 10) // 26 < len(self.map[0]) and 0 <= (y - 10) // 26 < len(self.map))):
+        elif ((0 <= (x - self.offset) // CELL_SIZE < len(self.map[0]) and 0 <= (y - self.offset) // CELL_SIZE < len(self.map)) 
+           or (0 <= (x - self.offset) // CELL_SIZE < len(self.map[0]) and 0 <= (y - self.offset) // CELL_SIZE < len(self.map))):
             return 1
     
     def move(self, event):
@@ -87,12 +91,16 @@ class Player:
             #self.draw()
 
     def update_board_pos(self):
-        self.x_board_pos = (self.y_pos - 10) // 26
-        self.y_board_pos = (self.x_pos - 10) // 26
+        self.x_board_pos = (self.y_pos - self.offset) // CELL_SIZE
+        self.y_board_pos = (self.x_pos - self.offset) // CELL_SIZE
+    
+    def update_position(self, x, y):
+        self.x_pos = x
+        self.y_pos = y
     
     def eat_food(self):
         if(self.map[self.x_board_pos][self.y_board_pos] == 2):
-            self.score += 10
+            self.score += self.offset
             self.map[self.x_board_pos][self.y_board_pos] = 5
         if(self.map[self.x_board_pos][self.y_board_pos] == 3):
             self.score += 30

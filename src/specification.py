@@ -12,6 +12,17 @@ APP_CAPTION = r"Pacman with Tom and Jerry"
 GRID_SIZE = CELL_SIZE = 26  
 PI = math.pi
 
+#Screen state
+STATE_HOME = "home"
+STATE_PLAYING = "playing"
+STATE_ABOUT = "about"
+STATE_LEVEL = "level"
+STATE_GAMEOVER = "gameover"
+STATE_WIN = "win"
+STATE_DONE = "done" # Vẽ xong path
+STATE_DRAW_1 = "draw 1 path"
+STATE_DRAW_4 = "draw 4 paths"
+
 #Map
 #0: empty,  1: wall,    2: path,    3:power pellets  
 #Small test case
