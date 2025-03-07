@@ -286,3 +286,6 @@ class AStarSolver:
         self.y_pos = y_pos
         self.target = target
         self.map = map_data
+
+    # Power up: đổi ảnh, nếu bị ăn thì dead, trở về vị trí bắt dâu
+    

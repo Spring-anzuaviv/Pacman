@@ -61,7 +61,6 @@ class Player:
     
     def move(self, event):
         """Chỉ di chuyển Pac-Man khi có sự kiện nhấn phím"""
-        
         if event.type == pygame.KEYDOWN:  
             if event.key == pygame.K_LEFT:
                 self.direction = "Left"
@@ -100,4 +99,9 @@ class Player:
             self.powerup = True
             self.map[self.x_board_pos][self.y_board_pos] = 5 # No food on path
 
+    # Power up: chỉnh trạng thái dead của ma
+
+    # Thắng: num đếm thức ăn, = 0 hiện mhinh thắng
     
+    # Thua: chạm ma, dead = True, nếu còn mạng, vẽ lại vị trí bắt đầu
+    # ko còn mạng thì hiển thị màn hình thua
