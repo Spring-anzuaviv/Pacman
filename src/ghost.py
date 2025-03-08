@@ -28,7 +28,7 @@ class Ghost:
         else:
            self.game.screen.blit(GHOST_DEAD, (self.x_pos, self.y_pos))
         pygame.display.update()
-        time.sleep(0.2)  
+        time.sleep(0.1)  
 
 
     def draw_path(self):
@@ -79,9 +79,10 @@ class Ghost:
         
         return turns
 
-    def move_bfs(self):  
+    def move_bfs(self):
+        print("BFS")
         start_time = time.time()
-
+        path = []
         start = ((self.y_pos - self.offset) // GRID_SIZE, (self.x_pos - self.offset) // GRID_SIZE)
         print("Start node:", start)
         end = ((self.target[1] - self.offset) // GRID_SIZE, (self.target[0] - self.offset) // GRID_SIZE)  # Pac-Man
@@ -102,7 +103,7 @@ class Ghost:
             path = queue.popleft()  # Lấy đường đi hiện tại từ hàng đợi
             x, y = path[-1]  # Lấy vị trí cuối cùng trong đường đi
             expanded.append((x, y))  
-            print(f"Expanding: {x}, {y}")
+            #print(f"Expanding: {x}, {y}")
 
             if (x, y) == end:
                 self.path = path 
@@ -114,11 +115,10 @@ class Ghost:
             for dx, dy in [(1, 0), (0, 1), (-1, 0), (0, -1)]:  # Các hướng di chuyển
                 next_x, next_y = x + dx, y + dy
                 #Generate node
-                if 0 <= next_x < len(self.map) and 0 <= next_y < len(self.map[0]) and self.map[next_x][next_y] != 1  and (next_x, next_y) not in visited:
+                if 0 <= next_x < len(self.map) and 0 <= next_y < len(self.map[0]) and self.map[next_x][next_y] != 1 and self.map[next_x][next_y] != 4  and (next_x, next_y) not in visited:
                     new_path = path + [(next_x, next_y)]  
-                    print("THOA")
-                    print((next_x, next_y))
-                    print("Value: ", self.map[next_x][next_y])
+                    #print((next_x, next_y))
+                    #print("Value: ", self.map[next_x][next_y])
 
                     #Early stopping 
                     if (next_x, next_y) == end:
@@ -130,13 +130,13 @@ class Ghost:
                     
                     queue.append(new_path) 
                     visited.add((next_x, next_y))  
-        print("END")
         self.path = []  
         return []  
 
     def move_dfs(self):
+        print("DFS")
         start_time = time.time()  
-
+        path = []
         start = ((self.y_pos - self.offset) // GRID_SIZE, (self.x_pos - self.offset) // GRID_SIZE)
         end = ((self.target[1] - self.offset) // GRID_SIZE, (self.target[0] - self.offset) // GRID_SIZE)
 
@@ -150,7 +150,7 @@ class Ghost:
             (x, y), path = stack.pop()
             
             expanded.append((x, y))  
-            print(f"Expanding: {x}, {y}")
+            #print(f"Expanding: {x}, {y}")
 
             if (x, y) == end:
                 elapsed_time = time.time() - start_time  
@@ -163,9 +163,9 @@ class Ghost:
 
             for dx, dy in [(1, 0), (0, 1), (-1, 0), (0, -1)]:
                 next_x, next_y = x + dx, y + dy
-                if 0 <= next_x < len(self.map) and 0 <= next_y < len(self.map[0]) and self.map[next_x][next_y] != 1 and (next_x, next_y) not in visited:
+                if 0 <= next_x < len(self.map) and 0 <= next_y < len(self.map[0]) and self.map[next_x][next_y] != 1 and self.map[next_x][next_y] != 4 and (next_x, next_y) not in visited:
                     new_path = path + [(next_x, next_y)]
-                    print(f"Checking node: ({next_x}, {next_y}), Value: {self.map[next_x][next_y]}")
+                   # print(f"Checking node: ({next_x}, {next_y}), Value: {self.map[next_x][next_y]}")
 
                     if (next_x, next_y) == end:
                         elapsed_time = time.time() - start_time
@@ -183,6 +183,8 @@ class Ghost:
     
 
     def move_ucs(self):
+        print("UCS")
+
         start_time = time.time()
 
         start = ((self.y_pos - self.offset) // GRID_SIZE, (self.x_pos - self.offset) // GRID_SIZE)
@@ -203,7 +205,7 @@ class Ghost:
             visited.add((x, y))  # Đánh dấu đã thăm khi lấy ra khỏi hàng đợi
 
             expanded.append((x, y))  
-            print(f"Expanding: {x}, {y}, Cost: {cost}")
+            #print(f"Expanding: {x}, {y}, Cost: {cost}")
 
             if (x, y) == end:
                 elapsed_time = time.time() - start_time
@@ -214,7 +216,7 @@ class Ghost:
 
             for dx, dy in [(1, 0), (0, 1), (-1, 0), (0, -1)]:
                 next_x, next_y = x + dx, y + dy
-                if 0 <= next_x < len(self.map) and 0 <= next_y < len(self.map[0]) and self.map[next_x][next_y] != 1:
+                if 0 <= next_x < len(self.map) and 0 <= next_y < len(self.map[0]) and self.map[next_x][next_y] != 1 and self.map[next_x][next_y] != 4:
                     new_cost = cost + 1  # Mỗi bước đi có chi phí cố định là 1
                     new_path = path + [(next_x, next_y)]
                     heapq.heappush(pq, (new_cost, (next_x, next_y), new_path))
@@ -253,7 +255,7 @@ class Ghost:
             
             visited.add((x, y))
             expanded.append((x, y))
-            print(f"Expanding: {x}, {y}, cost: {cost}, h_n: {heuristic(x,y)}, g_n: {g_n[(x, y)]}")
+            #print(f"Expanding: {x}, {y}, cost: {cost}, h_n: {heuristic(x,y)}, g_n: {g_n[(x, y)]}")
 
             if (x, y) == end:
                 elapsed_time = time.time() - start_time
@@ -263,7 +265,7 @@ class Ghost:
 
             for dx, dy in [(1, 0), (0, 1), (-1, 0), (0, -1)]:
                 next_x, next_y = x + dx, y + dy
-                if 0 <= next_x < len(self.map) and 0 <= next_y < len(self.map[0]) and self.map[next_x][next_y] != 1 and (next_x, next_y) not in visited:
+                if 0 <= next_x < len(self.map) and 0 <= next_y < len(self.map[0]) and self.map[next_x][next_y] != 1 and self.map[next_x][next_y] != 4 and (next_x, next_y) not in visited:
                     new_g = g_n[(x, y)] + 1
                     new_f = new_g + heuristic(next_x, next_y)
 

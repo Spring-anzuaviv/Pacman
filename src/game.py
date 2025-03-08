@@ -107,6 +107,8 @@ class Game:
             self.level_4()
         elif self.level == 5:
             self.level_5()
+        elif self.level == 6:
+            self.level_6()
 
     def exit_level_menu(self):
         self.state = "home"
@@ -359,8 +361,103 @@ class Game:
 
     # Level 6: Enable interactive game-play by allowing the player to control Pac-Man’s movement while
     # the ghosts actively chase him.
-    def level_6(self): ...
-        
+
+    def level_6(self): 
+        self.offset = 10
+        temp = copy.deepcopy(boards2)
+        self.draw_board2(boards2)
+        self.board = temp
+        self.player.map = temp
+
+        self.player.offset = 10
+        self.player.update_position(self.offset + 26 * 21, self.offset + 26 * 21)
+        self.player.appear()
+
+        self.blue_ghost.map = self.board
+        self.blue_ghost.offset = 10
+        self.blue_ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE)
+        self.blue_ghost.target = (self.player.x_pos, self.player.y_pos)
+        path_blue = self.blue_ghost.move_bfs()
+
+        self.pink_ghost.map = self.board
+        self.pink_ghost.offset = 10
+        self.pink_ghost.update_position(self.offset + CELL_SIZE * 21, self.offset + CELL_SIZE)
+        self.pink_ghost.target = (self.player.x_pos, self.player.y_pos)
+        path_pink = self.pink_ghost.move_dfs()
+
+        self.red_ghost.map = self.board
+        self.red_ghost.offset = 10
+        self.red_ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE * 21)
+        self.red_ghost.target = (self.player.x_pos, self.player.y_pos)
+        path_red = self.red_ghost.move_astar()
+
+        self.orange_ghost.map = self.board
+        self.orange_ghost.offset = 10
+        self.orange_ghost.update_position(self.offset + CELL_SIZE * 10, self.offset + CELL_SIZE * 11) #Middle
+        self.orange_ghost.target = (self.player.x_pos, self.player.y_pos)
+        path_orange = self.orange_ghost.move_ucs()
+
+        paths = [path_blue, path_pink, path_orange, path_red]
+       
+        running = True
+        step = 1
+        # self.screen.blit(PACMAN_LEFT_1, (self.player.y_pos, self.player.x_pos))
+        # time.sleep(0.5)
+
+        while running and self.state == STATE_PLAYING:
+            self.screen.fill("black")  # Xóa màn hình
+            self.draw_board2(temp)  # Vẽ lại bản đồ
+
+            # Vẽ từng ghost tại bước hiện tại
+            if step < len(paths[0]):
+                self.blue_ghost.update_position(paths[0][step][1] * CELL_SIZE + self.offset, paths[0][step][0]* CELL_SIZE + self.offset)
+            if step < len(paths[1]):
+                self.pink_ghost.update_position(paths[1][step][1]* CELL_SIZE + self.offset, paths[1][step][0]* CELL_SIZE + self.offset)
+            if step < len(paths[2]):
+                self.orange_ghost.update_position(paths[2][step][1]* CELL_SIZE + self.offset, paths[2][step][0]* CELL_SIZE + self.offset)
+            if step < len(paths[3]):
+                self.red_ghost.update_position(paths[3][step][1]* CELL_SIZE + self.offset, paths[3][step][0]* CELL_SIZE + self.offset)
+
+            #Chỉnh lại nếu = goal thì ko vẽ
+            self.blue_ghost.draw()
+            self.red_ghost.draw()
+            self.pink_ghost.draw()
+            self.orange_ghost.draw()
+
+            # Xử lý sự kiện bàn phím (Pac-Man di chuyển)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False
+                self.player.move(event)
+            self.player.draw()
+
+            # Nếu Pac-Man di chuyển, tính lại BFS / DFS / A* / UCS
+            new_target = [self.player.x_pos, self.player.y_pos]
+            if new_target != self.blue_ghost.target:  # Kiểm tra nếu vị trí thay đổi
+                self.blue_ghost.target = new_target
+                self.pink_ghost.target = new_target
+                self.orange_ghost.target = new_target
+                self.red_ghost.target = new_target
+
+                path_blue = self.blue_ghost.move_bfs()
+                path_pink = self.pink_ghost.move_dfs()
+                path_red = self.red_ghost.move_astar()
+                path_orange = self.orange_ghost.move_ucs()
+                max_length = 0
+                paths = [path_blue, path_pink, path_orange, path_red]
+
+                for path in paths:
+                    max_length = max(len(path), max_length)   # Tìm đường đi dài nhất
+                step = 0
+
+            step += 1
+            if step >= max_length:
+                step = 0  # Reset bước đi để vẽ lại từ đầu
+
+            pygame.display.update()
+            pygame.time.delay(100)  # Tốc độ di chuyển
+
+        self.state = STATE_HOME
 
     def win(self): 
         self.state = STATE_WIN
@@ -384,6 +481,10 @@ class Game:
                 self.launch_game(self.level)
             if(self.state == STATE_WIN):
                 self.win()
+            if(self.state == STATE_GAMEOVER):
+                self.game_over()
+            if(self.state == STATE_DONE):
+                self.show_result()
            
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
