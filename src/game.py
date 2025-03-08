@@ -18,8 +18,7 @@ class Game:
         self.path = []
         self.img = None
         self.offset = 0
-        # Nếu win, thua reset lại
-        # Nếu tạm dừng có thể 
+ 
         self.player = Player(screen = self.screen, x_coord = 10 + 26, y_coord = 10 + 26, speed = 2, direct="", dead=False, powerup=False, board=self.board, board_offset = 0)
         self.pink_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_PINK, direct=0, dead=False, powerup=False, board=self.board, board_offset = 0)
         self.blue_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_BLUE, direct=0, dead=False, powerup=False, board=self.board, board_offset = 0)
@@ -86,10 +85,6 @@ class Game:
 
     def level_menu(self):
         self.state = "level"
-        # global screen_running
-        # screen_running = True
-        # while screen_running:
-        #self.screen.fill(COLORS["Black"])
         self.draw_button("Level 1", 480, 120, 270, 50, COLORS["Pink"], lambda: self.set_state(STATE_PLAYING, 1), 50)
         self.draw_button("Level 2", 480, 220, 270, 50, COLORS["Green"], lambda: self.set_state(STATE_PLAYING, 2), 50)
         self.draw_button("Level 3", 480, 320, 270, 50, COLORS["Blue"], lambda: self.set_state(STATE_PLAYING, 3), 50)
@@ -99,13 +94,7 @@ class Game:
         self.draw_button("Back", 20, 20, 80, 40, COLORS["Red"], lambda: self.exit_level_menu(), 32) 
 
         level_text = self.font.render("Choose Your Level", True, COLORS["Yellow"])
-        self.screen.blit(level_text, (WIDTH // 2 - level_text.get_width() // 2, 50))
-
-            # for event in pygame.event.get():
-            #     if event.type == pygame.QUIT:
-            #         pygame.quit()
-            #         sys.exit()
-           # pygame.display.update()    
+        self.screen.blit(level_text, (WIDTH // 2 - level_text.get_width() // 2, 50))   
 
     def launch_game(self, level):
         if self.level == 1:
@@ -366,16 +355,22 @@ class Game:
 
         expanded_nodes_text = font1.render(f"Expanded Nodes: 0", True, COLORS["White"])  
         self.screen.blit(expanded_nodes_text, (830, 240))
-        self.set_state = STATE_HOME
+        self.state = STATE_HOME
 
     # Level 6: Enable interactive game-play by allowing the player to control Pac-Man’s movement while
     # the ghosts actively chase him.
     def level_6(self): ...
+        
 
     def win(self): 
         self.state = STATE_WIN
 
             
+    def show_result(self):
+        self.state = STATE_DONE
+
+    def game_over(self):
+        self.state = STATE_GAMEOVER
 
     def run(self): 
         running = True
@@ -389,11 +384,10 @@ class Game:
                 self.launch_game(self.level)
             if(self.state == STATE_WIN):
                 self.win()
-            # if(self.state == STATE_DRAW_1):
-            #     self.draw_path()
+           
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
             
-            pygame.display.flip()  # Cập nhật màn hình
+            pygame.display.flip() 
         pygame.quit()

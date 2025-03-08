@@ -20,9 +20,7 @@ STATE_ABOUT = "about"
 STATE_LEVEL = "level"
 STATE_GAMEOVER = "gameover"
 STATE_WIN = "win"
-STATE_DONE = "done" # Vẽ xong path
-STATE_DRAW_1 = "draw 1 path"
-STATE_DRAW_4 = "draw 4 paths"
+STATE_DONE = "done" # Vẽ xong path"
 
 #Map
 #0: empty,  1: wall,    2: path,    3:power pellets  

@@ -116,11 +116,11 @@ class Player:
     def get_lives(self):
         return self.lives
 
-def check_win_condition(map):
-    for row in map:
-        if 2 in row or 3 in row:  # Nếu vẫn còn thức ăn (2) hoặc viên năng lượng (3)
-            return False
-    return True
+    def check_win_condition(map):
+        for row in map:
+            if 2 in row or 3 in row:  # Nếu vẫn còn thức ăn (2) hoặc viên năng lượng (3)
+                return False
+        return True
 
     # Power up: chỉnh trạng thái dead của ma
 
