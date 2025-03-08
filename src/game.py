@@ -161,21 +161,21 @@ class Game:
         path = self.blue_ghost.move_bfs()
         self.blue_ghost.draw_path()
 
-        font = pygame.font.SysFont("timesnewroman", 50, bold = True)
-        level_text = font.render(f"Level {self.level}", True, COLORS["Pink"])
-        self.screen.blit(level_text, (900, 20))
+        # font = pygame.font.SysFont("timesnewroman", 50, bold = True)
+        # level_text = font.render(f"Level {self.level}", True, COLORS["Pink"])
+        # self.screen.blit(level_text, (900, 20))
         
 
-        font1 = pygame.font.SysFont("timesnewroman", 32)
-        time_text = font1.render(f"Search Time: 0.00 s", True, COLORS["White"]) 
-        self.screen.blit(time_text, (830, 120))
+        # font1 = pygame.font.SysFont("timesnewroman", 32)
+        # time_text = font1.render(f"Search Time: 0.00 s", True, COLORS["White"]) 
+        # self.screen.blit(time_text, (830, 120))
 
-        memory_text = font1.render(f"Memory Usage: 0 MB", True, COLORS["White"]) 
-        self.screen.blit(memory_text, (830, 180))
+        # memory_text = font1.render(f"Memory Usage: 0 MB", True, COLORS["White"]) 
+        # self.screen.blit(memory_text, (830, 180))
 
-        expanded_nodes_text = font1.render(f"Expanded Nodes: 0", True, COLORS["White"])  
-        self.screen.blit(expanded_nodes_text, (830, 240))
-        self.draw_button("Back", 1100, 750, 80, 40, COLORS["Red"], lambda: self.level_menu(), 32)
+        # expanded_nodes_text = font1.render(f"Expanded Nodes: 0", True, COLORS["White"])  
+        # self.screen.blit(expanded_nodes_text, (830, 240))
+        # self.draw_button("Back", 1100, 750, 80, 40, COLORS["Red"], lambda: self.level_menu(), 32)
         self.state = STATE_HOME
 
     # Level 2: Implement the Pink Ghost using the Depth-First Search (DFS) algorithm to chase Pac-Man.
@@ -193,26 +193,25 @@ class Game:
         self.pink_ghost.offset = 100
         self.pink_ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE)
         self.pink_ghost.target = [self.player.x_pos, self.player.y_pos]
-        # print((self.pink_ghost.target[1], self.pink_ghost.target[0]))
 
         path = self.pink_ghost.move_dfs()
         self.pink_ghost.draw_path()
 
-        font = pygame.font.SysFont("timesnewroman", 50, bold = True)
-        level_text = font.render(f"Level {self.level}", True, COLORS["Pink"])
-        self.screen.blit(level_text, (900, 20))
+        # font = pygame.font.SysFont("timesnewroman", 50, bold = True)
+        # level_text = font.render(f"Level {self.level}", True, COLORS["Pink"])
+        # self.screen.blit(level_text, (900, 20))
         
 
-        font1 = pygame.font.SysFont("timesnewroman", 32)
-        time_text = font1.render(f"Search Time: 0.00 s", True, COLORS["White"]) 
-        self.screen.blit(time_text, (830, 120))
+        # font1 = pygame.font.SysFont("timesnewroman", 32)
+        # time_text = font1.render(f"Search Time: 0.00 s", True, COLORS["White"]) 
+        # self.screen.blit(time_text, (830, 120))
 
-        memory_text = font1.render(f"Memory Usage: 0 MB", True, COLORS["White"]) 
-        self.screen.blit(memory_text, (830, 180))
+        # memory_text = font1.render(f"Memory Usage: 0 MB", True, COLORS["White"]) 
+        # self.screen.blit(memory_text, (830, 180))
 
-        expanded_nodes_text = font1.render(f"Expanded Nodes: 0", True, COLORS["White"])  
-        self.screen.blit(expanded_nodes_text, (830, 240))
-        self.draw_button("Back", 1100, 750, 80, 40, COLORS["Red"], lambda: self.level_menu(), 32)
+        # expanded_nodes_text = font1.render(f"Expanded Nodes: 0", True, COLORS["White"])  
+        # self.screen.blit(expanded_nodes_text, (830, 240))
+        # self.draw_button("Back", 1100, 750, 80, 40, COLORS["Red"], lambda: self.level_menu(), 32)
         self.state = STATE_HOME
 
     # Level 3: Implement the Orange Ghost using the Uniform-Cost Search algorithm to chase Pac-Man.
@@ -235,21 +234,21 @@ class Game:
         path = self.orange_ghost.move_ucs()
         self.orange_ghost.draw_path()
 
-        font = pygame.font.SysFont("timesnewroman", 50, bold = True)
-        level_text = font.render(f"Level {self.level}", True, COLORS["Pink"])
-        self.screen.blit(level_text, (900, 20))
+        # font = pygame.font.SysFont("timesnewroman", 50, bold = True)
+        # level_text = font.render(f"Level {self.level}", True, COLORS["Pink"])
+        # self.screen.blit(level_text, (900, 20))
         
 
-        font1 = pygame.font.SysFont("timesnewroman", 32)
-        time_text = font1.render(f"Search Time: 0.00 s", True, COLORS["White"]) 
-        self.screen.blit(time_text, (830, 120))
+        # font1 = pygame.font.SysFont("timesnewroman", 32)
+        # time_text = font1.render(f"Search Time: 0.00 s", True, COLORS["White"]) 
+        # self.screen.blit(time_text, (830, 120))
 
-        memory_text = font1.render(f"Memory Usage: 0 MB", True, COLORS["White"]) 
-        self.screen.blit(memory_text, (830, 180))
+        # memory_text = font1.render(f"Memory Usage: 0 MB", True, COLORS["White"]) 
+        # self.screen.blit(memory_text, (830, 180))
 
-        expanded_nodes_text = font1.render(f"Expanded Nodes: 0", True, COLORS["White"])  
-        self.screen.blit(expanded_nodes_text, (830, 240))
-        self.draw_button("Back", 1100, 750, 80, 40, COLORS["Red"], lambda: self.level_menu(), 32)
+        # expanded_nodes_text = font1.render(f"Expanded Nodes: 0", True, COLORS["White"])  
+        # self.screen.blit(expanded_nodes_text, (830, 240))
+        # self.draw_button("Back", 1100, 750, 80, 40, COLORS["Red"], lambda: self.level_menu(), 32)
         self.state = STATE_HOME
     # Level 4: Implement the Red Ghost using the A* Search (A*) algorithm to chase Pac-Man.
     def level_4(self): 
@@ -287,33 +286,72 @@ class Game:
         self.screen.blit(expanded_nodes_text, (830, 240))
         self.draw_button("Back", 1100, 750, 80, 40, COLORS["Red"], lambda: self.level_menu(), 32)
         self.state = STATE_HOME
+
     # Level 5: Implement all ghosts (Blue, Pink, Orange, and Red) moving simultaneously in the same maze,
     # each ghost follows its respective search algorithm to chase Pac-Man and executes independently.
     def level_5(self): 
-        offset_x = 100
-        offset_y = 100
+        self.offset = 100
         self.draw_board1()
         self.board = copy.deepcopy(boards1) #check ghost và player board trỏ cùng vị trí vs board game chưa
-        self.player.map = self.board
+        self.player.map = copy.deepcopy(boards1)
 
-        self.player.update_position(offset_y + len(self.board[0]) * CELL_SIZE, offset_x + len(self.board) * CELL_SIZE)
+        self.player.offset = 100
+        self.player.update_position(self.offset + 26 * 21, self.offset + 26 * 21)
         self.player.appear()
 
-        self.blue_ghost.update_position(offset_y + CELL_SIZE, offset_x + CELL_SIZE)
+        self.blue_ghost.map = copy.deepcopy(boards1)
+        self.blue_ghost.offset = 100
+        self.blue_ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE)
         self.blue_ghost.target = (self.player.x_pos, self.player.y_pos)
         path_blue = self.blue_ghost.move_bfs()
 
-        self.pink_ghost.update_position(offset_y + CELL_SIZE, offset_x + CELL_SIZE)
+        self.pink_ghost.map = copy.deepcopy(boards1)
+        self.pink_ghost.offset = 100
+        self.pink_ghost.update_position(self.offset + CELL_SIZE * 21, self.offset + CELL_SIZE)
         self.pink_ghost.target = (self.player.x_pos, self.player.y_pos)
-        paht_pink = self.pink_ghost.move_dfs()
+        path_pink = self.pink_ghost.move_dfs()
 
-        self.red_ghost.update_position(offset_y + CELL_SIZE, offset_x + CELL_SIZE)
+        self.red_ghost.map = copy.deepcopy(boards1)
+        self.red_ghost.offset = 100
+        self.red_ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE * 21)
         self.red_ghost.target = (self.player.x_pos, self.player.y_pos)
         path_red = self.red_ghost.move_astar()
 
-        self.orange_ghost.update_position(offset_y + CELL_SIZE, offset_x + CELL_SIZE)
+        self.orange_ghost.map = copy.deepcopy(boards1)
+        self.orange_ghost.offset = 100
+        self.orange_ghost.update_position(self.offset + CELL_SIZE * 10, self.offset + CELL_SIZE * 11) #Middle
         self.orange_ghost.target = (self.player.x_pos, self.player.y_pos)
         path_orange = self.orange_ghost.move_ucs()
+
+        paths = [path_blue, path_pink, path_orange, path_red]
+        max_length = 0
+        path = []
+        for path in paths:
+            max_length = max(len(path), max_length)   # Tìm đường đi dài nhất
+        step = 0  # Bước hiện tại
+
+        while step < max_length:
+            self.screen.fill("black")  
+            self.draw_board1()  
+            self.screen.blit(PACMAN_LEFT_1, (self.blue_ghost.target[0], self.blue_ghost.target[1])) 
+
+            # Vẽ từng ghost tại bước hiện tại
+            if step < len(paths[0]):
+                self.blue_ghost.update_position(paths[0][step][1] * CELL_SIZE + self.offset, paths[0][step][0]* CELL_SIZE + self.offset)
+            if step < len(paths[1]):
+                self.pink_ghost.update_position(paths[1][step][1]* CELL_SIZE + self.offset, paths[1][step][0]* CELL_SIZE + self.offset)
+            if step < len(paths[2]):
+                self.orange_ghost.update_position(paths[2][step][1]* CELL_SIZE + self.offset, paths[2][step][0]* CELL_SIZE + self.offset)
+            if step < len(paths[3]):
+                self.red_ghost.update_position(paths[3][step][1]* CELL_SIZE + self.offset, paths[3][step][0]* CELL_SIZE + self.offset)
+
+            #Chỉnh lại nếu = goal thì ko vẽ
+            self.blue_ghost.draw()
+            self.red_ghost.draw()
+            self.pink_ghost.draw()
+            self.orange_ghost.draw()
+
+            step += 1
 
         font = pygame.font.SysFont("timesnewroman", 50, bold = True)
         level_text = font.render(f"Level {self.level}", True, COLORS["Pink"])
@@ -328,20 +366,15 @@ class Game:
 
         expanded_nodes_text = font1.render(f"Expanded Nodes: 0", True, COLORS["White"])  
         self.screen.blit(expanded_nodes_text, (830, 240))
+        self.set_state = STATE_HOME
+
     # Level 6: Enable interactive game-play by allowing the player to control Pac-Man’s movement while
     # the ghosts actively chase him.
     def level_6(self): ...
-    def win(self): ...
-    # def draw_path(self):
-    #     for x, y in self.path:
-    #         self.x_pos = x
-    #         self.y_pos = y
-    #         screen.fill((0, 0, 0))  
-    #         draw_board1() 
-    #         print((x, y))
-    #         screen.blit(self.img, (self.y_pos * CELL_SIZE + self.offset, self.x_pos * CELL_SIZE + self.offset))  
-    #         pygame.display.update()
-    #         time.sleep(0.5)
+
+    def win(self): 
+        self.state = STATE_WIN
+
             
 
     def run(self): 

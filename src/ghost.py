@@ -20,14 +20,16 @@ class Ghost:
     def draw(self):
         #Normal state
         if (not self.powerup and not self.dead):
-            self.game.screen.blit(self.img, (self.x_pos + self.offset, self.y_pos + self.offset))
+            self.game.screen.blit(self.img, (self.x_pos, self.y_pos))
         #Power up
         elif(self.powerup and not self.dead):
-            self.game.screen.blit(GHOST_POWERUP, (self.x_pos + self.offset, self.y_pos + self.offset))
+            self.game.screen.blit(GHOST_POWERUP, (self.x_pos, self.y_pos))
         #Dead
         else:
            self.game.screen.blit(GHOST_DEAD, (self.x_pos, self.y_pos))
         pygame.display.update()
+        time.sleep(0.2)  
+
 
     def draw_path(self):
         # Pacman's position changes
@@ -38,10 +40,9 @@ class Ghost:
             self.y_pos = x * CELL_SIZE + self.offset
             self.game.screen.fill((0, 0, 0))  
             self.game.draw_board1() # Màn hình cũ
-            
+            self.game.screen.blit(PACMAN_LEFT_1, (self.target[0], self.target[1])) 
             self.game.screen.blit(self.img, (self.x_pos , self.y_pos )) 
             # print((self.target[1], self.target[0]))
-            self.game.screen.blit(PACMAN_LEFT_1, (self.target[0], self.target[1])) 
             pygame.display.update()
             time.sleep(0.5)  
 
@@ -49,6 +50,8 @@ class Ghost:
         self.game.screen.blit(self.img, (y * CELL_SIZE + self.offset, x * CELL_SIZE + self.offset))
         pygame.display.update()
 
+    def draw_multipaths(self, paths): ...
+        
     # Không cần này 
     def check_collisions(self):
         cell_h = GRID_SIZE
@@ -129,7 +132,7 @@ class Ghost:
                     visited.add((next_x, next_y))  
         print("END")
         self.path = []  
-        return None  
+        return []  
 
     def move_dfs(self):
         start_time = time.time()  
@@ -255,6 +258,7 @@ class Ghost:
             if (x, y) == end:
                 elapsed_time = time.time() - start_time
                 print(f"Path found! Time: {elapsed_time:.6f}s, Memory: {sys.getsizeof(visited)} bytes")
+                self.path = path
                 return path  
 
             for dx, dy in [(1, 0), (0, 1), (-1, 0), (0, -1)]:
@@ -277,6 +281,7 @@ class Ghost:
     def update_position(self, x, y):
         self.x_pos = x
         self.y_pos = y
+
 
 class AStarSolver:
     def __init__(self, x_pos, y_pos, target, map_data):
