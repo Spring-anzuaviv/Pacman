@@ -67,6 +67,8 @@ class Player:
     
     def move(self, event):
         """Chỉ di chuyển Pac-Man khi có sự kiện nhấn phím"""
+        new_pos_x = 0
+        new_pos_y = 0
         if event.type == pygame.KEYDOWN:  
             if event.key == pygame.K_LEFT:
                 self.direction = "Left"
