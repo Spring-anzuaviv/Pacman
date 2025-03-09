@@ -134,4 +134,5 @@ GHOST_RED = pygame.transform.scale(pygame.image.load(r"img/red.png"), (CELL_SIZE
 GHOST_YELLOW = pygame.transform.scale(pygame.image.load(r"img/yellow.png"), (CELL_SIZE, CELL_SIZE))
 GHOST_POWERUP = pygame.transform.scale(pygame.image.load(r"img/powerup.png"), (CELL_SIZE, CELL_SIZE))
 
+BG_IMG = pygame.transform.scale(pygame.image.load(r"img/bg.png"), (CELL_SIZE, CELL_SIZE))
 

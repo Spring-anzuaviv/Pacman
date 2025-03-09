@@ -19,11 +19,11 @@ class Game:
         self.img = None
         self.offset = 0
  
-        self.player = Player(screen = self.screen, x_coord = 10 + 26, y_coord = 10 + 26, speed = 2, direct="", dead=False, powerup=False, board=self.board, board_offset = 0)
-        self.pink_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_PINK, direct=0, dead=False, powerup=False, board=self.board, board_offset = 0)
-        self.blue_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_BLUE, direct=0, dead=False, powerup=False, board=self.board, board_offset = 0)
-        self.orange_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_YELLOW, direct=0, dead=False, powerup=False, board=self.board, board_offset = 0)
-        self.red_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_RED, direct=0, dead=False, powerup=False, board=self.board, board_offset = 0)
+        self.player = Player(game = self, x_coord = 10 + 26, y_coord = 10 + 26, x_target= 10 +26, y_target= 10+26, speed = 2, direct="", dead=False, powerup=False, board=self.board, board_offset = 0)
+        self.pink_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, next_x = 26 , next_y = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_PINK, direct=0, dead=False, powerup=False, board=self.board, board_offset = 0)
+        self.blue_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, next_x = 26 , next_y = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_BLUE, direct=0, dead=False, powerup=False, board=self.board, board_offset = 0)
+        self.orange_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, next_x = 26 , next_y = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_YELLOW, direct=0, dead=False, powerup=False, board=self.board, board_offset = 0)
+        self.red_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, next_x = 26 , next_y = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_RED, direct=0, dead=False, powerup=False, board=self.board, board_offset = 0)
 
 
     def draw_board1(self):
@@ -261,21 +261,21 @@ class Game:
         path = self.red_ghost.move_astar()
         self.red_ghost.draw_path()
 
-        font = pygame.font.SysFont("timesnewroman", 50, bold = True)
-        level_text = font.render(f"Level {self.level}", True, COLORS["Pink"])
-        self.screen.blit(level_text, (900, 20))
+        # font = pygame.font.SysFont("timesnewroman", 50, bold = True)
+        # level_text = font.render(f"Level {self.level}", True, COLORS["Pink"])
+        # self.screen.blit(level_text, (900, 20))
         
 
-        font1 = pygame.font.SysFont("timesnewroman", 32)
-        time_text = font1.render(f"Search Time: 0.00 s", True, COLORS["White"]) 
-        self.screen.blit(time_text, (830, 120))
+        # font1 = pygame.font.SysFont("timesnewroman", 32)
+        # time_text = font1.render(f"Search Time: 0.00 s", True, COLORS["White"]) 
+        # self.screen.blit(time_text, (830, 120))
 
-        memory_text = font1.render(f"Memory Usage: 0 MB", True, COLORS["White"]) 
-        self.screen.blit(memory_text, (830, 180))
+        # memory_text = font1.render(f"Memory Usage: 0 MB", True, COLORS["White"]) 
+        # self.screen.blit(memory_text, (830, 180))
 
-        expanded_nodes_text = font1.render(f"Expanded Nodes: 0", True, COLORS["White"])  
-        self.screen.blit(expanded_nodes_text, (830, 240))
-        self.draw_button("Back", 1100, 750, 80, 40, COLORS["Red"], lambda: self.level_menu(), 32)
+        # expanded_nodes_text = font1.render(f"Expanded Nodes: 0", True, COLORS["White"])  
+        # self.screen.blit(expanded_nodes_text, (830, 240))
+        # self.draw_button("Back", 1100, 750, 80, 40, COLORS["Red"], lambda: self.level_menu(), 32)
         self.state = STATE_HOME
 
     # Level 5: Implement all ghosts (Blue, Pink, Orange, and Red) moving simultaneously in the same maze,
@@ -341,22 +341,23 @@ class Game:
             self.red_ghost.draw()
             self.pink_ghost.draw()
             self.orange_ghost.draw()
+            time.sleep(0.5)
 
             step += 1
 
-        font = pygame.font.SysFont("timesnewroman", 50, bold = True)
-        level_text = font.render(f"Level {self.level}", True, COLORS["Pink"])
-        self.screen.blit(level_text, (900, 20))
+        # font = pygame.font.SysFont("timesnewroman", 50, bold = True)
+        # level_text = font.render(f"Level {self.level}", True, COLORS["Pink"])
+        # self.screen.blit(level_text, (900, 20))
 
-        font1 = pygame.font.SysFont("timesnewroman", 32)
-        time_text = font1.render(f"Search Time: 0.00 s", True, COLORS["White"]) 
-        self.screen.blit(time_text, (830, 120))
+        # font1 = pygame.font.SysFont("timesnewroman", 32)
+        # time_text = font1.render(f"Search Time: 0.00 s", True, COLORS["White"]) 
+        # self.screen.blit(time_text, (830, 120))
 
-        memory_text = font1.render(f"Memory Usage: 0 MB", True, COLORS["White"]) 
-        self.screen.blit(memory_text, (830, 180))
+        # memory_text = font1.render(f"Memory Usage: 0 MB", True, COLORS["White"]) 
+        # self.screen.blit(memory_text, (830, 180))
 
-        expanded_nodes_text = font1.render(f"Expanded Nodes: 0", True, COLORS["White"])  
-        self.screen.blit(expanded_nodes_text, (830, 240))
+        # expanded_nodes_text = font1.render(f"Expanded Nodes: 0", True, COLORS["White"])  
+        # self.screen.blit(expanded_nodes_text, (830, 240))
         self.state = STATE_HOME
 
     # Level 6: Enable interactive game-play by allowing the player to control Pac-Man’s movement while
@@ -400,36 +401,44 @@ class Game:
         paths = [path_blue, path_pink, path_orange, path_red]
        
         running = True
-        step = 1
+        step = 0
+        frame_count = 0
+        frame_skip = 5
         # self.screen.blit(PACMAN_LEFT_1, (self.player.y_pos, self.player.x_pos))
         # time.sleep(0.5)
-
+        clock = pygame.time.Clock()
+        fps = 60
         while running and self.state == STATE_PLAYING:
+            clock.tick(fps)
+            frame_count += 1
             self.screen.fill("black")  # Xóa màn hình
             self.draw_board2(temp)  # Vẽ lại bản đồ
 
             # Vẽ từng ghost tại bước hiện tại
-            if step < len(paths[0]):
-                self.blue_ghost.update_position(paths[0][step][1] * CELL_SIZE + self.offset, paths[0][step][0]* CELL_SIZE + self.offset)
-            if step < len(paths[1]):
-                self.pink_ghost.update_position(paths[1][step][1]* CELL_SIZE + self.offset, paths[1][step][0]* CELL_SIZE + self.offset)
-            if step < len(paths[2]):
-                self.orange_ghost.update_position(paths[2][step][1]* CELL_SIZE + self.offset, paths[2][step][0]* CELL_SIZE + self.offset)
-            if step < len(paths[3]):
-                self.red_ghost.update_position(paths[3][step][1]* CELL_SIZE + self.offset, paths[3][step][0]* CELL_SIZE + self.offset)
+            if frame_count % frame_skip == 0:
+                step += 1
+                if step < len(paths[0]):
+                    self.blue_ghost.update_position(paths[0][step][1] * CELL_SIZE + self.offset, paths[0][step][0]* CELL_SIZE + self.offset)
+                if step < len(paths[1]):
+                    self.pink_ghost.update_position(paths[1][step][1]* CELL_SIZE + self.offset, paths[1][step][0]* CELL_SIZE + self.offset)
+                if step < len(paths[2]):
+                    self.orange_ghost.update_position(paths[2][step][1]* CELL_SIZE + self.offset, paths[2][step][0]* CELL_SIZE + self.offset)
+                if step < len(paths[3]):
+                    self.red_ghost.update_position(paths[3][step][1]* CELL_SIZE + self.offset, paths[3][step][0]* CELL_SIZE + self.offset)
 
-            #Chỉnh lại nếu = goal thì ko vẽ
             self.blue_ghost.draw()
+            self.pink_ghost.draw() #dfs
+            self.orange_ghost.draw() #ucs
             self.red_ghost.draw()
-            self.pink_ghost.draw()
-            self.orange_ghost.draw()
 
             # Xử lý sự kiện bàn phím (Pac-Man di chuyển)
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
-                self.player.move(event)
-            self.player.draw()
+                self.player.update_direction(event)
+
+            self.player.move()
+            self.player.eat_food()
 
             # Nếu Pac-Man di chuyển, tính lại BFS / DFS / A* / UCS
             new_target = [self.player.x_pos, self.player.y_pos]
@@ -450,9 +459,13 @@ class Game:
                     max_length = max(len(path), max_length)   # Tìm đường đi dài nhất
                 step = 0
 
-            step += 1
             if step >= max_length:
                 step = 0  # Reset bước đi để vẽ lại từ đầu
+            if ((self.player.x_pos, self.player.y_pos) == (self.blue_ghost.x_pos, self.blue_ghost.y_pos) or
+            (self.player.x_pos, self.player.y_pos) == (self.pink_ghost.x_pos, self.pink_ghost.y_pos) or
+            (self.player.x_pos, self.player.y_pos) == (self.orange_ghost.x_pos, self.orange_ghost.y_pos) or
+            (self.player.x_pos, self.player.y_pos) == (self.red_ghost.x_pos, self.red_ghost.y_pos)):
+                self.state = STATE_HOME
 
             pygame.display.update()
             pygame.time.delay(100)  # Tốc độ di chuyển
@@ -468,6 +481,7 @@ class Game:
 
     def game_over(self):
         self.state = STATE_GAMEOVER
+        
 
     def run(self): 
         running = True

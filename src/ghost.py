@@ -1,6 +1,6 @@
 from specification import *
 class Ghost:
-    def __init__(self, game, x_coord, y_coord, target, speed, img, direct, dead, powerup, board, board_offset):
+    def __init__(self, game, x_coord, y_coord, next_x, next_y, target, speed, img, direct, dead, powerup, board, board_offset):
         self.x_pos = x_coord
         self.y_pos = y_coord
         # self.center_x = self.x_pos + 13
@@ -16,6 +16,8 @@ class Ghost:
         self.path = [] #Path found by search algorithm
         self.offset = board_offset
         self.game = game
+        self.next_x_pos = next_x
+        self.next_y_pos = next_y
 
     def draw(self):
         #Normal state
@@ -27,8 +29,6 @@ class Ghost:
         #Dead
         else:
            self.game.screen.blit(GHOST_DEAD, (self.x_pos, self.y_pos))
-        pygame.display.update()
-
 
     def draw_path(self):
         # Pacman's position changes
@@ -45,9 +45,7 @@ class Ghost:
             pygame.display.update()
             time.sleep(0.5)  
 
-    def draw_ghost(self, x, y):
-        self.game.screen.blit(self.img, (y * CELL_SIZE + self.offset, x * CELL_SIZE + self.offset))
-        pygame.display.update()
+        
 
     def draw_multipaths(self, paths): ...
         
@@ -211,6 +209,7 @@ class Ghost:
                 memory_used = sys.getsizeof(visited) + max_pq_size
                 print(f"Path found! Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes, Nodes expanded: {len(expanded)}")
                 self.path = path
+                
                 return path
 
             for dx, dy in [(1, 0), (0, 1), (-1, 0), (0, -1)]:
@@ -279,10 +278,13 @@ class Ghost:
         print(f"No path found. Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes, Nodes expanded: {len(expanded)}")
         return []
     
+    def update_next(self, x, y):
+        self.next_x_pos = x
+        self.next_y_pos = y
+       
     def update_position(self, x, y):
         self.x_pos = x
         self.y_pos = y
-
 
 class AStarSolver:
     def __init__(self, x_pos, y_pos, target, map_data):
