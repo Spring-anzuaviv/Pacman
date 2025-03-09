@@ -28,7 +28,6 @@ class Ghost:
         else:
            self.game.screen.blit(GHOST_DEAD, (self.x_pos, self.y_pos))
         pygame.display.update()
-        time.sleep(0.1)  
 
 
     def draw_path(self):
