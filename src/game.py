@@ -134,8 +134,8 @@ class Game:
         self.draw_button("Exit", 800, 650, 270, 60, COLORS["Red"], self.exit_game, 50)
 
     def reset_ghost(self, ghost):
-        ghost.x_pos = ghost.initial_x
-        ghost.y_pos = ghost.initial_y
+        ghost.x_pos = ghost.x_pos
+        ghost.y_pos = ghost.y_pos
         ghost.target = [26 * 20, 26 * 19]
         ghost.speed = 2
         ghost.dead = False
@@ -143,8 +143,8 @@ class Game:
         ghost.direct = 0 
 
     def reset_player(self):
-        self.player.x_pos = self.player.initial_x
-        self.player.y_pos = self.player.initial_y
+        self.player.x_pos = self.player.x_pos
+        self.player.y_pos = self.player.y_pos
         self.player.dead = False
         self.player.powerup = False
         self.player.direct = "" 
@@ -365,7 +365,9 @@ class Game:
             frame_count += 1
             self.screen.fill("black")  # Xóa màn hình
             self.draw_board2(temp)  # Vẽ lại bản đồ
-
+            # if self.check_collision():  # Kiểm tra va chạm đầu tiên
+            #     self.game_over()
+            #     return 
 
             # Vẽ từng ghost tại bước hiện tại
             if frame_count % frame_skip == 0:
@@ -378,6 +380,7 @@ class Game:
                     self.orange_ghost.update_position(paths[2][step][1]* CELL_SIZE + self.offset, paths[2][step][0]* CELL_SIZE + self.offset)
                 if step < len(paths[3]):
                     self.red_ghost.update_position(paths[3][step][1]* CELL_SIZE + self.offset, paths[3][step][0]* CELL_SIZE + self.offset)
+            
             # if self.check_collision():
             #     self.game_over()
             #     return 
@@ -385,9 +388,8 @@ class Game:
             # if self.check_win():
             #     self.win()
             #     return
-            '''tự nhiên lỗi chỗ này'''
+
             # Vẽ từng ghost tại bước hiện tại 
-           
             self.blue_ghost.draw()
             self.pink_ghost.draw() #dfs
             self.orange_ghost.draw() #ucs
@@ -428,7 +430,7 @@ class Game:
             (self.player.x_pos, self.player.y_pos) == (self.pink_ghost.x_pos, self.pink_ghost.y_pos) or
             (self.player.x_pos, self.player.y_pos) == (self.orange_ghost.x_pos, self.orange_ghost.y_pos) or
             (self.player.x_pos, self.player.y_pos) == (self.red_ghost.x_pos, self.red_ghost.y_pos)):
-                self.state = STATE_HOME
+                self.state = STATE_GAMEOVER
 
             pygame.display.update()
             pygame.time.delay(100)  # Tốc độ di chuyển
@@ -437,9 +439,16 @@ class Game:
 
     """Kiểm tra nếu Pac-Man chạm vào ma"""
     def check_collision(self): 
+        # for ghost in [self.blue_ghost, self.pink_ghost, self.orange_ghost, self.red_ghost]:
+        #     if abs(self.player.x_pos - ghost.x_pos) < CELL_SIZE // 2 and abs(self.player.y_pos - ghost.y_pos) < CELL_SIZE // 2:
+        #         return True  # Pac-Man bị bắt
+        pac_rect = pygame.Rect(self.player.x_pos, self.player.y_pos, CELL_SIZE, CELL_SIZE)
+    
         for ghost in [self.blue_ghost, self.pink_ghost, self.orange_ghost, self.red_ghost]:
-            if abs(self.player.x_pos - ghost.x_pos) < CELL_SIZE // 2 and abs(self.player.y_pos - ghost.y_pos) < CELL_SIZE // 2:
-                return True  # Pac-Man bị bắt
+            ghost_rect = pygame.Rect(ghost.x_pos, ghost.y_pos, CELL_SIZE, CELL_SIZE)
+            
+            if pac_rect.colliderect(ghost_rect):  # Check if Pac-Man and ghost collide
+                return True  
         return False
     
     """Kiểm tra nếu Pac-Man đã ăn hết tất cả pellet"""
@@ -450,12 +459,13 @@ class Game:
         return True  
 
     def win(self): 
+        self.state = STATE_WIN
         self.screen.fill((0, 0, 0))  # Đặt nền màu đen
         font = pygame.font.SysFont("timesnewroman", 50, bold=True)
         win_text = font.render("YOU WIN!", True, (255, 255, 0))
         self.screen.blit(EMOJI_WIN_1, (425, 345))
         self.screen.blit(EMOJI_WIN_2, (725, 345))
-        text_rect = win_text.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 2 - 50))
+        self.screen.blit(win_text, (WIDTH // 2 - win_text.get_width() // 2, HEIGHT // 2 - 50))
         
         sub_font = pygame.font.SysFont("timesnewroman", 40)
         play_again_text = sub_font.render("Press Y to Play Again", True, COLORS["Yellow"])
@@ -478,12 +488,12 @@ class Game:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_y:  
                         self.reset_game()
-                        waiting = False
+                        self.state = STATE_PLAYING
+                        return
                     elif event.key == pygame.K_n:
                         self.state = STATE_LEVEL
-                        waiting = False
+                        return
         
-        self.state = STATE_WIN
 
     """bị sai chỗ Y quay lại màn hình cho chạy"""
     def show_result(self):
@@ -532,10 +542,10 @@ class Game:
     def game_over(self):
         self.screen.fill((0, 0, 0))  # Đặt nền màu đen
         font = pygame.font.SysFont("timesnewroman", 50, bold=True)
-        text = font.render("GAME OVER", True, (255, 0, 0))
-        self.screen.blit(EMOJI_LOSE, (390, 345))
-        self.screen.blit(EMOJI_LOSE, (760, 345))
-        text_rect = text.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 2 - 50))
+        text = font.render("GAME OVER", True, COLORS["Red"])
+        self.screen.blit(EMOJI_LOSE, (390, 360))
+        self.screen.blit(EMOJI_LOSE, (760, 360))
+        self.screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - 50))
         
         sub_font = pygame.font.SysFont("timesnewroman", 40)
         play_again_text = sub_font.render("Press Y to Play Again", True, COLORS["Yellow"])
@@ -558,12 +568,12 @@ class Game:
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_y:  
                         self.reset_game()
-                        waiting = False
+                        self.state = STATE_PLAYING
+                        return
                     elif event.key == pygame.K_n:
                         self.state = STATE_LEVEL
-                        waiting = False
+                        return
         
-        self.state = STATE_GAMEOVER
 
     
     def reset_game(self):
