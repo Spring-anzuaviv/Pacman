@@ -30,5 +30,6 @@ def main():
 
     game = Game()
     game.run()
+    #game.game_over()
 
 main()

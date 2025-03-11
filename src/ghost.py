@@ -88,7 +88,8 @@ class Ghost:
         end = ((self.target[1] - self.offset) // GRID_SIZE, (self.target[0] - self.offset) // GRID_SIZE)  # Pac-Man
         print("Goal node: ", end)
         if self.path and (self.path[-1] == [self.target[0], self.target[1]]):
-            return self.path, 0, 0, 0
+            self.time, self.expanded, self.mem = elapsed_time, expanded_nodes,  memory_used
+            return self.path
         
         queue = deque([[start]])  
         visited = set([start])
@@ -111,16 +112,16 @@ class Ghost:
                 self.path = path 
                 elapsed_time = time.time() - start_time
                 memory_used = sys.getsizeof(visited) + max_queue_size 
-                print(f"Path found! Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes")
-                return path, elapsed_time, memory_used, expanded_nodes
+                print(f"Path found! Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes, Nodes: {expanded_nodes}")
+                self.time, self.expanded, self.mem = elapsed_time, expanded_nodes,  memory_used
+
+                return path
             
             for dx, dy in [(1, 0), (0, 1), (-1, 0), (0, -1)]:  # Các hướng di chuyển
                 next_x, next_y = x + dx, y + dy
                 #Generate node
                 if 0 <= next_x < len(self.map) and 0 <= next_y < len(self.map[0]) and self.map[next_x][next_y] != 1 and self.map[next_x][next_y] != 4  and (next_x, next_y) not in visited:
                     new_path = path + [(next_x, next_y)]  
-                    #print((next_x, next_y))
-                    #print("Value: ", self.map[next_x][next_y])
 
                     #Early stopping 
                     if (next_x, next_y) == end:

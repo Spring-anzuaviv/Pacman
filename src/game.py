@@ -22,7 +22,7 @@ class Game:
         self.img = None
         self.offset = 0
         self.expanded_nodes = 0
-        self.elapsed_time = 0
+        self.elapsed_time = 0.00000001
         self.memory_usage = 0
         self.player = Player(game = self, x_coord = 10 + 26, y_coord = 10 + 26, x_target= 10 +26, y_target= 10+26, speed = 2, direct="", dead=False, powerup=False, board=self.board, board_offset = 0)
         self.pink_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, next_x = 26 , next_y = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_PINK, direct=0, dead=False, powerup=False, board=self.board, board_offset = 0)
@@ -428,7 +428,7 @@ class Game:
             (self.player.x_pos, self.player.y_pos) == (self.pink_ghost.x_pos, self.pink_ghost.y_pos) or
             (self.player.x_pos, self.player.y_pos) == (self.orange_ghost.x_pos, self.orange_ghost.y_pos) or
             (self.player.x_pos, self.player.y_pos) == (self.red_ghost.x_pos, self.red_ghost.y_pos)):
-                self.state = STATE_HOME
+                self.state = STATE_WIN
 
             pygame.display.update()
             pygame.time.delay(100)  # Tốc độ di chuyển
@@ -483,7 +483,6 @@ class Game:
                         self.state = STATE_LEVEL
                         waiting = False
         
-        self.state = STATE_WIN
 
     """bị sai chỗ Y quay lại màn hình cho chạy"""
     def show_result(self):
@@ -493,7 +492,7 @@ class Game:
         self.screen.blit(level_text, (WIDTH // 2 - level_text.get_width() // 2, 50))
 
         font1 = pygame.font.SysFont("timesnewroman", 32)
-        time_text = font1.render(f"Search Time: {self.elapsed_time} s", True, COLORS["White"]) 
+        time_text = font1.render(f"Search Time: {self.search_time:.6f} s", True, COLORS["White"]) 
         self.screen.blit(time_text, (WIDTH // 2 - 200, 150))
 
         memory_text = font1.render(f"Memory Usage: {self.memory_usage} bytes", True, COLORS["White"]) 
