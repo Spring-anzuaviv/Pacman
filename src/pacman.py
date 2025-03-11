@@ -28,35 +28,65 @@ class Player:
         self.draw()
 
 
-    def draw(self):
-        if self.open_mouth:
-            self.open_mouth = False
-            if self.direction == "Left":
-                rect = self.game.screen.blit(PACMAN_LEFT_1, (self.x_pos, self.y_pos))
-                pygame.display.update(rect)
-            if self.direction == "Right":
-                rect = self.game.screen.blit(PACMAN_RIGHT_1, (self.x_pos, self.y_pos))
-                pygame.display.update(rect)
-            if self.direction == "Up":
-                rect = self.game.screen.blit(PACMAN_UP_1, (self.x_pos, self.y_pos))
-                pygame.display.update(rect)
-            if self.direction == "Down":
-                rect = self.game.screen.blit(PACMAN_DOWN_1, (self.x_pos, self.y_pos))
-                pygame.display.update(rect) 
+    def draw(self): 
+        if self.powerup:
+            if self.open_mouth:
+                self.open_mouth = False
+                if self.direction == "Left":
+                    rect = self.game.screen.blit(PACMAN_POWERUP, (self.x_pos, self.y_pos))
+                    pygame.display.update(rect)
+                elif self.direction == "Right":
+                    rect = self.game.screen.blit(PACMAN_POWERUP, (self.x_pos, self.y_pos))
+                    pygame.display.update(rect)
+                elif self.direction == "Up":
+                    rect = self.game.screen.blit(PACMAN_POWERUP, (self.x_pos, self.y_pos))
+                    pygame.display.update(rect)
+                elif self.direction == "Down":
+                    rect = self.game.screen.blit(PACMAN_POWERUP, (self.x_pos, self.y_pos))
+                    pygame.display.update(rect)
+            else:
+                self.open_mouth = True
+                if self.direction == "Left":
+                    rect = self.game.screen.blit(PACMAN_POWERUP, (self.x_pos, self.y_pos))
+                    pygame.display.update(rect)
+                elif self.direction == "Right":
+                    rect = self.game.screen.blit(PACMAN_POWERUP, (self.x_pos, self.y_pos))
+                    pygame.display.update(rect)
+                elif self.direction == "Up":
+                    rect = self.game.screen.blit(PACMAN_POWERUP, (self.x_pos, self.y_pos))
+                    pygame.display.update(rect)
+                elif self.direction == "Down":
+                    rect = self.game.screen.blit(PACMAN_POWERUP, (self.x_pos, self.y_pos))
+                    pygame.display.update(rect)
         else:
-            self.open_mouth = True
-            if self.direction == "Left":
-                rect = self.game.screen.blit(PACMAN_LEFT_2, (self.x_pos, self.y_pos))
-                pygame.display.update(rect)
-            if self.direction == "Right":
-                rect = self.game.screen.blit(PACMAN_RIGHT_2, (self.x_pos, self.y_pos))
-                pygame.display.update(rect)
-            if self.direction == "Up":
-                rect = self.game.screen.blit(PACMAN_UP_2, (self.x_pos, self.y_pos))
-                pygame.display.update(rect)
-            if self.direction == "Down":
-                rect = self.game.screen.blit(PACMAN_DOWN_2, (self.x_pos, self.y_pos))
-                pygame.display.update(rect)
+                if self.open_mouth:
+                    self.open_mouth = False
+                    if self.direction == "Left":
+                        rect = self.game.screen.blit(PACMAN_LEFT_1, (self.x_pos, self.y_pos))
+                        pygame.display.update(rect)
+                    if self.direction == "Right":
+                        rect = self.game.screen.blit(PACMAN_RIGHT_1, (self.x_pos, self.y_pos))
+                        pygame.display.update(rect)
+                    if self.direction == "Up":
+                        rect = self.game.screen.blit(PACMAN_UP_1, (self.x_pos, self.y_pos))
+                        pygame.display.update(rect)
+                    if self.direction == "Down":
+                        rect = self.game.screen.blit(PACMAN_DOWN_1, (self.x_pos, self.y_pos))
+                        pygame.display.update(rect) 
+                else:
+                    self.open_mouth = True
+                    if self.direction == "Left":
+                        rect = self.game.screen.blit(PACMAN_LEFT_2, (self.x_pos, self.y_pos))
+                        pygame.display.update(rect)
+                    if self.direction == "Right":
+                        rect = self.game.screen.blit(PACMAN_RIGHT_2, (self.x_pos, self.y_pos))
+                        pygame.display.update(rect)
+                    if self.direction == "Up":
+                        rect = self.game.screen.blit(PACMAN_UP_2, (self.x_pos, self.y_pos))
+                        pygame.display.update(rect)
+                    if self.direction == "Down":
+                        rect = self.game.screen.blit(PACMAN_DOWN_2, (self.x_pos, self.y_pos))
+                        pygame.display.update(rect)
     
     def check_collision(self, x, y):
         if((0 <= (x - self.offset) // CELL_SIZE < len(self.map[0]) and 0 <= (y - self.offset) // CELL_SIZE < len(self.map) and self.map[(y - self.offset) // CELL_SIZE ][(x - self.offset) // CELL_SIZE ] == 1) 
