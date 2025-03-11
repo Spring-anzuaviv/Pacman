@@ -20,7 +20,8 @@ STATE_ABOUT = "about"
 STATE_LEVEL = "level"
 STATE_GAMEOVER = "gameover"
 STATE_WIN = "win"
-STATE_DONE = "done" # Vẽ xong path"
+STATE_RESULT = "result" # Vẽ xong path"
+STATE_RESULT_4 = "result for 4"
 
 #Map
 #0: empty,  1: wall,    2: path,    3:power pellets  

@@ -32,6 +32,7 @@ class Ghost:
         #Dead
         else:
            self.game.screen.blit(GHOST_DEAD, (self.x_pos, self.y_pos))
+       
 
     def draw_path(self):
         # Pacman's position changes
@@ -114,7 +115,6 @@ class Ghost:
                 memory_used = sys.getsizeof(visited) + max_queue_size 
                 print(f"Path found! Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes, Nodes: {expanded_nodes}")
                 self.time, self.expanded, self.mem = elapsed_time, expanded_nodes,  memory_used
-
                 return path
             
             for dx, dy in [(1, 0), (0, 1), (-1, 0), (0, -1)]:  # Các hướng di chuyển
@@ -189,7 +189,7 @@ class Ghost:
         elapsed_time = time.time() - start_time
         memory_used = sys.getsizeof(visited) + max_stack_size
         print(f"No path found. Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes, Nodes expanded: {len(expanded)}")
-        self.time, self.expanded, self.mem = elapsed_time, expanded_nodes,  memory_used
+        self.time, self.expanded, self.mem = elapsed_time, expanded_nodes, memory_used
         return []
     
 

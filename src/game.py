@@ -24,6 +24,8 @@ class Game:
         self.expanded_nodes = 0
         self.elapsed_time = 0.00000001
         self.memory_usage = 0
+        self.powerup_time = 0
+
         self.player = Player(game = self, x_coord = 10 + 26, y_coord = 10 + 26, x_target= 10 +26, y_target= 10+26, speed = 2, direct="", dead=False, powerup=False, board=self.board, board_offset = 0)
         self.pink_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, next_x = 26 , next_y = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_PINK, direct=0, dead=False, powerup=False, board=self.board, board_offset = 0)
         self.blue_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, next_x = 26 , next_y = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_BLUE, direct=0, dead=False, powerup=False, board=self.board, board_offset = 0)
@@ -171,7 +173,7 @@ class Game:
         self.search_time, self.expanded_nodes, self.memory_usage = self.blue_ghost.time, self.blue_ghost.expanded, self.blue_ghost.mem
 
         self.blue_ghost.draw_path()
-        self.state = STATE_DONE
+        self.state = STATE_RESULT
 
     # Level 2: Implement the Pink Ghost using the Depth-First Search (DFS) algorithm to chase Pac-Man.
     def level_2(self): 
@@ -216,7 +218,7 @@ class Game:
         self.search_time, self.expanded_nodes, self.memory_usage = self.orange_ghost.time, self.orange_ghost.expanded, self.orange_ghost.mem
 
         self.orange_ghost.draw_path()
-        self.state = STATE_DONE
+        self.state = STATE_RESULT
 
     # Level 4: Implement the Red Ghost using the A* Search (A*) algorithm to chase Pac-Man.
     def level_4(self): 
@@ -240,13 +242,14 @@ class Game:
 
         self.red_ghost.draw_path()
 
-        self.state = STATE_DONE
+        self.state = STATE_RESULT
 
     # Level 5: Implement all ghosts (Blue, Pink, Orange, and Red) moving simultaneously in the same maze,
     # each ghost follows its respective search algorithm to chase Pac-Man and executes independently.
-    '''còn level 5 chưa chèn thông tin'''
+
     def level_5(self): 
         self.offset = 100
+
         self.draw_board1()
         self.board = copy.deepcopy(boards1) #check ghost và player board trỏ cùng vị trí vs board game chưa
         self.player.map = copy.deepcopy(boards1)
@@ -258,28 +261,29 @@ class Game:
         self.blue_ghost.map = copy.deepcopy(boards1)
         self.blue_ghost.offset = 100
         self.blue_ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE)
-        self.blue_ghost.target = (self.player.x_pos, self.player.y_pos)
+        self.blue_ghost.target = [self.player.x_pos, self.player.y_pos]
         path_blue = self.blue_ghost.move_bfs()
 
         self.pink_ghost.map = copy.deepcopy(boards1)
         self.pink_ghost.offset = 100
         self.pink_ghost.update_position(self.offset + CELL_SIZE * 21, self.offset + CELL_SIZE)
-        self.pink_ghost.target = (self.player.x_pos, self.player.y_pos)
+        self.pink_ghost.target = [self.player.x_pos, self.player.y_pos]
         path_pink = self.pink_ghost.move_dfs()
 
         self.red_ghost.map = copy.deepcopy(boards1)
         self.red_ghost.offset = 100
         self.red_ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE * 21)
-        self.red_ghost.target = (self.player.x_pos, self.player.y_pos)
+        self.red_ghost.target = [self.player.x_pos, self.player.y_pos]
         path_red = self.red_ghost.move_astar()
 
         self.orange_ghost.map = copy.deepcopy(boards1)
         self.orange_ghost.offset = 100
         self.orange_ghost.update_position(self.offset + CELL_SIZE * 10, self.offset + CELL_SIZE * 11) #Middle
-        self.orange_ghost.target = (self.player.x_pos, self.player.y_pos)
+        self.orange_ghost.target = [self.player.x_pos, self.player.y_pos]
         path_orange = self.orange_ghost.move_ucs()
 
         paths = [path_blue, path_pink, path_orange, path_red]
+        print(path_blue, path_orange, path_pink, path_red)
         max_length = 0
         path = []
         for path in paths:
@@ -303,14 +307,18 @@ class Game:
 
             #Chỉnh lại nếu = goal thì ko vẽ
             self.blue_ghost.draw()
+            time.sleep(0.1)
             self.red_ghost.draw()
+            time.sleep(0.1)
             self.pink_ghost.draw()
+            time.sleep(0.1)
             self.orange_ghost.draw()
-            time.sleep(0.5)
+            time.sleep(0.1)
+            pygame.display.update()
 
             step += 1
 
-        self.state = STATE_DONE
+        self.state = STATE_RESULT_4
 
     # Level 6: Enable interactive game-play by allowing the player to control Pac-Man’s movement while
     # the ghosts actively chase him.
@@ -381,13 +389,7 @@ class Game:
                 if step < len(paths[3]):
                     self.red_ghost.update_position(paths[3][step][1]* CELL_SIZE + self.offset, paths[3][step][0]* CELL_SIZE + self.offset)
             
-            # if self.check_collision():
-            #     self.game_over()
-            #     return 
-            
-            # if self.check_win():
-            #     self.win()
-            #     return
+
 
             # Vẽ từng ghost tại bước hiện tại 
             self.blue_ghost.draw()
@@ -403,6 +405,13 @@ class Game:
 
             self.player.move()
             self.player.eat_food()
+
+            # Power up
+            if(self.player.powerup == True):
+                self.blue_ghost.powerup = True
+                self.pink_ghost.powerup = True
+                self.orange_ghost.powerup = True
+                self.red_ghost.powerup = True
 
             # Nếu Pac-Man di chuyển, tính lại BFS / DFS / A* / UCS
             new_target = [self.player.x_pos, self.player.y_pos]
@@ -430,8 +439,63 @@ class Game:
             (self.player.x_pos, self.player.y_pos) == (self.pink_ghost.x_pos, self.pink_ghost.y_pos) or
             (self.player.x_pos, self.player.y_pos) == (self.orange_ghost.x_pos, self.orange_ghost.y_pos) or
             (self.player.x_pos, self.player.y_pos) == (self.red_ghost.x_pos, self.red_ghost.y_pos)):
-                self.state = STATE_GAMEOVER
+                if(self.player.powerup == False):
+                    if(self.player.lives == 0):
+                        self.state = STATE_GAMEOVER
+                        return
+                    if(self.player.powerup == False):
+                        self.player.lives -= 1
+                        time.sleep(0.1)
+                        self.blue_ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE)
+                        self.pink_ghost.update_position(self.offset + CELL_SIZE * 21, self.offset + CELL_SIZE)
+                        self.red_ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE * 21)
+                        self.orange_ghost.update_position(self.offset + CELL_SIZE * 10, self.offset + CELL_SIZE * 11) #Middle
+                else:
+                        if((self.player.x_pos, self.player.y_pos) == (self.blue_ghost.x_pos, self.blue_ghost.y_pos)):
+                            self.blue_ghost.dead = True
+                            self.player.score += 50
+                            self.screen.blit(BG_IMG, (self.blue_ghost.x_pos, self.blue_ghost.y_pos))
+                            self.blue_ghost.draw()
+                            time.sleep(0.1)
+                            self.blue_ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE)
+                            self.blue_ghost.dead = False
 
+                        elif((self.player.x_pos, self.player.y_pos) == (self.red_ghost.x_pos, self.red_ghost.y_pos)):
+                            self.red_ghost.dead = True
+                            self.player.score += 50
+                            self.screen.blit(BG_IMG, (self.red_ghost.x_pos, self.red_ghost.y_pos))
+                            self.red_ghost.draw()
+                            self.red_ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE)
+                            self.red_ghost.dead = False
+                        elif((self.player.x_pos, self.player.y_pos) == (self.orange_ghost.x_pos, self.orange_ghost.y_pos)):
+                            self.orange_ghost.dead = True
+                            self.player.score += 50
+                            self.screen.blit(BG_IMG, (self.orange_ghost.x_pos, self.orange_ghost.y_pos))
+                            self.orange_ghost.draw()
+                            self.orange_ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE)
+                            self.orange_ghost.dead = False
+                        elif((self.player.x_pos, self.player.y_pos) == (self.pink_ghost.x_pos, self.pink_ghost.y_pos)):
+                            self.pink_ghost.dead = True
+                            self.player.score += 50
+                            self.screen.blit(BG_IMG, (self.pink_ghost.x_pos, self.pink_ghost.y_pos))
+                            self.pink_ghost.draw()
+                            self.pink_ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE)
+                            self.pink_ghost.dead = False
+
+            if(self.check_win()):
+                self.state = STATE_WIN
+            
+            print(time.time() - self.player.powerup_time)
+            if self.player.powerup and time.time() - self.player.powerup_time >= 7:
+                print("Out of time")
+                self.player.powerup = False
+                self.blue_ghost.powerup = False
+                self.pink_ghost.powerup = False
+                self.orange_ghost.powerup = False
+                self.red_ghost.powerup = False
+
+            #for i in range self.lives: vẽ mạng vô đây
+                
             pygame.display.update()
             pygame.time.delay(100)  # Tốc độ di chuyển
 
@@ -591,6 +655,8 @@ class Game:
         self.search_time = 0
         self.memory_usage = 0
 
+    def show_result_for_four(self):
+        ...
 
     def run(self): 
         running = True
@@ -606,9 +672,11 @@ class Game:
                 self.win()
             if(self.state == STATE_GAMEOVER):
                 self.game_over()
-            if(self.state == STATE_DONE):
+            if(self.state == STATE_RESULT):
                 self.show_result()
-           
+            if(self.state == STATE_RESULT_4):
+                self.show_result_for_four()
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
