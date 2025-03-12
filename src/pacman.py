@@ -147,7 +147,7 @@ class Player:
         if self.check_collision(target_x, target_y) == 1:
            
             while (self.x_pos, self.y_pos) != (target_x, target_y):
-                self.game.screen.blit(BG_IMG, (self.x_pos, self.y_pos))
+                rect = self.game.screen.blit(BG_IMG, (self.x_pos, self.y_pos))
 
                 if self.x_pos < target_x:
                     self.x_pos += 1
@@ -159,7 +159,7 @@ class Player:
                     self.y_pos -= 1
 
                 self.draw()
-                pygame.display.update()
+                pygame.display.update(rect)
                 pygame.time.delay(5)
         else:
             self.draw()
