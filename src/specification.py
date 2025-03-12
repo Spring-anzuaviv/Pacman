@@ -117,25 +117,23 @@ MENU_LOGO_1 = r"img/tomandjerry.png"
 MENU_LOGO_2 = r"img/pacman.png"
 
 #Pacman, ghost animations
-PACMAN_UP_1 = pygame.transform.scale(pygame.image.load(r"img/PACMAN_UP_1.png"), (CELL_SIZE, CELL_SIZE))
-PACMAN_UP_2 = pygame.transform.scale(pygame.image.load(r"img/PACMAN_UP_2.png"), (CELL_SIZE, CELL_SIZE))
-PACMAN_DOWN_1 = pygame.transform.scale(pygame.image.load(r"img/PACMAN_DOWN_1.png"), (CELL_SIZE, CELL_SIZE))
-PACMAN_DOWN_2 = pygame.transform.scale(pygame.image.load(r"img/PACMAN_DOWN_2.png"), (CELL_SIZE, CELL_SIZE))
-PACMAN_LEFT_1 = pygame.transform.scale(pygame.image.load(r"img/PACMAN_LEFT_1.png"), (CELL_SIZE, CELL_SIZE))
-PACMAN_LEFT_2 = pygame.transform.scale(pygame.image.load(r"img/PACMAN_LEFT_2.png"), (CELL_SIZE, CELL_SIZE))
-PACMAN_RIGHT_1 = pygame.transform.scale(pygame.image.load(r"img/PACMAN_RIGHT_1.png"), (CELL_SIZE, CELL_SIZE))
-PACMAN_RIGHT_2 = pygame.transform.scale(pygame.image.load(r"img/PACMAN_RIGHT_2.png"), (CELL_SIZE, CELL_SIZE))
-PACMAN_POWERUP = pygame.transform.scale(pygame.image.load(r"img/powerup.png"), (CELL_SIZE, CELL_SIZE))
-PACMAN_DEAD = pygame.transform.scale(pygame.image.load(r"img/dead.png"), (CELL_SIZE, CELL_SIZE))
-# PACMAN_POWERUP_LEFT
-# PACMAN_POWERUP_RIGHT
-# PACMAN_POWERUP_UP
-# PACMAN_POWERUP_DOWN
-# PACMAN_POWERUP_LEFT_2
-# PACMAN_POWERUP_RIGHT_2
-# PACMAN_POWERUP_UP_2
-# PACMAN_POWERUP_DOWN_2
-
+PACMAN_UP_1 = pygame.transform.scale(pygame.image.load(r"img/pacman_up_1.png"), (CELL_SIZE, CELL_SIZE))
+PACMAN_UP_2 = pygame.transform.scale(pygame.image.load(r"img/pacman_up_2.png"), (CELL_SIZE, CELL_SIZE))
+PACMAN_DOWN_1 = pygame.transform.scale(pygame.image.load(r"img/pacman_down_1.png"), (CELL_SIZE, CELL_SIZE))
+PACMAN_DOWN_2 = pygame.transform.scale(pygame.image.load(r"img/pacman_down_2.png"), (CELL_SIZE, CELL_SIZE))
+PACMAN_LEFT_1 = pygame.transform.scale(pygame.image.load(r"img/pacman_left_1.png"), (CELL_SIZE, CELL_SIZE))
+PACMAN_LEFT_2 = pygame.transform.scale(pygame.image.load(r"img/pacman_left_2.png"), (CELL_SIZE, CELL_SIZE))
+PACMAN_RIGHT_1 = pygame.transform.scale(pygame.image.load(r"img/pacman_right_1.png"), (CELL_SIZE, CELL_SIZE))
+PACMAN_RIGHT_2 = pygame.transform.scale(pygame.image.load(r"img/pacman_right_2.png"), (CELL_SIZE, CELL_SIZE))
+PACMAN_POWERUP_UP_1 = pygame.transform.scale(pygame.image.load(r"img/pacman_powerup_up_1.png"), (CELL_SIZE, CELL_SIZE))
+PACMAN_POWERUP_UP_2 = pygame.transform.scale(pygame.image.load(r"img/pacman_powerup_up_2.png"), (CELL_SIZE, CELL_SIZE))
+PACMAN_POWERUP_DOWN_1 = pygame.transform.scale(pygame.image.load(r"img/pacman_powerup_down_1.png"), (CELL_SIZE, CELL_SIZE))
+PACMAN_POWERUP_DOWN_2 = pygame.transform.scale(pygame.image.load(r"img/pacman_powerup_down_2.png"), (CELL_SIZE, CELL_SIZE))
+PACMAN_POWERUP_LEFT_1 = pygame.transform.scale(pygame.image.load(r"img/pacman_powerup_left_1.png"), (CELL_SIZE, CELL_SIZE))
+PACMAN_POWERUP_LEFT_2 = pygame.transform.scale(pygame.image.load(r"img/pacman_powerup_left_2.png"), (CELL_SIZE, CELL_SIZE))
+PACMAN_POWERUP_RIGHT_1 = pygame.transform.scale(pygame.image.load(r"img/pacman_powerup_right_1.png"), (CELL_SIZE, CELL_SIZE))
+PACMAN_POWERUP_RIGHT_2 = pygame.transform.scale(pygame.image.load(r"img/pacman_powerup_right_2.png"), (CELL_SIZE, CELL_SIZE))
+PACMAN_LIVE = pygame.transform.scale(pygame.image.load(r"img/pacman_live.png"), (CELL_SIZE, CELL_SIZE))
 
 GHOST_DEAD = pygame.transform.scale(pygame.image.load(r"img/dead.png"), (CELL_SIZE, CELL_SIZE))
 GHOST_BLUE = pygame.transform.scale(pygame.image.load(r"img/blue.png"), (CELL_SIZE, CELL_SIZE))

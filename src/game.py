@@ -497,7 +497,7 @@ class Game:
             lives_text = font.render("Lives: ", True, COLORS["Pink"])
             self.screen.blit(lives_text, (940, 200))
             for i in range(self.player.lives):
-                self.screen.blit(PACMAN_DEAD, (1040 + i * (CELL_SIZE + 5), 210))
+                self.screen.blit(PACMAN_LIVE, (1040 + i * (CELL_SIZE + 5), 210))
             score_text = font.render(f"Score: {self.player.score}", True, COLORS["Pink"])
             self.screen.blit(score_text, (940, 150))
                 

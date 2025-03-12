@@ -34,30 +34,30 @@ class Player:
             if self.open_mouth:
                 self.open_mouth = False
                 if self.direction == "Left":
-                    rect = self.game.screen.blit(PACMAN_POWERUP, (self.x_pos, self.y_pos))
+                    rect = self.game.screen.blit(PACMAN_POWERUP_LEFT_1, (self.x_pos, self.y_pos))
                     pygame.display.update(rect)
                 elif self.direction == "Right":
-                    rect = self.game.screen.blit(PACMAN_POWERUP, (self.x_pos, self.y_pos))
+                    rect = self.game.screen.blit(PACMAN_POWERUP_RIGHT_1, (self.x_pos, self.y_pos))
                     pygame.display.update(rect)
                 elif self.direction == "Up":
-                    rect = self.game.screen.blit(PACMAN_POWERUP, (self.x_pos, self.y_pos))
+                    rect = self.game.screen.blit(PACMAN_POWERUP_UP_1, (self.x_pos, self.y_pos))
                     pygame.display.update(rect)
                 elif self.direction == "Down":
-                    rect = self.game.screen.blit(PACMAN_POWERUP, (self.x_pos, self.y_pos))
+                    rect = self.game.screen.blit(PACMAN_POWERUP_DOWN_1, (self.x_pos, self.y_pos))
                     pygame.display.update(rect)
             else:
                 self.open_mouth = True
                 if self.direction == "Left":
-                    rect = self.game.screen.blit(PACMAN_POWERUP, (self.x_pos, self.y_pos))
+                    rect = self.game.screen.blit(PACMAN_POWERUP_LEFT_2, (self.x_pos, self.y_pos))
                     pygame.display.update(rect)
                 elif self.direction == "Right":
-                    rect = self.game.screen.blit(PACMAN_POWERUP, (self.x_pos, self.y_pos))
+                    rect = self.game.screen.blit(PACMAN_POWERUP_RIGHT_2, (self.x_pos, self.y_pos))
                     pygame.display.update(rect)
                 elif self.direction == "Up":
-                    rect = self.game.screen.blit(PACMAN_POWERUP, (self.x_pos, self.y_pos))
+                    rect = self.game.screen.blit(PACMAN_POWERUP_UP_2, (self.x_pos, self.y_pos))
                     pygame.display.update(rect)
                 elif self.direction == "Down":
-                    rect = self.game.screen.blit(PACMAN_POWERUP, (self.x_pos, self.y_pos))
+                    rect = self.game.screen.blit(PACMAN_POWERUP_DOWN_2, (self.x_pos, self.y_pos))
                     pygame.display.update(rect)
         else:
                 if self.open_mouth:
