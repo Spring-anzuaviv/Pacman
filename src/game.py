@@ -22,7 +22,7 @@ class Game:
         self.img = None
         self.offset = 0
         self.expanded_nodes = 0
-        self.elapsed_time = 0
+        self.search_time = 0
         self.memory_usage = 0
         self.powerup_time = 0
 
@@ -31,7 +31,6 @@ class Game:
         self.blue_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, next_x = 26 , next_y = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_BLUE, direct=0, dead=False, powerup=False, board=self.board, board_offset = 0)
         self.orange_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, next_x = 26 , next_y = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_YELLOW, direct=0, dead=False, powerup=False, board=self.board, board_offset = 0)
         self.red_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, next_x = 26 , next_y = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_RED, direct=0, dead=False, powerup=False, board=self.board, board_offset = 0)
-
 
     def draw_board1(self):
         maze_width = len(boards1[0]) * GRID_SIZE
@@ -258,24 +257,28 @@ class Game:
         self.blue_ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE)
         self.blue_ghost.target = [self.player.x_pos, self.player.y_pos]
         path_blue = self.blue_ghost.move_bfs()
+        self.blue_search_time, self.blue_expanded_nodes, self.blue_memory_usage = self.blue_ghost.time, self.blue_ghost.expanded, self.blue_ghost.mem
 
         self.pink_ghost.map = copy.deepcopy(boards1)
         self.pink_ghost.offset = 100
         self.pink_ghost.update_position(self.offset + CELL_SIZE * 21, self.offset + CELL_SIZE)
         self.pink_ghost.target = [self.player.x_pos, self.player.y_pos]
         path_pink = self.pink_ghost.move_dfs()
+        self.pink_search_time, self.pink_expanded_nodes, self.pink_memory_usage = self.pink_ghost.time, self.pink_ghost.expanded, self.pink_ghost.mem
 
         self.red_ghost.map = copy.deepcopy(boards1)
         self.red_ghost.offset = 100
         self.red_ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE * 21)
         self.red_ghost.target = [self.player.x_pos, self.player.y_pos]
         path_red = self.red_ghost.move_astar()
+        self.red_search_time, self.red_expanded_nodes, self.red_memory_usage = self.red_ghost.time, self.red_ghost.expanded, self.red_ghost.mem
 
         self.orange_ghost.map = copy.deepcopy(boards1)
         self.orange_ghost.offset = 100
         self.orange_ghost.update_position(self.offset + CELL_SIZE * 10, self.offset + CELL_SIZE * 11) #Middle
         self.orange_ghost.target = [self.player.x_pos, self.player.y_pos]
         path_orange = self.orange_ghost.move_ucs()
+        self.orange_search_time, self.orange_expanded_nodes, self.orange_memory_usage = self.orange_ghost.time, self.orange_ghost.expanded, self.orange_ghost.mem
 
         paths = [path_blue, path_pink, path_orange, path_red]
         print(path_blue, path_orange, path_pink, path_red)
@@ -490,13 +493,19 @@ class Game:
                 self.red_ghost.powerup = False
 
             #for i in range self.lives: vẽ mạng vô đây
+            font = pygame.font.SysFont("timesnewroman", 32)
+            lives_text = font.render("Lives: ", True, COLORS["Pink"])
+            self.screen.blit(lives_text, (940, 200))
+            for i in range(self.player.lives):
+                self.screen.blit(PACMAN_DEAD, (1040 + i * (CELL_SIZE + 5), 210))
+            score_text = font.render(f"Score: {self.player.score}", True, COLORS["Pink"])
+            self.screen.blit(score_text, (940, 150))
                 
             pygame.display.update()
             pygame.time.delay(100)  # Tốc độ di chuyển
 
         self.state = STATE_HOME
 
-    """Kiểm tra nếu Pac-Man chạm vào ma"""
     def check_collision(self): 
         # for ghost in [self.blue_ghost, self.pink_ghost, self.orange_ghost, self.red_ghost]:
         #     if abs(self.player.x_pos - ghost.x_pos) < CELL_SIZE // 2 and abs(self.player.y_pos - ghost.y_pos) < CELL_SIZE // 2:
@@ -510,7 +519,6 @@ class Game:
                 return True  
         return False
     
-    """Kiểm tra nếu Pac-Man đã ăn hết tất cả pellet"""
     def check_win(self):
         for row in self.board:
             if 2 in row or 3 in row: 
@@ -553,8 +561,6 @@ class Game:
                         self.state = STATE_LEVEL
                         return
         
-
-    """bị sai chỗ Y quay lại màn hình cho chạy"""
     def show_result(self):
         self.screen.fill(COLORS["Black"])
         pygame.draw.rect(self.screen, (0, 0, 0, 150), (50, 50, WIDTH - 100, HEIGHT - 150), border_radius=20)
@@ -589,6 +595,60 @@ class Game:
                         self.state = STATE_LEVEL
                         waiting = False
 
+    def show_result_for_four(self):
+        self.screen.fill(COLORS["Black"])
+        pygame.draw.rect(self.screen, (0, 0, 0, 150), (50, 50, WIDTH - 100, HEIGHT - 150), border_radius=20)
+        font = pygame.font.SysFont("timesnewroman", 50, bold=True)
+        level_text = font.render(f"Level {self.level} Complete!", True, COLORS["Yellow"])
+        self.screen.blit(level_text, (WIDTH // 2 - level_text.get_width() // 2, 70))
+
+        font1 = pygame.font.SysFont("timesnewroman", 32)
+
+        time_text = font1.render(f"Search time of the Blue ghost: {self.blue_search_time} s", True, COLORS["Blue"])
+        self.screen.blit(time_text, (WIDTH // 2 - time_text.get_width() // 2, 130))
+        memory_text = font1.render(f"Memory usage of the Blue ghost: {self.blue_memory_usage} bytes", True, COLORS["Blue"])
+        self.screen.blit(memory_text, (WIDTH // 2 - memory_text.get_width() // 2, 150))
+        expanded_nodes_text = font1.render(f"Expanded nodes of the Blue ghost: {self.blue_expanded_nodes}", True, COLORS["Blue"])
+        self.screen.blit(expanded_nodes_text, (WIDTH // 2 - expanded_nodes_text.get_width() // 2, 170))
+
+        time_text = font1.render(f"Search time of the Pink ghost: {self.pink_search_time} s", True, COLORS["Pink"])
+        self.screen.blit(time_text, (WIDTH // 2 - time_text.get_width() // 2, 200))
+        memory_text = font1.render(f"Memory usage of the Pink ghost: {self.pink_memory_usage} bytes", True, COLORS["Pink"])
+        self.screen.blit(memory_text, (WIDTH // 2 - memory_text.get_width() // 2, 220))
+        expanded_nodes_text = font1.render(f"Expanded nodes of the Pink ghost: {self.pink_expanded_nodes}", True, COLORS["Pink"])
+        self.screen.blit(expanded_nodes_text, (WIDTH // 2 - expanded_nodes_text.get_width() // 2, 240))
+
+        time_text = font1.render(f"Search time of the Red ghost: {self.red_search_time} s", True, COLORS["Red"])
+        self.screen.blit(time_text, (WIDTH // 2 - time_text.get_width() // 2, 270))
+        memory_text = font1.render(f"Memory usage of the Red ghost: {self.red_memory_usage} bytes", True, COLORS["Red"])
+        self.screen.blit(memory_text, (WIDTH // 2 - memory_text.get_width() // 2, 290))
+        expanded_nodes_text = font1.render(f"Expanded nodes of the Red ghost: {self.red_expanded_nodes}", True, COLORS["Red"])
+        self.screen.blit(expanded_nodes_text, (WIDTH // 2 - expanded_nodes_text.get_width() // 2, 310))
+
+        time_text = font1.render(f"Search time of the Orange ghost: {self.orange_search_time} s", True, COLORS["Orange"])
+        self.screen.blit(time_text, (WIDTH // 2 - time_text.get_width() // 2, 340))
+        memory_text = font1.render(f"Memory usage of the Orange ghost: {self.orange_memory_usage} bytes", True, COLORS["Orange"])
+        self.screen.blit(memory_text, (WIDTH // 2 - memory_text.get_width() // 2, 150))
+        expanded_nodes_text = font1.render(f"Expanded nodes of the Orange ghost: {self.orange_expanded_nodes}", True, COLORS["Orange"])
+        self.screen.blit(expanded_nodes_text, (WIDTH // 2 - expanded_nodes_text.get_width() // 2, 170))
+
+        sub_font = pygame.font.SysFont("timesnewroman", 40)
+        menu_text = sub_font.render("Press N to go to Level Menu", True, COLORS["Yellow"])
+        menu_rect = menu_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 100))
+        self.screen.blit(menu_text, menu_rect)
+
+        pygame.display.flip()
+        waiting = True
+        while waiting:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_n: 
+                        self.state = STATE_LEVEL
+                        waiting = False
+
 
     def game_over(self):
         self.screen.fill((0, 0, 0))  # Đặt nền màu đen
@@ -599,13 +659,9 @@ class Game:
         self.screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - 50))
         
         sub_font = pygame.font.SysFont("timesnewroman", 40)
-        play_again_text = sub_font.render("Press Y to Play Again", True, COLORS["Yellow"])
         menu_text = sub_font.render("Press N to Go to Level Menu", True, COLORS["Yellow"])
 
-        play_again_rect = play_again_text.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 2 + 50))
         menu_rect = menu_text.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 2 + 100))
-
-        self.screen.blit(play_again_text, play_again_rect)
         self.screen.blit(menu_text, menu_rect)
         
         pygame.display.flip()
@@ -641,6 +697,8 @@ class Game:
         self.expanded_nodes = 0
         self.search_time = 0
         self.memory_usage = 0
+        self.player.score = 0
+        self.player.lives = 3
 
     def show_result_for_four(self):
         ...
