@@ -438,7 +438,7 @@ class Game:
             (self.player.x_pos, self.player.y_pos) == (self.orange_ghost.x_pos, self.orange_ghost.y_pos) or
             (self.player.x_pos, self.player.y_pos) == (self.red_ghost.x_pos, self.red_ghost.y_pos)):
                 if(self.player.powerup == False):
-                    if(self.player.lives == 0):
+                    if(self.player.lives == 1):
                         self.state = STATE_GAMEOVER
                         return
                     if(self.player.powerup == False):
