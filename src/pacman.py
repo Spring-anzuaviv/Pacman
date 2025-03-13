@@ -5,27 +5,19 @@ class Player:
         self.x_pos = x_coord
         self.y_pos = y_coord
         self.game =  game
-        self.speed = speed  
-        # self.img = img 
         self.direction = direct  #"left", "right", "up", "down"
         self.dead = dead
         self.map = board  
         self.powerup = powerup  # Nếu True, Pac-Man có thể ăn ma
         self.lives = 3  # Số mạng của Pac-Man
         self.score = 0  # Điểm số
-        self.frame_count = 0 #thay đổi hình
-        self.turns = [False, False, False, False] #R, L, U, D
         self.offset = board_offset
-        self.x_board_pos = (self.x_pos - self.offset) // CELL_SIZE ######################### Sửa lại offset
-        self.y_board_pos = (self.y_pos - self.offset) // CELL_SIZE
         self.open_mouth = False
-        self.target_x = x_target
-        self.target_x = y_target
         self.last_move_time = 0
         self.powerup_time = 0
 
     def appear(self):
-        self.direction = "Left"
+        self.direction = "Right"
         self.draw()
 
 
