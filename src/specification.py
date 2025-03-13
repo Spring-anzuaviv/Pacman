@@ -105,7 +105,8 @@ COLORS = {
     "Green": (0, 255, 0),
     "Black": (0,0,0), 
     "Blue": (0, 0, 255),
-    "Purple": (128, 0, 128)
+    "Purple": (128, 0, 128),
+    "Orange": (255,69,0)
 }
 #emoji
 EMOJI_LOSE = pygame.transform.scale(pygame.image.load(r"img/emoji_lose.png"), (50, 50))

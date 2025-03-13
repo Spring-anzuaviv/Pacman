@@ -700,8 +700,6 @@ class Game:
         self.player.score = 0
         self.player.lives = 3
 
-    def show_result_for_four(self):
-        ...
 
     def run(self): 
         running = True

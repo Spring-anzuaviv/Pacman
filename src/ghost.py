@@ -257,29 +257,26 @@ class Ghost:
     def move_astar(self):
         print("A*")
 
-        def heuristic(x, y):
-            manhatta = (abs(x - self.target[0] // GRID_SIZE) + abs(y - self.target[1]//GRID_SIZE))
-            return manhatta
-
         start_time = time.time()
 
         start = ((self.y_pos - self.offset) // GRID_SIZE, (self.x_pos - self.offset) // GRID_SIZE)
         end = ((self.target[1] - self.offset) // GRID_SIZE, (self.target[0] - self.offset) // GRID_SIZE)
         
+        def heuristic(x, y):
+            return (abs(x - end[0]) + abs(y - end[1])) # Khoảng cách Manhattan
+            
         def g_cost (x,y):  # chi phí cho mỗi bước đi
             unit = WIDTH // GRID_SIZE + HEIGHT // GRID_SIZE - 2 # khoảng cách lớn nhất giữa 2 điểm làm đơn vị, để khi lấy distance_to_pacman/unit <= 1
             base_cost = 1
             distance_to_pacman = (abs(x - end[0]) + abs(y - end[1])) 
             if(distance_to_pacman != 1): # nếu không phải là điểm kế cận thì kiểm tra xem có gần tường không
-              if(x - 1 < 0 or x + 1 >= WIDTH // GRID_SIZE or y - 1 < 0 or y + 1 >= HEIGHT // GRID_SIZE):
+                if(x - 1 < 0 or x + 1 >= WIDTH // GRID_SIZE or y - 1 < 0 or y + 1 >= HEIGHT // GRID_SIZE):
                     return 2 #nếu gần đến tường thì chi phí sẽ cao hơn 
             if(self.powerup == True):
                 avoid_pacman = ( 1 - distance_to_pacman/unit) # nếu pacman đang có powerup thì ma có nguy cơ bị ăn nên cần tránh xa pacman ; cách càng xa chi phí avoid càng th
                 return base_cost + avoid_pacman
             else:
-                return  1 + distance_to_pacman/unit # nếu pacman không có powerup thì ma sẽ cố gắng tiếp cận
-            return base_cost
-            
+                return  base_cost + distance_to_pacman/unit # nếu pacman không có powerup thì ma sẽ cố gắng tiếp cận
         g_n = {start: 0}
         f_n = {start: heuristic(*start)}
 
