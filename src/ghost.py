@@ -5,15 +5,13 @@ class Ghost:
         self.y_pos = y_coord
         self.target = target 
         self.img = img
-        self.direction = direct # 0: right, 1: left, 2: up, 3: down
+        self.direction = direct 
         self.dead = dead
-        self.powerup = powerup #player can eat ghost
+        self.powerup = powerup # Player can eat ghost
         self.map = board
         self.path = [] #Path found by search algorithm
         self.offset = board_offset
         self.game = game
-        # self.next_x_pos = next_x
-        # self.next_y_pos = next_y
         self.time = 0
         self.expanded = 0
         self.mem = 0
@@ -38,20 +36,15 @@ class Ghost:
             self.x_pos = y * CELL_SIZE + self.offset
             self.y_pos = x * CELL_SIZE + self.offset
             self.game.screen.fill((0, 0, 0))  
-            self.game.draw_board1() # Màn hình cũ
+            self.game.draw_board1() 
             self.game.screen.blit(PACMAN_LEFT_1, (self.target[0], self.target[1])) 
             self.game.screen.blit(self.img, (self.x_pos , self.y_pos )) 
-            # print((self.target[1], self.target[0]))
             pygame.display.update()
             time.sleep(0.5)  
-
-        
 
     def check_collision(self):
         return [self.x_pos, self.y_pos] == self.target
         
-
-
     def move_bfs(self):
         print("BFS")
         start_time = time.time()
@@ -184,10 +177,10 @@ class Ghost:
             max_pq_size = max(max_pq_size, sys.getsizeof(pq))  
             cost, (x, y), path = heapq.heappop(pq)
 
-            if (x, y) in visited:  # Nếu nút đã từng mở rộng thì bỏ qua
+            if (x, y) in visited:  
                 continue  
 
-            visited.add((x, y))  # Đánh dấu đã thăm khi lấy ra khỏi hàng đợi
+            visited.add((x, y))  
 
             expanded.append((x, y))  
             expanded_nodes += 1
@@ -272,10 +265,6 @@ class Ghost:
         self.time, self.expanded, self.mem = elapsed_time, expanded_nodes,  memory_used
         return []
     
-    # def update_next(self, x, y):
-    #     self.next_x_pos = x
-    #     self.next_y_pos = y
-       
     def update_position(self, x, y):
         self.x_pos = x
         self.y_pos = y
@@ -287,5 +276,4 @@ class AStarSolver:
         self.target = target
         self.map = map_data
 
-    # Power up: đổi ảnh, nếu bị ăn thì dead, trở về vị trí bắt dâu
  

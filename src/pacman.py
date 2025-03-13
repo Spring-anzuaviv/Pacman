@@ -5,12 +5,12 @@ class Player:
         self.x_pos = x_coord
         self.y_pos = y_coord
         self.game =  game
-        self.direction = direct  #"left", "right", "up", "down"
+        self.direction = direct  # "Left", "Right", "Up", "Down"
         self.dead = dead
         self.map = board  
-        self.powerup = powerup  # Nếu True, Pac-Man có thể ăn ma
-        self.lives = 3  # Số mạng của Pac-Man
-        self.score = 0  # Điểm số
+        self.powerup = powerup  
+        self.lives = 3  
+        self.score = 0  
         self.offset = board_offset
         self.open_mouth = False
         self.last_move_time = 0
@@ -91,35 +91,19 @@ class Player:
         return 0
     
     def update_direction(self, event):
-        """Chỉ di chuyển Pac-Man khi có sự kiện nhấn phím"""
-    
         if event.type == pygame.KEYDOWN:  
             if event.key == pygame.K_LEFT:
                 self.direction = "Left"
-                # new_pos_x = self.x_pos - CELL_SIZE
-                # new_pos_y = self.y_pos
             elif event.key == pygame.K_RIGHT:
                 self.direction = "Right"
-                # new_pos_x = self.x_pos + CELL_SIZE
-                # new_pos_y = self.y_pos
             elif event.key == pygame.K_UP:
                 self.direction = "Up"
-                # new_pos_y = self.y_pos - CELL_SIZE
-                # new_pos_x = self.x_pos
             elif event.key == pygame.K_DOWN:
                 self.direction = "Down"
-                # new_pos_y = self.y_pos + CELL_SIZE
-                # new_pos_x = self.x_pos
-
-        #     if self.check_collision(new_pos_x, new_pos_y) == 1:
-        #         return new_pos_x, new_pos_y
-            
-        # return self.x_pos, self.y_pos
-            #self.draw()
           
     def move(self):
         current_time = pygame.time.get_ticks()
-        if current_time - self.last_move_time < 100:  # Giữ nguyên vị trí trong 100ms
+        if current_time - self.last_move_time < 100:  
             return
         
         self.last_move_time = current_time
@@ -173,7 +157,6 @@ class Player:
         if(self.map[x_board_pos][y_board_pos] == 3):
             self.score += 30
             self.powerup = True
-            # self.powerup_timer = pygame.time.get_ticks() + 7000  # Power-up tồn tại trong 7 giây
             self.powerup_time = time.time()
             self.map[x_board_pos][y_board_pos] = 5 # No food on path
         
@@ -186,10 +169,9 @@ class Player:
 
     def check_win_condition(map):
         for row in map:
-            if 2 in row or 3 in row:  # Nếu vẫn còn thức ăn (2) hoặc viên năng lượng (3)
+            if 2 in row or 3 in row:  
                 return False
         return True
 
-    # Power up: chỉnh trạng thái dead của ma
 
     
