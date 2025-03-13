@@ -38,7 +38,7 @@ class Game:
         maze_width = len(boards1[0]) * GRID_SIZE
         maze_height = len(boards1) * GRID_SIZE
         offset_x = 100
-        offset_y = 100 
+        offset_y = 100
 
         for row in range(len(boards1)):
             for col in range(len(boards1[row])):
@@ -78,7 +78,6 @@ class Game:
         text_surface = self.font.render(text, True, COLORS["Black"])
         self.screen.blit(text_surface, (x + (width - text_surface.get_width()) // 2, y + (height - text_surface.get_height()) // 2))
         
-        # Kiểm tra xem chuột có nhấn vào nút không
         mouse_x, mouse_y = pygame.mouse.get_pos()
         click = pygame.mouse.get_pressed()
         
@@ -92,7 +91,8 @@ class Game:
             self.level = new_level  
 
     def level_menu(self):
-        self.state = "level"
+        self.state = STATE_LEVEL
+        self.screen.fill("Black")
         self.draw_button("Level 1", 480, 120, 270, 50, COLORS["Pink"], lambda: self.set_state(STATE_PLAYING, 1), 50)
         self.draw_button("Level 2", 480, 220, 270, 50, COLORS["Green"], lambda: self.set_state(STATE_PLAYING, 2), 50)
         self.draw_button("Level 3", 480, 320, 270, 50, COLORS["Blue"], lambda: self.set_state(STATE_PLAYING, 3), 50)
@@ -135,24 +135,26 @@ class Game:
         self.draw_button("Start Game", 200, 650, 270, 60, COLORS["Green"], self.level_menu, 50)
         self.draw_button("Exit", 800, 650, 270, 60, COLORS["Red"], self.exit_game, 50)
 
-    def reset_ghost(self, ghost):
-        ghost.x_pos = ghost.x_pos
-        ghost.y_pos = ghost.y_pos
-        ghost.target = [26 * 20, 26 * 19]
-        ghost.speed = 2
-        ghost.dead = False
-        ghost.powerup = False
-        ghost.direct = 0 
-
     def reset_player(self):
-        self.player.x_pos = self.player.x_pos
-        self.player.y_pos = self.player.y_pos
+        self.player.x_pos = self.player.offset + CELL_SIZE
+        self.player.y_pos = self.player.offset + CELL_SIZE
         self.player.dead = False
         self.player.powerup = False
-        self.player.direct = "" 
+        self.player.direction = "" 
+        self.player.lives = 3
+        self.player.score = 0
+        self.player.last_move_time = 0
+        self.player.open_mouth = False
 
+    def reset_game(self):
+        self.offset = 100
+        self.board = copy.deepcopy(boards1) #check ghost và player board trỏ cùng vị trí vs board game chưa
+        self.player.map = copy.deepcopy(boards1)
 
-    # Level 1:  Implement the Blue Ghost using Breadth-First Search (BFS) algorithm to chase Pac-Man
+        self.player.offset = 100
+        self.player.update_position(self.offset + 26, self.offset + 26)
+       
+    ''' Level 1:  Implement the Blue Ghost using Breadth-First Search (BFS) algorithm to chase Pac-Man '''
     def level_1(self):
         self.offset = 100
         self.draw_board1()
@@ -172,13 +174,14 @@ class Game:
         path = self.blue_ghost.move_bfs()
         self.search_time, self.expanded_nodes, self.memory_usage = self.blue_ghost.time, self.blue_ghost.expanded, self.blue_ghost.mem
         self.blue_ghost.draw_path()
+        
         self.state = STATE_RESULT
 
-    # Level 2: Implement the Pink Ghost using the Depth-First Search (DFS) algorithm to chase Pac-Man.
+    ''' Level 2: Implement the Pink Ghost using the Depth-First Search (DFS) algorithm to chase Pac-Man. '''
     def level_2(self): 
         self.offset = 100
         self.draw_board1()
-        self.board = copy.deepcopy(boards1) #check ghost và player board trỏ cùng vị trí vs board game chưa
+        self.board = copy.deepcopy(boards1) 
         self.player.map = copy.deepcopy(boards1)
 
         self.player.offset = 100
@@ -195,7 +198,7 @@ class Game:
         self.pink_ghost.draw_path()
         self.state = STATE_RESULT
 
-    # Level 3: Implement the Orange Ghost using the Uniform-Cost Search algorithm to chase Pac-Man.
+    ''' Level 3: Implement the Orange Ghost using the Uniform-Cost Search algorithm to chase Pac-Man '''
     def level_3(self): 
         self.offset = 100
         self.draw_board1()
@@ -217,7 +220,7 @@ class Game:
         self.orange_ghost.draw_path()
         self.state = STATE_RESULT
 
-    # Level 4: Implement the Red Ghost using the A* Search (A*) algorithm to chase Pac-Man.
+    ''' Level 4: Implement the Red Ghost using the A* Search (A*) algorithm to chase Pac-Man '''
     def level_4(self): 
         self.offset = 100
         self.draw_board1()
@@ -239,164 +242,111 @@ class Game:
         self.red_ghost.draw_path()
         self.state = STATE_RESULT
 
-    # Level 5: Implement all ghosts (Blue, Pink, Orange, and Red) moving simultaneously in the same maze,
-    # each ghost follows its respective search algorithm to chase Pac-Man and executes independently.
+    ''' Level 5: Implement all ghosts (Blue, Pink, Orange, and Red) moving simultaneously in the same maze,
+     each ghost follows its respective search algorithm to chase Pac-Man and executes independently. '''
 
     def level_5(self): 
         self.offset = 100
-
         self.draw_board1()
-        self.board = copy.deepcopy(boards1) #check ghost và player board trỏ cùng vị trí vs board game chưa
+        
+        self.board = copy.deepcopy(boards1)
         self.player.map = copy.deepcopy(boards1)
-
         self.player.offset = 100
         self.player.update_position(self.offset + 26 * 21, self.offset + 26 * 21)
-        self.player.appear()
 
-        self.blue_ghost.map = copy.deepcopy(boards1)
-        self.blue_ghost.offset = 100
-        self.blue_ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE)
-        self.blue_ghost.target = [self.player.x_pos, self.player.y_pos]
-        path_blue = self.blue_ghost.move_bfs()
-        self.blue_search_time, self.blue_expanded_nodes, self.blue_memory_usage = self.blue_ghost.time, self.blue_ghost.expanded, self.blue_ghost.mem
+        ghosts = [
+            {"ghost": self.blue_ghost, "pos": (1, 1), "move_func": self.blue_ghost.move_bfs},
+            {"ghost": self.pink_ghost, "pos": (21, 1), "move_func": self.pink_ghost.move_dfs},
+            {"ghost": self.red_ghost, "pos": (1, 21), "move_func": self.red_ghost.move_astar},
+            {"ghost": self.orange_ghost, "pos": (10, 11), "move_func": self.orange_ghost.move_ucs},
+        ]
+        
+        paths = []
+        for data in ghosts:
+            ghost = data["ghost"]
+            ghost.map = copy.deepcopy(boards1)
+            ghost.offset = 100
+            ghost.update_position(self.offset + CELL_SIZE * data["pos"][0], self.offset + CELL_SIZE * data["pos"][1])
+            ghost.target = [self.player.x_pos, self.player.y_pos]
+            paths.append(data["move_func"]()) 
 
-        self.pink_ghost.map = copy.deepcopy(boards1)
-        self.pink_ghost.offset = 100
-        self.pink_ghost.update_position(self.offset + CELL_SIZE * 21, self.offset + CELL_SIZE)
-        self.pink_ghost.target = [self.player.x_pos, self.player.y_pos]
-        path_pink = self.pink_ghost.move_dfs()
-        self.pink_search_time, self.pink_expanded_nodes, self.pink_memory_usage = self.pink_ghost.time, self.pink_ghost.expanded, self.pink_ghost.mem
-
-        self.red_ghost.map = copy.deepcopy(boards1)
-        self.red_ghost.offset = 100
-        self.red_ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE * 21)
-        self.red_ghost.target = [self.player.x_pos, self.player.y_pos]
-        path_red = self.red_ghost.move_astar()
-        self.red_search_time, self.red_expanded_nodes, self.red_memory_usage = self.red_ghost.time, self.red_ghost.expanded, self.red_ghost.mem
-
-        self.orange_ghost.map = copy.deepcopy(boards1)
-        self.orange_ghost.offset = 100
-        self.orange_ghost.update_position(self.offset + CELL_SIZE * 10, self.offset + CELL_SIZE * 11) #Middle
-        self.orange_ghost.target = [self.player.x_pos, self.player.y_pos]
-        path_orange = self.orange_ghost.move_ucs()
-        self.orange_search_time, self.orange_expanded_nodes, self.orange_memory_usage = self.orange_ghost.time, self.orange_ghost.expanded, self.orange_ghost.mem
-
-        paths = [path_blue, path_pink, path_orange, path_red]
-        print(path_blue, path_orange, path_pink, path_red)
-        max_length = 0
-        path = []
-        for path in paths:
-            max_length = max(len(path), max_length)   # Tìm đường đi dài nhất
-        step = 0  # Bước hiện tại
+        max_length = max(len(path) for path in paths)
+        step = 0  
 
         while step < max_length:
             self.screen.fill("black")  
             self.draw_board1()  
             self.screen.blit(PACMAN_LEFT_1, (self.blue_ghost.target[0], self.blue_ghost.target[1])) 
-
-            # Vẽ từng ghost tại bước hiện tại
-            if step < len(paths[0]):
-                self.blue_ghost.update_position(paths[0][step][1] * CELL_SIZE + self.offset, paths[0][step][0]* CELL_SIZE + self.offset)
-            if step < len(paths[1]):
-                self.pink_ghost.update_position(paths[1][step][1]* CELL_SIZE + self.offset, paths[1][step][0]* CELL_SIZE + self.offset)
-            if step < len(paths[2]):
-                self.orange_ghost.update_position(paths[2][step][1]* CELL_SIZE + self.offset, paths[2][step][0]* CELL_SIZE + self.offset)
-            if step < len(paths[3]):
-                self.red_ghost.update_position(paths[3][step][1]* CELL_SIZE + self.offset, paths[3][step][0]* CELL_SIZE + self.offset)
-
-            #Chỉnh lại nếu = goal thì ko vẽ
-            self.blue_ghost.draw()
-            time.sleep(0.1)
-            self.red_ghost.draw()
-            time.sleep(0.1)
-            self.pink_ghost.draw()
-            time.sleep(0.1)
-            self.orange_ghost.draw()
-            time.sleep(0.1)
+            for i, data in enumerate(ghosts):
+                ghost = data["ghost"]
+                if step < len(paths[i]):
+                    ghost.update_position(paths[i][step][1] * CELL_SIZE + self.offset, paths[i][step][0] * CELL_SIZE + self.offset)
+                
+                if not ghost.check_collision():
+                    ghost.draw()
+                time.sleep(0.1)
+            # Exit
             pygame.display.update()
-
             step += 1
 
         self.state = STATE_RESULT_4
 
-    # Level 6: Enable interactive game-play by allowing the player to control Pac-Man’s movement while
-    # the ghosts actively chase him.
 
+    ''' Level 6: Enable interactive game-play by allowing the player to control Pac-Man’s movement while
+    the ghosts actively chase him. '''
     def level_6(self): 
+        self.reset_player()
         self.offset = 10
         temp = copy.deepcopy(boards2)
         self.draw_board2(boards2)
         self.board = temp
         self.player.map = temp
-
         self.player.offset = 10
-        self.player.update_position(self.offset + 26 * 21, self.offset + 26 * 21)
+        self.player.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE)
         self.player.appear()
 
-        self.blue_ghost.map = self.board
-        self.blue_ghost.offset = 10
-        self.blue_ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE)
-        self.blue_ghost.target = (self.player.x_pos, self.player.y_pos)
-        path_blue = self.blue_ghost.move_bfs()
+        ghosts = [
+            {"ghost": self.blue_ghost, "pos": (29, 3), "method": self.blue_ghost.move_bfs},
+            {"ghost": self.pink_ghost, "pos": (21, 1), "method": self.pink_ghost.move_dfs},
+            {"ghost": self.red_ghost, "pos": (1, 21), "method": self.red_ghost.move_astar},
+            {"ghost": self.orange_ghost, "pos": (31, 27), "method": self.orange_ghost.move_ucs}
+        ]
 
-        self.pink_ghost.map = self.board
-        self.pink_ghost.offset = 10
-        self.pink_ghost.update_position(self.offset + CELL_SIZE * 21, self.offset + CELL_SIZE)
-        self.pink_ghost.target = (self.player.x_pos, self.player.y_pos)
-        path_pink = self.pink_ghost.move_dfs()
+        for ghost_data in ghosts:
+            ghost = ghost_data["ghost"]
+            x, y = ghost_data["pos"]
+            ghost.map = self.board
+            ghost.offset = 10
+            ghost.update_position(self.offset + CELL_SIZE * x, self.offset + CELL_SIZE * y)
+            ghost.target = (self.player.x_pos, self.player.y_pos)
 
-        self.red_ghost.map = self.board
-        self.red_ghost.offset = 10
-        self.red_ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE * 21)
-        self.red_ghost.target = (self.player.x_pos, self.player.y_pos)
-        path_red = self.red_ghost.move_astar()
+        paths = [ghost_data["method"]() for ghost_data in ghosts]
 
-        self.orange_ghost.map = self.board
-        self.orange_ghost.offset = 10
-        self.orange_ghost.update_position(self.offset + CELL_SIZE * 10, self.offset + CELL_SIZE * 11) #Middle
-        self.orange_ghost.target = (self.player.x_pos, self.player.y_pos)
-        path_orange = self.orange_ghost.move_ucs()
-
-        paths = [path_blue, path_pink, path_orange, path_red]
-       
         running = True
         step = 0
         frame_count = 0
         frame_skip = 5
-        # self.screen.blit(PACMAN_LEFT_1, (self.player.y_pos, self.player.x_pos))
-        # time.sleep(0.5)
         clock = pygame.time.Clock()
         fps = 60
+
         while running and self.state == STATE_PLAYING:
             clock.tick(fps)
             frame_count += 1
-            self.screen.fill("black")  # Xóa màn hình
-            self.draw_board2(temp)  # Vẽ lại bản đồ
-            # if self.check_collision():  # Kiểm tra va chạm đầu tiên
-            #     self.game_over()
-            #     return
+            self.screen.fill("black")  
+            self.draw_board2(temp)  
 
-            # Vẽ từng ghost tại bước hiện tại
             if frame_count % frame_skip == 0:
                 step += 1
-                if step < len(paths[0]):
-                    self.blue_ghost.update_position(paths[0][step][1] * CELL_SIZE + self.offset, paths[0][step][0]* CELL_SIZE + self.offset)
-                if step < len(paths[1]):
-                    self.pink_ghost.update_position(paths[1][step][1]* CELL_SIZE + self.offset, paths[1][step][0]* CELL_SIZE + self.offset)
-                if step < len(paths[2]):
-                    self.orange_ghost.update_position(paths[2][step][1]* CELL_SIZE + self.offset, paths[2][step][0]* CELL_SIZE + self.offset)
-                if step < len(paths[3]):
-                    self.red_ghost.update_position(paths[3][step][1]* CELL_SIZE + self.offset, paths[3][step][0]* CELL_SIZE + self.offset)
-            
+                for i, ghost_data in enumerate(ghosts):
+                    if step < len(paths[i]):
+                        ghost = ghost_data["ghost"]
+                        x, y = paths[i][step]
+                        ghost.update_position(y * CELL_SIZE + self.offset, x * CELL_SIZE + self.offset)
 
+            for ghost_data in ghosts:
+                ghost_data["ghost"].draw()
 
-            # Vẽ từng ghost tại bước hiện tại 
-            self.blue_ghost.draw()
-            self.pink_ghost.draw() #dfs
-            self.orange_ghost.draw() #ucs
-            self.red_ghost.draw()
-
-            # Xử lý sự kiện bàn phím (Pac-Man di chuyển)
+            #Player move
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
@@ -405,120 +355,71 @@ class Game:
             self.player.move()
             self.player.eat_food()
 
-            # Power up
-            if(self.player.powerup == True):
-                self.blue_ghost.powerup = True
-                self.pink_ghost.powerup = True
-                self.orange_ghost.powerup = True
-                self.red_ghost.powerup = True
+            # Power-up logic
+            if self.player.powerup:
+                for ghost_data in ghosts:
+                    ghost_data["ghost"].powerup = True
 
-            # Nếu Pac-Man di chuyển, tính lại BFS / DFS / A* / UCS
             new_target = [self.player.x_pos, self.player.y_pos]
-            if new_target != self.blue_ghost.target:  # Kiểm tra nếu vị trí thay đổi
-                self.blue_ghost.target = new_target
-                self.pink_ghost.target = new_target
-                self.orange_ghost.target = new_target
-                self.red_ghost.target = new_target
-
-                path_blue = self.blue_ghost.move_bfs()
-                path_pink = self.pink_ghost.move_dfs()
-                path_red = self.red_ghost.move_astar()
-                path_orange = self.orange_ghost.move_ucs()
-                max_length = 0
-                paths = [path_blue, path_pink, path_orange, path_red]
-
-                for path in paths:
-                    max_length = max(len(path), max_length)   # Tìm đường đi dài nhất
+            if new_target != ghosts[0]["ghost"].target:
+                for ghost_data in ghosts:
+                    ghost_data["ghost"].target = new_target
+                paths = [ghost_data["method"]() for ghost_data in ghosts]
+                max_length = max(len(path) for path in paths)
                 step = 0
 
             if step >= max_length:
                 step = 0  # Reset bước đi để vẽ lại từ đầu
-                
-            if ((self.player.x_pos, self.player.y_pos) == (self.blue_ghost.x_pos, self.blue_ghost.y_pos) or
-            (self.player.x_pos, self.player.y_pos) == (self.pink_ghost.x_pos, self.pink_ghost.y_pos) or
-            (self.player.x_pos, self.player.y_pos) == (self.orange_ghost.x_pos, self.orange_ghost.y_pos) or
-            (self.player.x_pos, self.player.y_pos) == (self.red_ghost.x_pos, self.red_ghost.y_pos)):
-                if(self.player.powerup == False):
-                    if(self.player.lives == 1):
-                        self.state = STATE_GAMEOVER
-                        return
-                    if(self.player.powerup == False):
+
+            for ghost_data in ghosts:
+                ghost = ghost_data["ghost"]
+                if (self.player.x_pos, self.player.y_pos) == (ghost.x_pos, ghost.y_pos):
+                    if not self.player.powerup:
                         self.player.lives -= 1
+                        if self.player.lives == 0:
+                            self.state = STATE_GAMEOVER
+                            return
+                        time.sleep(0.2)
+                        for ghost_data in ghosts:
+                            ghost_data["ghost"].update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE)
+                    else:
+                        ghost.dead = True
+                        self.player.score += 50
+                        self.screen.blit(BG_IMG, (ghost.x_pos, ghost.y_pos))
+                        ghost.draw()
                         time.sleep(0.1)
-                        self.blue_ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE)
-                        self.pink_ghost.update_position(self.offset + CELL_SIZE * 21, self.offset + CELL_SIZE)
-                        self.red_ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE * 21)
-                        self.orange_ghost.update_position(self.offset + CELL_SIZE * 10, self.offset + CELL_SIZE * 11) #Middle
-                else:
-                        if((self.player.x_pos, self.player.y_pos) == (self.blue_ghost.x_pos, self.blue_ghost.y_pos)):
-                            self.blue_ghost.dead = True
-                            self.player.score += 50
-                            self.screen.blit(BG_IMG, (self.blue_ghost.x_pos, self.blue_ghost.y_pos))
-                            self.blue_ghost.draw()
-                            time.sleep(0.1)
-                            self.blue_ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE)
-                            self.blue_ghost.dead = False
+                        ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE)
+                        ghost.dead = False
 
-                        elif((self.player.x_pos, self.player.y_pos) == (self.red_ghost.x_pos, self.red_ghost.y_pos)):
-                            self.red_ghost.dead = True
-                            self.player.score += 50
-                            self.screen.blit(BG_IMG, (self.red_ghost.x_pos, self.red_ghost.y_pos))
-                            self.red_ghost.draw()
-                            self.red_ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE)
-                            self.red_ghost.dead = False
-                        elif((self.player.x_pos, self.player.y_pos) == (self.orange_ghost.x_pos, self.orange_ghost.y_pos)):
-                            self.orange_ghost.dead = True
-                            self.player.score += 50
-                            self.screen.blit(BG_IMG, (self.orange_ghost.x_pos, self.orange_ghost.y_pos))
-                            self.orange_ghost.draw()
-                            self.orange_ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE)
-                            self.orange_ghost.dead = False
-                        elif((self.player.x_pos, self.player.y_pos) == (self.pink_ghost.x_pos, self.pink_ghost.y_pos)):
-                            self.pink_ghost.dead = True
-                            self.player.score += 50
-                            self.screen.blit(BG_IMG, (self.pink_ghost.x_pos, self.pink_ghost.y_pos))
-                            self.pink_ghost.draw()
-                            self.pink_ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE)
-                            self.pink_ghost.dead = False
-
-            if(self.check_win()):
+            # Win condition check
+            if self.check_win():
                 self.state = STATE_WIN
-            
-            print(time.time() - self.player.powerup_time)
-            if self.player.powerup and time.time() - self.player.powerup_time >= 7:
-                print("Out of time")
-                self.player.powerup = False
-                self.blue_ghost.powerup = False
-                self.pink_ghost.powerup = False
-                self.orange_ghost.powerup = False
-                self.red_ghost.powerup = False
 
-            #for i in range self.lives: vẽ mạng vô đây
-            font = pygame.font.SysFont("timesnewroman", 32)
-            lives_text = font.render("Lives: ", True, COLORS["Pink"])
-            self.screen.blit(lives_text, (940, 200))
-            for i in range(self.player.lives):
-                self.screen.blit(PACMAN_LIVE, (1040 + i * (CELL_SIZE + 5), 210))
-            score_text = font.render(f"Score: {self.player.score}", True, COLORS["Pink"])
-            self.screen.blit(score_text, (940, 150))
-                
+            # Power-up time check
+            if self.player.powerup and time.time() - self.player.powerup_time >= 7:
+                self.player.powerup = False
+                for ghost_data in ghosts:
+                    ghost_data["ghost"].powerup = False
+
+            # Draw lives and score
+            self.draw_lives_and_score()
+
+            # Exit
+            self.draw_button("Exit", 1080, 30, 80, 40, COLORS["Red"], lambda: self.level_menu(), 32) 
+
             pygame.display.update()
             pygame.time.delay(100)  # Tốc độ di chuyển
 
-        self.state = STATE_HOME
-
-    def check_collision(self): 
-        # for ghost in [self.blue_ghost, self.pink_ghost, self.orange_ghost, self.red_ghost]:
-        #     if abs(self.player.x_pos - ghost.x_pos) < CELL_SIZE // 2 and abs(self.player.y_pos - ghost.y_pos) < CELL_SIZE // 2:
-        #         return True  # Pac-Man bị bắt
-        pac_rect = pygame.Rect(self.player.x_pos, self.player.y_pos, CELL_SIZE, CELL_SIZE)
-    
-        for ghost in [self.blue_ghost, self.pink_ghost, self.orange_ghost, self.red_ghost]:
-            ghost_rect = pygame.Rect(ghost.x_pos, ghost.y_pos, CELL_SIZE, CELL_SIZE)
-            
-            if pac_rect.colliderect(ghost_rect):  # Check if Pac-Man and ghost collide
-                return True  
-        return False
+        # self.state = STATE_HOME
+   
+    def draw_lives_and_score(self):
+        font = pygame.font.SysFont("timesnewroman", 32)
+        lives_text = font.render("Lives: ", True, COLORS["Pink"])
+        self.screen.blit(lives_text, (940, 200))
+        for i in range(self.player.lives):
+            self.screen.blit(PACMAN_LIVE, (1040 + i * (CELL_SIZE + 5), 210))
+        score_text = font.render(f"Score: {self.player.score}", True, COLORS["Pink"])
+        self.screen.blit(score_text, (940, 150))
     
     def check_win(self):
         for row in self.board:
@@ -604,35 +505,34 @@ class Game:
         self.screen.blit(level_text, (WIDTH // 2 - level_text.get_width() // 2, 50))
 
         font1 = pygame.font.SysFont("timesnewroman", 32)
-        
-        blue_time_text = font1.render(f"Search time of the Blue ghost: {self.blue_search_time} s", True, COLORS["Blue"])
-        self.screen.blit(blue_time_text, (WIDTH // 2 - blue_time_text.get_width() // 2, 130))        
-        blue_memory_text = font1.render(f"Memory usage of the Blue ghost: {self.blue_memory_usage} bytes", True, COLORS["Blue"])
-        self.screen.blit(blue_memory_text, (WIDTH // 2 - blue_memory_text.get_width() // 2, 170))        
-        blue_expanded_nodes_text = font1.render(f"Expanded nodes of the Blue ghost: {self.blue_expanded_nodes}", True, COLORS["Blue"])
-        self.screen.blit(blue_expanded_nodes_text, (WIDTH // 2 - blue_expanded_nodes_text.get_width() // 2, 210))
 
-        time_text = font1.render(f"Search time of the Pink ghost: {self.pink_search_time} s", True, COLORS["Pink"])
+        time_text = font1.render(f"Search time of the Blue ghost: {self.blue_ghost.time} s", True, COLORS["Blue"])
+        self.screen.blit(time_text, (WIDTH // 2 - time_text.get_width() // 2, 130))
+        memory_text = font1.render(f"Memory usage of the Blue ghost: {self.blue_ghost.mem} bytes", True, COLORS["Blue"])
+        self.screen.blit(memory_text, (WIDTH // 2 - memory_text.get_width() // 2, 150))
+        expanded_nodes_text = font1.render(f"Expanded nodes of the Blue ghost: {self.blue_ghost.expanded}", True, COLORS["Blue"])
+        self.screen.blit(expanded_nodes_text, (WIDTH // 2 - expanded_nodes_text.get_width() // 2, 170))
+
+        time_text = font1.render(f"Search time of the Pink ghost: {self.pink_ghost.time} s", True, COLORS["Pink"])
         self.screen.blit(time_text, (WIDTH // 2 - time_text.get_width() // 2, 290))
-        memory_text = font1.render(f"Memory usage of the Pink ghost: {self.pink_memory_usage} bytes", True, COLORS["Pink"])
+        memory_text = font1.render(f"Memory usage of the Pink ghost: {self.pink_ghost.mem} bytes", True, COLORS["Pink"])
         self.screen.blit(memory_text, (WIDTH // 2 - memory_text.get_width() // 2, 330))
-        expanded_nodes_text = font1.render(f"Expanded nodes of the Pink ghost: {self.pink_expanded_nodes}", True, COLORS["Pink"])
+        expanded_nodes_text = font1.render(f"Expanded nodes of the Pink ghost: {self.pink_ghost.expanded}", True, COLORS["Pink"])
         self.screen.blit(expanded_nodes_text, (WIDTH // 2 - expanded_nodes_text.get_width() // 2, 370))
 
-        time_text = font1.render(f"Search time of the Red ghost: {self.red_search_time} s", True, COLORS["Red"])
+        time_text = font1.render(f"Search time of the Red ghost: {self.red_ghost.time} s", True, COLORS["Red"])
         self.screen.blit(time_text, (WIDTH // 2 - time_text.get_width() // 2, 450))
-        memory_text = font1.render(f"Memory usage of the Red ghost: {self.red_memory_usage} bytes", True, COLORS["Red"])
+        memory_text = font1.render(f"Memory usage of the Red ghost: {self.red_ghost.mem} bytes", True, COLORS["Red"])
         self.screen.blit(memory_text, (WIDTH // 2 - memory_text.get_width() // 2, 490))
-        expanded_nodes_text = font1.render(f"Expanded nodes of the Red ghost: {self.red_expanded_nodes}", True, COLORS["Red"])
+        expanded_nodes_text = font1.render(f"Expanded nodes of the Red ghost: {self.red_ghost.expanded}", True, COLORS["Red"])
         self.screen.blit(expanded_nodes_text, (WIDTH // 2 - expanded_nodes_text.get_width() // 2, 530))
 
-        time_text = font1.render(f"Search time of the Orange ghost: {self.orange_search_time} s", True, COLORS["Orange"])
-        self.screen.blit(time_text, (WIDTH // 2 - time_text.get_width() // 2, 610))
-        memory_text = font1.render(f"Memory usage of the Orange ghost: {self.orange_memory_usage} bytes", True, COLORS["Orange"])
-        self.screen.blit(memory_text, (WIDTH // 2 - memory_text.get_width() // 2, 650))
-        expanded_nodes_text = font1.render(f"Expanded nodes of the Orange ghost: {self.orange_expanded_nodes}", True, COLORS["Orange"])
-        self.screen.blit(expanded_nodes_text, (WIDTH // 2 - expanded_nodes_text.get_width() // 2, 690))
-
+        time_text = font1.render(f"Search time of the Orange ghost: {self.orange_ghost.time} s", True, COLORS["Orange"])
+        self.screen.blit(time_text, (WIDTH // 2 - time_text.get_width() // 2, 340))
+        memory_text = font1.render(f"Memory usage of the Orange ghost: {self.orange_ghost.mem} bytes", True, COLORS["Orange"])
+        self.screen.blit(memory_text, (WIDTH // 2 - memory_text.get_width() // 2, 150))
+        expanded_nodes_text = font1.render(f"Expanded nodes of the Orange ghost: {self.orange_ghost.expanded}", True, COLORS["Orange"])
+        self.screen.blit(expanded_nodes_text, (WIDTH // 2 - expanded_nodes_text.get_width() // 2, 170))
 
         sub_font = pygame.font.SysFont("timesnewroman", 40)
         menu_text = sub_font.render("Press N to go to Level Menu", True, COLORS["Yellow"])
@@ -682,31 +582,12 @@ class Game:
                     elif event.key == pygame.K_n:
                         self.state = STATE_LEVEL
                         return
-        
-
-    
-    def reset_game(self):
-    # Đặt lại vị trí Pac-Man
-        self.reset_player()
-
-        # Đặt lại vị trí của tất cả các Ghost
-        self.reset_ghost(self.blue_ghost)
-        self.reset_ghost(self.pink_ghost)
-        self.reset_ghost(self.red_ghost)
-        self.reset_ghost(self.orange_ghost)
-
-        # Đặt lại điểm số, trạng thái game nếu cần
-        self.expanded_nodes = 0
-        self.search_time = 0
-        self.memory_usage = 0
-        self.player.score = 0
-        self.player.lives = 3
 
 
     def run(self): 
         running = True
         while running:
-            self.screen.fill("black")
+            self.screen.fill("Black")
             if(self.state == STATE_HOME):
                 self.home_screen()
             if(self.state == STATE_LEVEL):
