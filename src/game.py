@@ -90,6 +90,7 @@ class Game:
 
     def level_menu(self):
         self.state = STATE_LEVEL
+        self.screen.fill("Black")
         self.draw_button("Level 1", 480, 120, 270, 50, COLORS["Pink"], lambda: self.set_state(STATE_PLAYING, 1), 50)
         self.draw_button("Level 2", 480, 220, 270, 50, COLORS["Green"], lambda: self.set_state(STATE_PLAYING, 2), 50)
         self.draw_button("Level 3", 480, 320, 270, 50, COLORS["Blue"], lambda: self.set_state(STATE_PLAYING, 3), 50)
@@ -585,7 +586,7 @@ class Game:
     def run(self): 
         running = True
         while running:
-            self.screen.fill("black")
+            self.screen.fill("Black")
             if(self.state == STATE_HOME):
                 self.home_screen()
             if(self.state == STATE_LEVEL):
