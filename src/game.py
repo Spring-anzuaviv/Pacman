@@ -91,6 +91,7 @@ class Game:
         
         if x < mouse_x < x + width and y < mouse_y < y + height:
             if click[0] == 1 and action:
+                self.menu_music.stop()
                 self.click_sound.play()
                 action()
 
