@@ -32,6 +32,7 @@ class Ghost:
         # Pacman's position changes
         print(self.path)
         end = self.target
+        button_rect = pygame.Rect(20, 20, 160, 40)
         for x, y in self.path:
             self.x_pos = y * CELL_SIZE + self.offset[0]
             self.y_pos = x * CELL_SIZE + self.offset[1]
@@ -40,8 +41,21 @@ class Ghost:
             self.game.screen.blit(PACMAN_LEFT_1, (self.target[0], self.target[1])) 
             if not self.check_collision():
                 self.game.screen.blit(self.img, (self.x_pos , self.y_pos )) 
+
+            pygame.draw.rect(self.game.screen, (200, 0, 0), button_rect) 
+            font = pygame.font.Font(None, 36)
+            text = font.render("See result", True, (255, 255, 255))  
+            self.game.screen.blit(text, (button_rect.x + 20, button_rect.y + 10))
+
             pygame.display.update()
             time.sleep(0.5)  
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if button_rect.collidepoint(event.pos): 
+                        return 
 
     def check_collision(self):
         return [self.x_pos, self.y_pos] == self.target

@@ -305,10 +305,10 @@ class Game:
         self.player.appear()
 
         ghosts = [
-            {"ghost": self.blue_ghost, "pos": (29, 3), "method": self.blue_ghost.move_bfs},
-            {"ghost": self.pink_ghost, "pos": (21, 1), "method": self.pink_ghost.move_dfs},
-            {"ghost": self.red_ghost, "pos": (1, 21), "method": self.red_ghost.move_astar},
-            {"ghost": self.orange_ghost, "pos": (31, 27), "method": self.orange_ghost.move_ucs}
+            {"ghost": self.blue_ghost, "pos": (1, 27), "method": self.blue_ghost.move_bfs},
+            {"ghost": self.pink_ghost, "pos": (31, 27), "method": self.pink_ghost.move_dfs},
+            {"ghost": self.red_ghost, "pos": (31, 1), "method": self.red_ghost.move_astar},
+            {"ghost": self.orange_ghost, "pos": (15, 17), "method": self.orange_ghost.move_ucs}
         ]
 
         for ghost_data in ghosts:
