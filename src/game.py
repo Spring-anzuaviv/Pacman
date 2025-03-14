@@ -645,7 +645,6 @@ class Game:
         
     def run(self): 
         running = True
-        self.state = STATE_WIN
         while running:
             self.screen.fill("black")
             if(self.state == STATE_HOME):
