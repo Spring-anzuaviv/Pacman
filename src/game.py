@@ -437,13 +437,8 @@ class Game:
         self.screen.blit(win_text, (WIDTH // 2 - win_text.get_width() // 2, HEIGHT // 2 - 50))
         
         sub_font = pygame.font.SysFont("timesnewroman", 40)
-        play_again_text = sub_font.render("Press Y to Play Again", True, COLORS["Yellow"])
         menu_text = sub_font.render("Press N to Go to Level Menu", True, COLORS["Yellow"])
-
-        play_again_rect = play_again_text.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 2 + 50))
         menu_rect = menu_text.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 2 + 100))
-
-        self.screen.blit(play_again_text, play_again_rect)
         self.screen.blit(menu_text, menu_rect)
         
         pygame.display.flip()
