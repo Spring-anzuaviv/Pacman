@@ -12,7 +12,7 @@ class Game:
         pygame.init()
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption(APP_CAPTION)
-        self.font = pygame.font.SysFont("timesnewroman", 32)
+        self.font = pygame.font.Font("PressStart2P.ttf", 25)
         self.background_image1 = pygame.image.load(MENU_LOGO_1)
         self.background_image2 = pygame.image.load(MENU_LOGO_2)
         self.background_image1 = pygame.transform.scale(self.background_image1, (WIDTH//2.2, HEIGHT//2.2))
@@ -74,8 +74,8 @@ class Game:
 
     def draw_button(self, text, x, y, width, height, color, action=None, fontsize=int):
         pygame.draw.rect(self.screen, color, (x, y, width, height))
-        self.font = pygame.font.SysFont("timesnewroman", fontsize)
-        text_surface = self.font.render(text, True, COLORS["Black"])
+        font = pygame.font.Font("PressStart2P.ttf", fontsize)
+        text_surface = font.render(text, True, COLORS["Black"])
         self.screen.blit(text_surface, (x + (width - text_surface.get_width()) // 2, y + (height - text_surface.get_height()) // 2))
         
         mouse_x, mouse_y = pygame.mouse.get_pos()
@@ -93,13 +93,13 @@ class Game:
     def level_menu(self):
         self.state = STATE_LEVEL
         self.screen.fill("Black")
-        self.draw_button("Level 1", 480, 120, 270, 50, COLORS["Pink"], lambda: self.set_state(STATE_PLAYING, 1), 50)
-        self.draw_button("Level 2", 480, 220, 270, 50, COLORS["Green"], lambda: self.set_state(STATE_PLAYING, 2), 50)
-        self.draw_button("Level 3", 480, 320, 270, 50, COLORS["Blue"], lambda: self.set_state(STATE_PLAYING, 3), 50)
-        self.draw_button("Level 4", 480, 420, 270, 50, COLORS["Yellow"], lambda: self.set_state(STATE_PLAYING, 4), 50)
-        self.draw_button("Level 5", 480, 520, 270, 50, COLORS["BACKGROUND_BLUE"], lambda: self.set_state(STATE_PLAYING, 5), 50)
-        self.draw_button("Level 6", 480, 620, 270, 50, COLORS["Purple"], lambda: self.set_state(STATE_PLAYING, 6), 50)
-        self.draw_button("Back", 20, 20, 80, 40, COLORS["Red"], lambda: self.exit_level_menu(), 32) 
+        self.draw_button("Level 1", 480, 150, 270, 50, COLORS["Pink"], lambda: self.set_state(STATE_PLAYING, 1), 25)
+        self.draw_button("Level 2", 480, 250, 270, 50, COLORS["Green"], lambda: self.set_state(STATE_PLAYING, 2), 25)
+        self.draw_button("Level 3", 480, 350, 270, 50, COLORS["Blue"], lambda: self.set_state(STATE_PLAYING, 3), 25)
+        self.draw_button("Level 4", 480, 450, 270, 50, COLORS["Yellow"], lambda: self.set_state(STATE_PLAYING, 4), 25)
+        self.draw_button("Level 5", 480, 550, 270, 50, COLORS["BACKGROUND_BLUE"], lambda: self.set_state(STATE_PLAYING, 5), 25)
+        self.draw_button("Level 6", 480, 650, 270, 50, COLORS["Purple"], lambda: self.set_state(STATE_PLAYING, 6), 25)
+        self.draw_button("Back", 20, 20, 80, 40, COLORS["Red"], lambda: self.exit_level_menu(), 15) 
 
         level_text = self.font.render("Choose Your Level", True, COLORS["Yellow"])
         self.screen.blit(level_text, (WIDTH // 2 - level_text.get_width() // 2, 50))   
@@ -132,8 +132,9 @@ class Game:
         self.state = "home"
         self.screen.blit(self.background_image1, (350, 30))
         self.screen.blit(self.background_image2, (320, 380))
-        self.draw_button("Start Game", 200, 650, 270, 60, COLORS["Green"], self.level_menu, 50)
-        self.draw_button("Exit", 800, 650, 270, 60, COLORS["Red"], self.exit_game, 50)
+        self.draw_button("START GAME", 100, 650, 270, 60, COLORS["Green"], self.level_menu, 23)
+        self.draw_button("HOW TO PLAY", 445, 650, 330, 60, COLORS["Yellow"], self.how_to_play_screen, 25)
+        self.draw_button("EXIT", 850, 650, 270, 60, COLORS["Red"], self.exit_game, 25)
 
     def reset_player(self):
         self.player.x_pos = self.player.offset[0] + CELL_SIZE
@@ -287,11 +288,11 @@ class Game:
                 time.sleep(0.1)
 
             # Exit
-            button_rect = pygame.Rect(20, 20, 160, 40)
+            button_rect = pygame.Rect(20, 20, 190, 35)
 
             pygame.draw.rect(self.screen, (200, 0, 0), button_rect) 
-            font = pygame.font.Font(None, 36)
-            text = font.render("See result", True, (255, 255, 255))  
+            font = pygame.font.Font("PressStart2P.ttf", 15)
+            text = font.render("See result", True, (0, 0, 0))  
             self.screen.blit(text, (button_rect.x + 20, button_rect.y + 10))
  
             for event in pygame.event.get():
@@ -420,20 +421,20 @@ class Game:
             self.draw_lives_and_score()
 
             # Exit
-            self.draw_button("Exit", 1080, 30, 80, 40, COLORS["Red"], lambda: self.level_menu(), 32) 
+            self.draw_button("Exit", 1080, 30, 80, 40, COLORS["Red"], lambda: self.level_menu(), 15) 
 
             pygame.display.update()
             pygame.time.delay(100)  
         # self.state = STATE_HOME
    
     def draw_lives_and_score(self):
-        font = pygame.font.SysFont("timesnewroman", 32)
+        font = pygame.font.Font("PressStart2P.ttf", 20)
         lives_text = font.render("Lives: ", True, COLORS["Pink"])
-        self.screen.blit(lives_text, (940, 200))
+        self.screen.blit(lives_text, (910, 215))
         for i in range(self.player.lives):
             self.screen.blit(PACMAN_LIVE, (1040 + i * (CELL_SIZE + 5), 210))
         score_text = font.render(f"Score: {self.player.score}", True, COLORS["Pink"])
-        self.screen.blit(score_text, (940, 150))
+        self.screen.blit(score_text, (910, 150))
     
     def check_win(self):
         for row in self.board:
@@ -444,14 +445,14 @@ class Game:
     def win(self): 
         self.state = STATE_WIN
         self.screen.fill((0, 0, 0))  # Đặt nền màu đen
-        font = pygame.font.SysFont("timesnewroman", 50, bold=True)
+        font = pygame.font.Font("PressStart2P.ttf", 25)
         win_text = font.render("YOU WIN!", True, (255, 255, 0))
         self.screen.blit(EMOJI_WIN_1, (425, 345))
         self.screen.blit(EMOJI_WIN_2, (725, 345))
         self.screen.blit(win_text, (WIDTH // 2 - win_text.get_width() // 2, HEIGHT // 2 - 50))
         
-        sub_font = pygame.font.SysFont("timesnewroman", 40)
-        menu_text = sub_font.render("Press N to Go to Level Menu", True, COLORS["Yellow"])
+        sub_font = pygame.font.Font("PressStart2P.ttf", 20)
+        menu_text = sub_font.render("Press N to Go to Level Menu", True, COLORS["White"])
         menu_rect = menu_text.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 2 + 100))
         self.screen.blit(menu_text, menu_rect)
         
@@ -475,11 +476,11 @@ class Game:
     def show_result(self):
         self.screen.fill(COLORS["Black"])
         pygame.draw.rect(self.screen, (0, 0, 0, 150), (50, 50, WIDTH - 100, HEIGHT - 150), border_radius=20)
-        font = pygame.font.SysFont("timesnewroman", 50, bold=True)
+        font = pygame.font.Font("PressStart2P.ttf", 25)
         level_text = font.render(f"Level {self.level} Complete!", True, COLORS["Pink"])
         self.screen.blit(level_text, (WIDTH // 2 - level_text.get_width() // 2, 100))
 
-        font1 = pygame.font.SysFont("timesnewroman", 32)
+        font1 = pygame.font.Font("PressStart2P.ttf", 20)
         time_text = font1.render(f"Search Time: {self.search_time} s", True, COLORS["White"])
         self.screen.blit(time_text, (WIDTH // 2 - time_text.get_width() // 2, 180))
 
@@ -489,7 +490,7 @@ class Game:
         expanded_nodes_text = font1.render(f"Expanded Nodes: {self.expanded_nodes}", True, COLORS["White"])
         self.screen.blit(expanded_nodes_text, (WIDTH // 2 - expanded_nodes_text.get_width() // 2, 280))
 
-        sub_font = pygame.font.SysFont("timesnewroman", 40)
+        sub_font = pygame.font.Font("PressStart2P.ttf", 20)
         menu_text = sub_font.render("Press N to go to Level Menu", True, COLORS["Yellow"])
         menu_rect = menu_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 100))
         self.screen.blit(menu_text, menu_rect)
@@ -509,11 +510,11 @@ class Game:
     def show_result_for_four(self):
         self.screen.fill(COLORS["Black"])
         pygame.draw.rect(self.screen, (0, 0, 0, 150), (50, 50, WIDTH - 100, HEIGHT - 150), border_radius=20)
-        font = pygame.font.SysFont("timesnewroman", 50, bold=True)
+        font = pygame.font.Font("PressStart2P.ttf", 25)
         level_text = font.render(f"Level {self.level} Complete!", True, COLORS["Yellow"])
         self.screen.blit(level_text, (WIDTH // 2 - level_text.get_width() // 2, 50))
 
-        font1 = pygame.font.SysFont("timesnewroman", 32)
+        font1 = pygame.font.Font("PressStart2P.ttf", 20)
 
         time_text = font1.render(f"Search time of the Blue ghost: {self.blue_ghost.time} s", True, COLORS["Blue"])
         self.screen.blit(time_text, (WIDTH // 2 - time_text.get_width() // 2, 130))
@@ -543,7 +544,7 @@ class Game:
         expanded_nodes_text = font1.render(f"Expanded nodes of the Orange ghost: {self.orange_ghost.expanded}", True, COLORS["Orange"])
         self.screen.blit(expanded_nodes_text, (WIDTH // 2 - expanded_nodes_text.get_width() // 2, 170))
 
-        sub_font = pygame.font.SysFont("timesnewroman", 40)
+        sub_font = pygame.font.Font("PressStart2P.ttf", 20)
         menu_text = sub_font.render("Press N to go to Level Menu", True, COLORS["Yellow"])
         menu_rect = menu_text.get_rect(center=(WIDTH // 2, HEIGHT - 70))
         self.screen.blit(menu_text, menu_rect)
@@ -563,7 +564,7 @@ class Game:
 
     def game_over(self):
         self.screen.fill((0, 0, 0))  # Đặt nền màu đen
-        font = pygame.font.SysFont("timesnewroman", 50, bold=True)
+        font = pygame.font.Font("PressStart2P.ttf", 20)
         text = font.render("GAME OVER", True, COLORS["Red"])
         self.screen.blit(EMOJI_LOSE, (390, 360))
         self.screen.blit(EMOJI_LOSE, (760, 360))
@@ -572,7 +573,7 @@ class Game:
         score_text = font.render(f"SCORE: {self.player.score}", True, COLORS["White"])
         self.screen.blit(score_text, (WIDTH // 2 - score_text.get_width() // 2, HEIGHT // 2 + 5))
 
-        sub_font = pygame.font.SysFont("timesnewroman", 40)
+        sub_font = pygame.font.Font("PressStart2P.ttf", 20)
         menu_text = sub_font.render("Press N to Go to Level Menu", True, COLORS["Yellow"])
 
         menu_rect = menu_text.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 2 + 90))
@@ -595,9 +596,56 @@ class Game:
                         self.state = STATE_LEVEL
                         return
 
+    def how_to_play_screen(self):
+        self.state = STATE_HOW_TO_PLAY
+        title_font = pygame.font.Font("PressStart2P.ttf", 30)  
+        text_font = pygame.font.Font("PressStart2P.ttf", 18)   
+        instructions = [
+            "MOVE:",
+            "Use arrow keys to move Pac-Man.",
+            "  ↑ Arrow - Move Up",
+            "  ↓ Arrow - Move Down",
+            "  ← Arrow - Move Left",
+            "  → Arrow - Move Right",
+            "",
+            "RULES:",
+            "- Avoid ghosts or lose a life!",
+            "- Eat small dots (+10 points).",
+            "- Eat big dots (Power Pellet) (+30 points).",
+            "  → Power-Up: Pacman can eat ghosts (+50 points).",
+            "",
+            "WIN: Eat all dots to clear the level.",
+            "LOSE: You lose if you run out of 3 lives.",
+        ]
+        title_text = title_font.render(f"HOW TO PLAY", True, COLORS["Yellow"])
+        self.screen.blit(title_text, (WIDTH // 2 - title_text.get_width() // 2, 50))
+        y_offset = 150  # Vị trí bắt đầu
+        for line in instructions:
+            text_surface = text_font.render(line, True, COLORS["White"])
+            text_rect = text_surface.get_rect(center=(600, y_offset))  # Căn giữa nội dung
+            self.screen.blit(text_surface, text_rect)
+            y_offset += 40  # Khoảng cách giữa các dòng
 
+        button_rect = pygame.Rect(20, 20, 115, 40)
+
+        pygame.draw.rect(self.screen, (200, 0, 0), button_rect) 
+        
+        text = text_font.render("Back", True, COLORS["Black"])  
+        self.screen.blit(text, (button_rect.x + 20, button_rect.y + 10))
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                if button_rect.collidepoint(event.pos): 
+                    self.state = STATE_HOME
+        pygame.display.flip()
+
+        
     def run(self): 
         running = True
+        self.state = STATE_WIN
         while running:
             self.screen.fill("black")
             if(self.state == STATE_HOME):
@@ -614,7 +662,8 @@ class Game:
                 self.show_result()
             if(self.state == STATE_RESULT_4):
                 self.show_result_for_four()
-
+            if(self.state == STATE_HOW_TO_PLAY):
+                self.how_to_play_screen()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False

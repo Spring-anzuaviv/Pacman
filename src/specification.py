@@ -22,6 +22,7 @@ STATE_GAMEOVER = "gameover"
 STATE_WIN = "win"
 STATE_RESULT = "result" # Vẽ xong path"
 STATE_RESULT_4 = "result for 4"
+STATE_HOW_TO_PLAY = "how to play"
 
 #Map
 #0: empty,  1: wall,    2: path,    3:power pellets  
@@ -92,7 +93,7 @@ boards2 = [
 
 #Color
 COLORS = {
-    "BACKGROUND_BLUE": (0, 90, 141),  # Màu nền vintage
+    "BACKGROUND_BLUE": (0, 90, 141),  
     "Brown": (204, 153, 0),
     "White": (255, 255, 255),
     "Red": (244, 67, 54),
