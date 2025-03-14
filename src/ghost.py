@@ -32,30 +32,16 @@ class Ghost:
         # Pacman's position changes
         print(self.path)
         end = self.target
-        button_rect = pygame.Rect(20, 20, 190, 35)
         for x, y in self.path:
-            self.x_pos = y * CELL_SIZE + self.offset[0]
-            self.y_pos = x * CELL_SIZE + self.offset[1]
+            self.x_pos = y * CELL_SIZE + self.offset
+            self.y_pos = x * CELL_SIZE + self.offset
             self.game.screen.fill((0, 0, 0))  
             self.game.draw_board1() 
             self.game.screen.blit(PACMAN_LEFT_1, (self.target[0], self.target[1])) 
             if not self.check_collision():
                 self.game.screen.blit(self.img, (self.x_pos , self.y_pos )) 
-
-            pygame.draw.rect(self.game.screen, (200, 0, 0), button_rect) 
-            font = pygame.font.Font("PressStart2P.ttf", 15)
-            text = font.render("See result", True, (0, 0, 0))  
-            self.game.screen.blit(text, (button_rect.x + 20, button_rect.y + 10))
-
             pygame.display.update()
             time.sleep(0.5)  
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if button_rect.collidepoint(event.pos): 
-                        return 
 
     def check_collision(self):
         return [self.x_pos, self.y_pos] == self.target
@@ -63,8 +49,8 @@ class Ghost:
     def move_bfs(self):
         print("BFS")
         start_time = time.time()
-        start = ((self.y_pos - self.offset[1]) // GRID_SIZE, (self.x_pos - self.offset[0]) // GRID_SIZE)
-        end = ((self.target[1] - self.offset[1]) // GRID_SIZE, (self.target[0] - self.offset[0]) // GRID_SIZE)
+        start = ((self.y_pos - self.offset) // GRID_SIZE, (self.x_pos - self.offset) // GRID_SIZE)
+        end = ((self.target[1] - self.offset) // GRID_SIZE, (self.target[0] - self.offset) // GRID_SIZE)
         print("Start node:", start)
         print("Goal node:", end)
 
@@ -105,7 +91,7 @@ class Ghost:
                     if (next_x, next_y) == end:
                         elapsed_time = time.time() - start_time
                         memory_used = sys.getsizeof(queue) + sys.getsizeof(visited)
-                        print(f"Goal reached! Stopping early. Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes")
+                        print(f"Goal reached! Stopping early. Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes, Nodes: {expanded_nodes}")
                         self.path = new_path
                         self.time, self.expanded, self.mem = elapsed_time, expanded_nodes, memory_used
                         return new_path
@@ -124,8 +110,8 @@ class Ghost:
         print("DFS")
         start_time = time.time()  
         path = []
-        start = ((self.y_pos - self.offset[1]) // GRID_SIZE, (self.x_pos - self.offset[0]) // GRID_SIZE)
-        end = ((self.target[1] - self.offset[1]) // GRID_SIZE, (self.target[0] - self.offset[0]) // GRID_SIZE)
+        start = ((self.y_pos - self.offset) // GRID_SIZE, (self.x_pos - self.offset) // GRID_SIZE)
+        end = ((self.target[1] - self.offset) // GRID_SIZE, (self.target[0] - self.offset) // GRID_SIZE)
 
         stack = [(start, [start])]
         visited = set()
@@ -173,13 +159,12 @@ class Ghost:
         self.time, self.expanded, self.mem = elapsed_time, expanded_nodes, memory_used
         return []
     
-
     def move_ucs(self):
       
         start_time = time.time()
 
-        start = ((self.y_pos - self.offset[1]) // GRID_SIZE, (self.x_pos - self.offset[0]) // GRID_SIZE)
-        end = ((self.target[1] - self.offset[1]) // GRID_SIZE, (self.target[0] - self.offset[0]) // GRID_SIZE)
+        start = ((self.y_pos - self.offset) // GRID_SIZE, (self.x_pos - self.offset) // GRID_SIZE)
+        end = ((self.target[1] - self.offset) // GRID_SIZE, (self.target[0] - self.offset) // GRID_SIZE)
 
         def g_cost (x,y):  # chi phí cho mỗi bước đi
             unit = WIDTH // GRID_SIZE + HEIGHT // GRID_SIZE - 2 # khoảng cách lớn nhất giữa 2 điểm làm đơn vị, để khi lấy distance_to_pacman/unit <= 1
@@ -206,10 +191,10 @@ class Ghost:
 
             if (x, y) in visited:  # Nếu nút đã từng mở rộng thì bỏ qua
                 continue  
-            else:
-                visited.add((x, y))  # Đánh dấu đã thăm khi lấy ra khỏi hàng đợi
-                expanded.append((x, y))  
-                expanded_nodes += 1
+           
+            visited.add((x, y))  # Đánh dấu đã thăm khi lấy ra khỏi hàng đợi
+            expanded.append((x, y))  
+            expanded_nodes += 1
 
             if (x, y) == end:
                 elapsed_time = time.time() - start_time
@@ -238,8 +223,8 @@ class Ghost:
 
         start_time = time.time()
 
-        start = ((self.y_pos - self.offset[1]) // GRID_SIZE, (self.x_pos - self.offset[0]) // GRID_SIZE)
-        end = ((self.target[1] - self.offset[1]) // GRID_SIZE, (self.target[0] - self.offset[0]) // GRID_SIZE)
+        start = ((self.y_pos - self.offset) // GRID_SIZE, (self.x_pos - self.offset) // GRID_SIZE)
+        end = ((self.target[1] - self.offset) // GRID_SIZE, (self.target[0] - self.offset) // GRID_SIZE)
         
         def heuristic(x, y):
             return (abs(x - end[0]) + abs(y - end[1])) # Khoảng cách Manhattan
@@ -271,15 +256,15 @@ class Ghost:
 
             if (x, y) in visited:  # Bỏ qua nếu đã thăm
                 continue
-            else:
-                visited.add((x, y))
-                expanded.append((x, y))
-                expanded_nodes += 1
+            
+            visited.add((x, y))
+            expanded.append((x, y))
+            expanded_nodes += 1
            
 
             if (x, y) == end:
                 elapsed_time = time.time() - start_time
-                memory_used = sys.getsizeof(visited)
+                memory_used = sys.getsizeof(visited) + max_pq_size
                 print(f"Path found! Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes")
                 self.path = path
                 self.time, self.expanded, self.mem = elapsed_time, expanded_nodes,  memory_used
@@ -287,8 +272,8 @@ class Ghost:
 
             for dx, dy in [(1, 0), (0, 1), (-1, 0), (0, -1)]:
                 next_x, next_y = x + dx, y + dy
-                if (0 <= next_x < len(self.map) and 0 <= next_y < len(self.map[0]) and self.map[next_x][next_y] != 1 and self.map[next_x][next_y] != 4 and (next_x, next_y) not in visited):
-                    new_g = g_n[(x, y)] + g_cost(next_x, next_y) 
+                if (0 <= next_x < len(self.map) and 0 <= next_y < len(self.map[0]) and self.map[next_x][next_y] != 1 and self.map[next_x][next_y] != 4 ):
+                    new_g = g_n[(x, y)] + g_cost(next_x, next_y)
                     new_f = new_g + heuristic(next_x, next_y)
 
                     if (next_x, next_y) not in g_n or new_g < g_n[(next_x, next_y)]:
@@ -303,6 +288,9 @@ class Ghost:
         self.time, self.expanded, self.mem = elapsed_time, expanded_nodes,  memory_used
         return []
     
+    def update_next(self, x, y):
+        self.next_x_pos = x
+        self.next_y_pos = y
        
     def update_position(self, x, y):
         self.x_pos = x
@@ -314,4 +302,6 @@ class AStarSolver:
         self.y_pos = y_pos
         self.target = target
         self.map = map_data
+
+    # Power up: đổi ảnh, nếu bị ăn thì dead, trở về vị trí bắt dâu
  
