@@ -20,23 +20,23 @@ class Game:
         self.board = []
         self.path = []
         self.img = None
-        self.offset = 0
+        self.offset = (0, 0)
         self.expanded_nodes = 0
         self.search_time = 0
         self.memory_usage = 0
         self.powerup_time = 0
 
-        self.player = Player(game = self, x_coord = 10 + 26, y_coord = 10 + 26, x_target= 10 +26, y_target= 10+26, speed = 2, direct="", dead=False, powerup=False, board=self.board, board_offset = 0)
-        self.pink_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, next_x = 26 , next_y = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_PINK, direct=0, dead=False, powerup=False, board=self.board, board_offset = 0)
-        self.blue_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, next_x = 26 , next_y = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_BLUE, direct=0, dead=False, powerup=False, board=self.board, board_offset = 0)
-        self.orange_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, next_x = 26 , next_y = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_YELLOW, direct=0, dead=False, powerup=False, board=self.board, board_offset = 0)
-        self.red_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, next_x = 26 , next_y = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_RED, direct=0, dead=False, powerup=False, board=self.board, board_offset = 0)
+        self.player = Player(game = self, x_coord = 10 + 26, y_coord = 10 + 26, x_target= 10 +26, y_target= 10+26, speed = 2, direct="", dead=False, powerup=False, board=self.board, board_offset=(0,0))
+        self.pink_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, next_x = 26 , next_y = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_PINK, direct=0, dead=False, powerup=False, board=self.board, board_offset = (0,0))
+        self.blue_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, next_x = 26 , next_y = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_BLUE, direct=0, dead=False, powerup=False, board=self.board, board_offset = (0,0))
+        self.orange_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, next_x = 26 , next_y = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_YELLOW, direct=0, dead=False, powerup=False, board=self.board, board_offset = (0,0))
+        self.red_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, next_x = 26 , next_y = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_RED, direct=0, dead=False, powerup=False, board=self.board, board_offset = (0,0))
 
     def draw_board1(self):
         maze_width = len(boards1[0]) * GRID_SIZE
         maze_height = len(boards1) * GRID_SIZE
-        offset_x = 100
-        offset_y = 100
+        offset_x = (WIDTH - maze_width) // 2
+        offset_y = (HEIGHT - maze_height) // 2
 
         for row in range(len(boards1)):
             for col in range(len(boards1[row])):
@@ -135,8 +135,8 @@ class Game:
         self.draw_button("Exit", 800, 650, 270, 60, COLORS["Red"], self.exit_game, 50)
 
     def reset_player(self):
-        self.player.x_pos = self.player.offset + CELL_SIZE
-        self.player.y_pos = self.player.offset + CELL_SIZE
+        self.player.x_pos = self.player.offset[0] + CELL_SIZE
+        self.player.y_pos = self.player.offset[1] + CELL_SIZE
         self.player.dead = False
         self.player.powerup = False
         self.player.direction = "" 
@@ -146,27 +146,27 @@ class Game:
         self.player.open_mouth = False
 
     def reset_game(self):
-        self.offset = 100
+        self.offset = boards1_offset
         self.board = copy.deepcopy(boards1) #check ghost và player board trỏ cùng vị trí vs board game chưa
         self.player.map = copy.deepcopy(boards1)
 
-        self.player.offset = 100
-        self.player.update_position(self.offset + 26, self.offset + 26)
+        self.player.offset = boards1_offset
+        self.player.update_position(self.offset[0] + 26, self.offset[1] + 26)
        
     ''' Level 1:  Implement the Blue Ghost using Breadth-First Search (BFS) algorithm to chase Pac-Man '''
     def level_1(self):
-        self.offset = 100
+        self.offset = boards1_offset
         self.draw_board1()
         self.board = copy.deepcopy(boards1) #check ghost và player board trỏ cùng vị trí vs board game chưa
         self.player.map = copy.deepcopy(boards1)
 
-        self.player.offset = 100
-        self.player.update_position(self.offset + 26 * 21, self.offset + 26 * 21)
+        self.player.offset = boards1_offset
+        self.player.update_position(self.offset[0] + 26 * 21, self.offset[1] + 26 * 21)
         self.player.appear()
 
         self.blue_ghost.map = copy.deepcopy(boards1)
-        self.blue_ghost.offset = 100
-        self.blue_ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE)
+        self.blue_ghost.offset = boards1_offset
+        self.blue_ghost.update_position(self.offset[0] + CELL_SIZE * 1, self.offset[1] + CELL_SIZE * 1)
         self.blue_ghost.target = [self.player.x_pos, self.player.y_pos]
         print((self.blue_ghost.target[1], self.blue_ghost.target[0]))
 
@@ -178,18 +178,18 @@ class Game:
 
     ''' Level 2: Implement the Pink Ghost using the Depth-First Search (DFS) algorithm to chase Pac-Man. '''
     def level_2(self): 
-        self.offset = 100
+        self.offset = boards1_offset
         self.draw_board1()
         self.board = copy.deepcopy(boards1) 
         self.player.map = copy.deepcopy(boards1)
 
-        self.player.offset = 100
-        self.player.update_position(self.offset + 26 * 21, self.offset + 26 * 21)
+        self.player.offset = boards1_offset
+        self.player.update_position(self.offset[0] + 26 * 21, self.offset[1] + 26 * 21)
         self.player.appear()
 
         self.pink_ghost.map = copy.deepcopy(boards1)
-        self.pink_ghost.offset = 100
-        self.pink_ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE)
+        self.pink_ghost.offset = boards1_offset
+        self.pink_ghost.update_position(self.offset[0] + CELL_SIZE, self.offset[1] + CELL_SIZE)
         self.pink_ghost.target = [self.player.x_pos, self.player.y_pos]
 
         path = self.pink_ghost.move_dfs()
@@ -199,18 +199,18 @@ class Game:
 
     ''' Level 3: Implement the Orange Ghost using the Uniform-Cost Search algorithm to chase Pac-Man '''
     def level_3(self): 
-        self.offset = 100
+        self.offset = boards1_offset
         self.draw_board1()
         self.board = copy.deepcopy(boards1) #check ghost và player board trỏ cùng vị trí vs board game chưa
         self.player.map = copy.deepcopy(boards1)
 
-        self.player.offset = 100
-        self.player.update_position(self.offset + 26 * 21, self.offset + 26 * 21)
+        self.player.offset = boards1_offset
+        self.player.update_position(self.offset[0] + 26 * 21, self.offset[1] + 26 * 21)
         self.player.appear()
 
         self.orange_ghost.map = copy.deepcopy(boards1)
-        self.orange_ghost.offset = 100
-        self.orange_ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE)
+        self.orange_ghost.offset = boards1_offset
+        self.orange_ghost.update_position(self.offset[0] + CELL_SIZE, self.offset[1] + CELL_SIZE)
         self.orange_ghost.target = [self.player.x_pos, self.player.y_pos]
         print((self.orange_ghost.target[1], self.orange_ghost.target[0]))
 
@@ -221,18 +221,18 @@ class Game:
 
     ''' Level 4: Implement the Red Ghost using the A* Search (A*) algorithm to chase Pac-Man '''
     def level_4(self): 
-        self.offset = 100
+        self.offset = boards1_offset
         self.draw_board1()
         self.board = copy.deepcopy(boards1) #check ghost và player board trỏ cùng vị trí vs board game chưa
         self.player.map = copy.deepcopy(boards1)
 
-        self.player.offset = 100
-        self.player.update_position(self.offset + 26 * 21, self.offset + 26 * 21)
+        self.player.offset = boards1_offset
+        self.player.update_position(self.offset[0] + 26 * 21, self.offset[1] + 26 * 21)
         self.player.appear()
 
         self.red_ghost.map = copy.deepcopy(boards1)
-        self.red_ghost.offset = 100
-        self.red_ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE)
+        self.red_ghost.offset = boards1_offset
+        self.red_ghost.update_position(self.offset[0] + CELL_SIZE, self.offset[1] + CELL_SIZE)
         self.red_ghost.target = [self.player.x_pos, self.player.y_pos]
         print((self.red_ghost.target[1], self.red_ghost.target[0]))
 
@@ -245,13 +245,13 @@ class Game:
      each ghost follows its respective search algorithm to chase Pac-Man and executes independently. '''
 
     def level_5(self): 
-        self.offset = 100
+        self.offset = boards1_offset
         self.draw_board1()
         
         self.board = copy.deepcopy(boards1)
         self.player.map = copy.deepcopy(boards1)
-        self.player.offset = 100
-        self.player.update_position(self.offset + 26 * 21, self.offset + 26 * 21)
+        self.player.offset = boards1_offset
+        self.player.update_position(self.offset[0] + 26 * 21, self.offset[1] + 26 * 21)
 
         ghosts = [
             {"ghost": self.blue_ghost, "pos": (1, 1), "move_func": self.blue_ghost.move_bfs},
@@ -264,8 +264,8 @@ class Game:
         for data in ghosts:
             ghost = data["ghost"]
             ghost.map = copy.deepcopy(boards1)
-            ghost.offset = 100
-            ghost.update_position(self.offset + CELL_SIZE * data["pos"][0], self.offset + CELL_SIZE * data["pos"][1])
+            ghost.offset = boards1_offset
+            ghost.update_position(self.offset[0] + CELL_SIZE * data["pos"][0], self.offset[1] + CELL_SIZE * data["pos"][1])
             ghost.target = [self.player.x_pos, self.player.y_pos]
             paths.append(data["move_func"]()) 
 
@@ -279,7 +279,7 @@ class Game:
             for i, data in enumerate(ghosts):
                 ghost = data["ghost"]
                 if step < len(paths[i]):
-                    ghost.update_position(paths[i][step][1] * CELL_SIZE + self.offset, paths[i][step][0] * CELL_SIZE + self.offset)
+                    ghost.update_position(paths[i][step][1] * CELL_SIZE + self.offset[0], paths[i][step][0] * CELL_SIZE + self.offset[1])
                 
                 if not ghost.check_collision():
                     ghost.draw()
@@ -295,13 +295,13 @@ class Game:
     the ghosts actively chase him. '''
     def level_6(self): 
         self.reset_player()
-        self.offset = 10
+        self.offset = (10, 10)
         temp = copy.deepcopy(boards2)
         self.draw_board2(boards2)
         self.board = temp
         self.player.map = temp
-        self.player.offset = 10
-        self.player.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE)
+        self.player.offset = (10, 10)
+        self.player.update_position(self.offset[0] + CELL_SIZE, self.offset[1] + CELL_SIZE)
         self.player.appear()
 
         ghosts = [
@@ -315,8 +315,8 @@ class Game:
             ghost = ghost_data["ghost"]
             x, y = ghost_data["pos"]
             ghost.map = self.board
-            ghost.offset = 10
-            ghost.update_position(self.offset + CELL_SIZE * x, self.offset + CELL_SIZE * y)
+            ghost.offset = (10, 10)
+            ghost.update_position(self.offset[0] + CELL_SIZE * x, self.offset[1] + CELL_SIZE * y)
             ghost.target = (self.player.x_pos, self.player.y_pos)
 
         paths = [ghost_data["method"]() for ghost_data in ghosts]
@@ -327,7 +327,7 @@ class Game:
         frame_skip = 5
         clock = pygame.time.Clock()
         fps = 60
-
+        
         while running and self.state == STATE_PLAYING:
             clock.tick(fps)
             frame_count += 1
@@ -340,7 +340,7 @@ class Game:
                     if step < len(paths[i]):
                         ghost = ghost_data["ghost"]
                         x, y = paths[i][step]
-                        ghost.update_position(y * CELL_SIZE + self.offset, x * CELL_SIZE + self.offset)
+                        ghost.update_position(y * CELL_SIZE + self.offset[0], x * CELL_SIZE + self.offset[1])
 
             for ghost_data in ghosts:
                 ghost_data["ghost"].draw()
@@ -379,15 +379,15 @@ class Game:
                             self.state = STATE_GAMEOVER
                             return
                         time.sleep(0.2)
-                        for ghost_data in ghosts:
-                            ghost_data["ghost"].update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE)
+                        self.player.update_position(self.offset[0] + CELL_SIZE, self.offset[1] + CELL_SIZE)
                     else:
                         ghost.dead = True
                         self.player.score += 50
                         self.screen.blit(BG_IMG, (ghost.x_pos, ghost.y_pos))
                         ghost.draw()
-                        time.sleep(0.1)
-                        ghost.update_position(self.offset + CELL_SIZE, self.offset + CELL_SIZE)
+                        time.sleep(0.2)
+                        x, y = ghost_data["pos"]
+                        ghost.update_position(self.offset[0] + CELL_SIZE * x, self.offset[1] + CELL_SIZE * y)
                         ghost.dead = False
 
             # Win condition check
@@ -407,8 +407,7 @@ class Game:
             self.draw_button("Exit", 1080, 30, 80, 40, COLORS["Red"], lambda: self.level_menu(), 32) 
 
             pygame.display.update()
-            pygame.time.delay(100)  # Tốc độ di chuyển
-
+            pygame.time.delay(100)  
         # self.state = STATE_HOME
    
     def draw_lives_and_score(self):
@@ -455,8 +454,8 @@ class Game:
                     sys.exit()
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_y:  
-                        self.reset_game()
                         self.state = STATE_PLAYING
+                        self.level = 6
                         return
                     elif event.key == pygame.K_n:
                         self.state = STATE_LEVEL
@@ -558,11 +557,14 @@ class Game:
         self.screen.blit(EMOJI_LOSE, (390, 360))
         self.screen.blit(EMOJI_LOSE, (760, 360))
         self.screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT // 2 - 50))
-        
+
+        score_text = font.render(f"SCORE: {self.player.score}", True, COLORS["White"])
+        self.screen.blit(score_text, (WIDTH // 2 - score_text.get_width() // 2, HEIGHT // 2 + 5))
+
         sub_font = pygame.font.SysFont("timesnewroman", 40)
         menu_text = sub_font.render("Press N to Go to Level Menu", True, COLORS["Yellow"])
 
-        menu_rect = menu_text.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 2 + 100))
+        menu_rect = menu_text.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 2 + 90))
         self.screen.blit(menu_text, menu_rect)
         
         pygame.display.flip()
@@ -586,7 +588,7 @@ class Game:
     def run(self): 
         running = True
         while running:
-            self.screen.fill("Black")
+            self.screen.fill("black")
             if(self.state == STATE_HOME):
                 self.home_screen()
             if(self.state == STATE_LEVEL):

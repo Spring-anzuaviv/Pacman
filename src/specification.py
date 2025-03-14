@@ -52,7 +52,7 @@ boards1 = [
     [1,2,2,2,1,2,2,2,3,2,2,2,2,2,2,2,2,2,1,2,2,2,1],
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 ]
-boards1_offset = ((len(boards1[0]) * GRID_SIZE)//5, (len(boards1) * GRID_SIZE)//15)
+boards1_offset = ((WIDTH - len(boards1[0]) * GRID_SIZE) // 2, (HEIGHT - len(boards1) * GRID_SIZE) // 2)
 
 #29x33
 boards2 = [

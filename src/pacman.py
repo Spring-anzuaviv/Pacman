@@ -82,11 +82,11 @@ class Player:
                         pygame.display.update(rect)
     
     def check_collision(self, x, y):
-        if((0 <= (x - self.offset) // CELL_SIZE < len(self.map[0]) and 0 <= (y - self.offset) // CELL_SIZE < len(self.map) and self.map[(y - self.offset) // CELL_SIZE ][(x - self.offset) // CELL_SIZE ] == 1) 
-           or (0 <= (x - self.offset) // CELL_SIZE < len(self.map[0]) and 0 <= (y - self.offset) // CELL_SIZE < len(self.map) and self.map[(y - self.offset) // CELL_SIZE ][(x - self.offset) // CELL_SIZE ] == 4)):
+        if((0 <= (x - self.offset[0]) // CELL_SIZE < len(self.map[0]) and 0 <= (y - self.offset[1]) // CELL_SIZE < len(self.map) and self.map[(y - self.offset[1]) // CELL_SIZE ][(x - self.offset[0]) // CELL_SIZE ] == 1) 
+           or (0 <= (x - self.offset[0]) // CELL_SIZE < len(self.map[0]) and 0 <= (y - self.offset[1]) // CELL_SIZE < len(self.map) and self.map[(y - self.offset[1]) // CELL_SIZE ][(x - self.offset[0]) // CELL_SIZE ] == 4)):
             return 0
-        elif ((0 <= (x - self.offset) // CELL_SIZE < len(self.map[0]) and 0 <= (y - self.offset) // CELL_SIZE < len(self.map)) 
-           or (0 <= (x - self.offset) // CELL_SIZE < len(self.map[0]) and 0 <= (y - self.offset) // CELL_SIZE < len(self.map))):
+        elif ((0 <= (x - self.offset[0]) // CELL_SIZE < len(self.map[0]) and 0 <= (y - self.offset[1]) // CELL_SIZE < len(self.map)) 
+           or (0 <= (x - self.offset[0]) // CELL_SIZE < len(self.map[0]) and 0 <= (y - self.offset[1]) // CELL_SIZE < len(self.map))):
             return 1
         return 0
     
@@ -140,19 +140,16 @@ class Player:
         else:
             self.draw()
 
-    def update_board_pos(self):
-        self.x_board_pos = (self.y_pos - self.offset) // CELL_SIZE
-        self.y_board_pos = (self.x_pos - self.offset) // CELL_SIZE
     
     def update_position(self, x, y):
         self.x_pos = x
         self.y_pos = y
     
     def eat_food(self):
-        x_board_pos = (self.y_pos - self.offset) // CELL_SIZE
-        y_board_pos = (self.x_pos - self.offset) // CELL_SIZE
+        x_board_pos = (self.y_pos - self.offset[1]) // CELL_SIZE
+        y_board_pos = (self.x_pos - self.offset[0]) // CELL_SIZE
         if(self.map[x_board_pos][y_board_pos] == 2):
-            self.score += self.offset
+            self.score += 10
             self.map[x_board_pos][y_board_pos] = 5
         if(self.map[x_board_pos][y_board_pos] == 3):
             self.score += 30
@@ -161,17 +158,9 @@ class Player:
             self.map[x_board_pos][y_board_pos] = 5 # No food on path
         
     
-    def get_score(self):
-        return self.score
 
-    def get_lives(self):
-        return self.lives
 
-    def check_win_condition(map):
-        for row in map:
-            if 2 in row or 3 in row:  
-                return False
-        return True
+
 
 
     

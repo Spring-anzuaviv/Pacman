@@ -33,8 +33,8 @@ class Ghost:
         print(self.path)
         end = self.target
         for x, y in self.path:
-            self.x_pos = y * CELL_SIZE + self.offset
-            self.y_pos = x * CELL_SIZE + self.offset
+            self.x_pos = y * CELL_SIZE + self.offset[0]
+            self.y_pos = x * CELL_SIZE + self.offset[1]
             self.game.screen.fill((0, 0, 0))  
             self.game.draw_board1() 
             self.game.screen.blit(PACMAN_LEFT_1, (self.target[0], self.target[1])) 
@@ -49,8 +49,8 @@ class Ghost:
     def move_bfs(self):
         print("BFS")
         start_time = time.time()
-        start = ((self.y_pos - self.offset) // GRID_SIZE, (self.x_pos - self.offset) // GRID_SIZE)
-        end = ((self.target[1] - self.offset) // GRID_SIZE, (self.target[0] - self.offset) // GRID_SIZE)
+        start = ((self.y_pos - self.offset[1]) // GRID_SIZE, (self.x_pos - self.offset[0]) // GRID_SIZE)
+        end = ((self.target[1] - self.offset[1]) // GRID_SIZE, (self.target[0] - self.offset[0]) // GRID_SIZE)
         print("Start node:", start)
         print("Goal node:", end)
 
@@ -110,8 +110,8 @@ class Ghost:
         print("DFS")
         start_time = time.time()  
         path = []
-        start = ((self.y_pos - self.offset) // GRID_SIZE, (self.x_pos - self.offset) // GRID_SIZE)
-        end = ((self.target[1] - self.offset) // GRID_SIZE, (self.target[0] - self.offset) // GRID_SIZE)
+        start = ((self.y_pos - self.offset[1]) // GRID_SIZE, (self.x_pos - self.offset[0]) // GRID_SIZE)
+        end = ((self.target[1] - self.offset[1]) // GRID_SIZE, (self.target[0] - self.offset[0]) // GRID_SIZE)
 
         stack = [(start, [start])]
         visited = set()
@@ -164,8 +164,8 @@ class Ghost:
       
         start_time = time.time()
 
-        start = ((self.y_pos - self.offset) // GRID_SIZE, (self.x_pos - self.offset) // GRID_SIZE)
-        end = ((self.target[1] - self.offset) // GRID_SIZE, (self.target[0] - self.offset) // GRID_SIZE)
+        start = ((self.y_pos - self.offset[1]) // GRID_SIZE, (self.x_pos - self.offset[0]) // GRID_SIZE)
+        end = ((self.target[1] - self.offset[1]) // GRID_SIZE, (self.target[0] - self.offset[0]) // GRID_SIZE)
 
         def g_cost (x,y):  # chi phí cho mỗi bước đi
             unit = WIDTH // GRID_SIZE + HEIGHT // GRID_SIZE - 2 # khoảng cách lớn nhất giữa 2 điểm làm đơn vị, để khi lấy distance_to_pacman/unit <= 1
@@ -224,8 +224,8 @@ class Ghost:
 
         start_time = time.time()
 
-        start = ((self.y_pos - self.offset) // GRID_SIZE, (self.x_pos - self.offset) // GRID_SIZE)
-        end = ((self.target[1] - self.offset) // GRID_SIZE, (self.target[0] - self.offset) // GRID_SIZE)
+        start = ((self.y_pos - self.offset[1]) // GRID_SIZE, (self.x_pos - self.offset[0]) // GRID_SIZE)
+        end = ((self.target[1] - self.offset[1]) // GRID_SIZE, (self.target[0] - self.offset[0]) // GRID_SIZE)
         
         def heuristic(x, y):
             return (abs(x - end[0]) + abs(y - end[1])) # Khoảng cách Manhattan
@@ -289,9 +289,6 @@ class Ghost:
         self.time, self.expanded, self.mem = elapsed_time, expanded_nodes,  memory_used
         return []
     
-    def update_next(self, x, y):
-        self.next_x_pos = x
-        self.next_y_pos = y
        
     def update_position(self, x, y):
         self.x_pos = x
