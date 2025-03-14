@@ -375,7 +375,28 @@ class Game:
 
             for ghost_data in ghosts:
                 ghost_data["ghost"].draw()
-
+            # Pacman and ghosts in same pos
+            for ghost_data in ghosts:
+                ghost = ghost_data["ghost"]
+                if (self.player.x_pos, self.player.y_pos) == (ghost.x_pos, ghost.y_pos):
+                    if not self.player.powerup:
+                        self.die_sound.play()
+                        self.player.lives -= 1
+                        if self.player.lives == 0:
+                            self.state = STATE_GAMEOVER
+                            return
+                        time.sleep(0.8)
+                        self.player.update_position(self.offset[0] + CELL_SIZE, self.offset[1] + CELL_SIZE)
+                    else:
+                        self.powerup_sound.play()
+                        ghost.dead = True
+                        self.player.score += 50
+                        self.screen.blit(BG_IMG, (ghost.x_pos, ghost.y_pos))
+                        ghost.draw()
+                        time.sleep(0.2)
+                        x, y = ghost_data["pos"]
+                        ghost.update_position(self.offset[0] + CELL_SIZE * x, self.offset[1] + CELL_SIZE * y)
+                        ghost.dead = False
             #Player move
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -399,29 +420,7 @@ class Game:
                 step = 0
 
             if step >= max_length:
-                step = 0  # Reset bước đi để vẽ lại từ đầu
-
-            for ghost_data in ghosts:
-                ghost = ghost_data["ghost"]
-                if (self.player.x_pos, self.player.y_pos) == (ghost.x_pos, ghost.y_pos):
-                    if not self.player.powerup:
-                        self.die_sound.play()
-                        self.player.lives -= 1
-                        if self.player.lives == 0:
-                            self.state = STATE_GAMEOVER
-                            return
-                        time.sleep(0.8)
-                        self.player.update_position(self.offset[0] + CELL_SIZE, self.offset[1] + CELL_SIZE)
-                    else:
-                        self.powerup_sound.play()
-                        ghost.dead = True
-                        self.player.score += 50
-                        self.screen.blit(BG_IMG, (ghost.x_pos, ghost.y_pos))
-                        ghost.draw()
-                        time.sleep(0.2)
-                        x, y = ghost_data["pos"]
-                        ghost.update_position(self.offset[0] + CELL_SIZE * x, self.offset[1] + CELL_SIZE * y)
-                        ghost.dead = False
+                step = 0  
 
             # Win condition check
             if self.check_win():
