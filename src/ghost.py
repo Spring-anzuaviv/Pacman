@@ -186,12 +186,27 @@ class Ghost:
         start_time = time.time()
 
         start = (self.x_pos // GRID_SIZE, self.y_pos // GRID_SIZE)
+        print("Start node:", start)
         end = (self.target[0] // GRID_SIZE, self.target[1] // GRID_SIZE)
+        print("Goal node: ", end)
 
         pq = [(0, start, [start])]  # (cost, position, path)
         visited = set()
-        expanded = []
+        expanded = []  
         max_pq_size = 0
+
+        def g_cost (x,y):  # chi phí cho mỗi bước đi
+            unit = WIDTH // GRID_SIZE + HEIGHT // GRID_SIZE - 2 # khoảng cách lớn nhất giữa 2 điểm làm đơn vị, để khi lấy distance_to_pacman/unit <= 1
+            base_cost = 1
+            distance_to_pacman = (abs(x - end[0]) + abs(y - end[1])) 
+            if(distance_to_pacman != 1): # nếu không phải là điểm kế cận thì kiểm tra xem có gần tường không
+                if(x - 1 < 0 or x + 1 >= WIDTH // GRID_SIZE or y - 1 < 0 or y + 1 >= HEIGHT // GRID_SIZE):
+                    return 2 #nếu gần đến tường thì chi phí sẽ cao hơn 
+            if(self.powerup == True):
+                avoid_pacman = ( 1 - distance_to_pacman/unit) # nếu pacman đang có powerup thì ma có nguy cơ bị ăn nên cần tránh xa pacman ; cách càng xa chi phí avoid càng th
+                return base_cost + avoid_pacman
+            else:
+                return  base_cost + distance_to_pacman/unit # nếu pacman không có powerup thì ma sẽ cố gắng tiếp cận
 
         while pq:
             max_pq_size = max(max_pq_size, sys.getsizeof(pq))  
@@ -214,8 +229,8 @@ class Ghost:
 
             for dx, dy in [(1, 0), (0, 1), (-1, 0), (0, -1)]:
                 next_x, next_y = x + dx, y + dy
-                if 0 <= next_x < len(self.map) and 0 <= next_y < len(self.map[0]) and self.map[next_x][next_y] != 1:
-                    new_cost = cost + 1  # Mỗi bước đi có chi phí cố định là 1
+                if 0 <= next_x < len(self.map) and 0 <= next_y < len(self.map[0]) and self.map[next_x][next_y] != 1 and (next_x, next_y) not in visited:
+                    new_cost = cost + g_cost(next_x, next_y)  # Mỗi bước đi có chi phí tuân theo hàm g_cost
                     new_path = path + [(next_x, next_y)]
                     heapq.heappush(pq, (new_cost, (next_x, next_y), new_path))
         elapsed_time = time.time() - start_time
@@ -226,13 +241,25 @@ class Ghost:
     def move_astar(self):
         print("A*")
 
-        def heuristic(x, y):
-            manhatta = (abs(x - self.target[0] // GRID_SIZE) + abs(y - self.target[1]//GRID_SIZE))
-            return manhatta
-
         start_time = time.time()
         start = (self.x_pos // GRID_SIZE, self.y_pos // GRID_SIZE)
         end = (self.target[0] // GRID_SIZE, self.target[1] // GRID_SIZE)
+
+        def heuristic(x, y):
+            return (abs(x - end[0]) + abs(y - end[1]))
+
+        def g_cost (x,y):  # chi phí cho mỗi bước đi
+            unit = WIDTH // GRID_SIZE + HEIGHT // GRID_SIZE - 2 # khoảng cách lớn nhất giữa 2 điểm làm đơn vị, để khi lấy distance_to_pacman/unit <= 1
+            base_cost = 1
+            distance_to_pacman = (abs(x - end[0]) + abs(y - end[1])) 
+            if(distance_to_pacman != 1): # nếu không phải là điểm kế cận thì kiểm tra xem có gần tường không
+                if(x - 1 < 0 or x + 1 >= WIDTH // GRID_SIZE or y - 1 < 0 or y + 1 >= HEIGHT // GRID_SIZE):
+                    return 2 #nếu gần đến tường thì chi phí sẽ cao hơn 
+            if(self.powerup == True):
+                avoid_pacman = ( 1 - distance_to_pacman/unit) # nếu pacman đang có powerup thì ma có nguy cơ bị ăn nên cần tránh xa pacman ; cách càng xa chi phí avoid càng th
+                return base_cost + avoid_pacman
+            else:
+                return  base_cost + distance_to_pacman/unit # nếu pacman không có powerup thì ma sẽ cố gắng tiếp cận
 
         g_n = {start: 0}
         f_n = {start: heuristic(*start)}
@@ -257,13 +284,13 @@ class Ghost:
 
             if (x, y) == end:
                 elapsed_time = time.time() - start_time
-                print(f"Path found! Time: {elapsed_time:.6f}s, Memory: {sys.getsizeof(visited)} bytes")
+                print(f"Path found! Time: {elapsed_time:.6f}s, Memory: {sys.getsizeof(visited)} bytes, Nodes expanded: {len(expanded)}")
                 return path  
 
             for dx, dy in [(1, 0), (0, 1), (-1, 0), (0, -1)]:
                 next_x, next_y = x + dx, y + dy
-                if 0 <= next_x < len(self.map) and 0 <= next_y < len(self.map[0]) and self.map[next_x][next_y] != 1 and (next_x, next_y) not in visited:
-                    new_g = g_n[(x, y)] + 1
+                if 0 <= next_x < len(self.map) and 0 <= next_y < len(self.map[0]) and self.map[next_x][next_y] != 1:
+                    new_g = g_n[(x, y)] + g_cost(next_x, next_y)
                     new_f = new_g + heuristic(next_x, next_y)
 
                     if (next_x, next_y) not in g_n or new_g < g_n[(next_x, next_y)]:
