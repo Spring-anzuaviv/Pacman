@@ -285,7 +285,22 @@ class Game:
                 if not ghost.check_collision():
                     ghost.draw()
                 time.sleep(0.1)
+
             # Exit
+            button_rect = pygame.Rect(20, 20, 160, 40)
+
+            pygame.draw.rect(self.screen, (200, 0, 0), button_rect) 
+            font = pygame.font.Font(None, 36)
+            text = font.render("See result", True, (255, 255, 255))  
+            self.screen.blit(text, (button_rect.x + 20, button_rect.y + 10))
+ 
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if button_rect.collidepoint(event.pos): 
+                        step = 2**31
             pygame.display.update()
             step += 1
 
