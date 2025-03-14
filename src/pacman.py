@@ -146,12 +146,17 @@ class Player:
         self.y_pos = y
     
     def eat_food(self):
+        eating_sound = pygame.mixer.Sound(EATING_SOUND)
+        powerup_sound = pygame.mixer.Sound(POWER_UP_SOUND)
         x_board_pos = (self.y_pos - self.offset[1]) // CELL_SIZE
         y_board_pos = (self.x_pos - self.offset[0]) // CELL_SIZE
         if(self.map[x_board_pos][y_board_pos] == 2):
+            eating_sound.play()
             self.score += 10
             self.map[x_board_pos][y_board_pos] = 5
         if(self.map[x_board_pos][y_board_pos] == 3):
+            eating_sound.play()
+            powerup_sound.play()
             self.score += 30
             self.powerup = True
             self.powerup_time = time.time()

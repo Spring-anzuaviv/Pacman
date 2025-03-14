@@ -139,3 +139,11 @@ GHOST_POWERUP = pygame.transform.scale(pygame.image.load(r"img/powerup.png"), (C
 
 BG_IMG = pygame.transform.scale(pygame.image.load(r"img/bg.png"), (CELL_SIZE, CELL_SIZE))
 
+#Sound
+MOUSE_CLICK_SOUND = "sound/mouse-click.wav"
+WIN_MUSIC = "sound/win-sound.mp3"
+LOSE_MUSIC = "sound/lose-sound.mp3"
+EATING_SOUND = "sound/eating-sound.mp3"
+POWER_UP_SOUND = "sound/power-up-sound.mp3"
+MENU_BG_MUSIC = "sound/menu-music.mp3"
+DIE_SOUND = "sound/die-sound.mp3"

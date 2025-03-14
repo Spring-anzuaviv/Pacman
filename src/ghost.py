@@ -54,7 +54,9 @@ class Ghost:
                     pygame.quit()
                     sys.exit()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if button_rect.collidepoint(event.pos): 
+                    if button_rect.collidepoint(event.pos):
+                        click_sound = pygame.mixer.Sound(MOUSE_CLICK_SOUND)
+                        click_sound.play() 
                         return 
 
     def check_collision(self):

@@ -33,6 +33,15 @@ class Game:
         self.blue_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, next_x = 26 , next_y = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_BLUE, direct=0, dead=False, powerup=False, board=self.board, board_offset = (0,0))
         self.orange_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, next_x = 26 , next_y = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_ORANGE, direct=0, dead=False, powerup=False, board=self.board, board_offset = (0,0))
         self.red_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, next_x = 26 , next_y = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_RED, direct=0, dead=False, powerup=False, board=self.board, board_offset = (0,0))
+        pygame.mixer.init()
+
+        self.click_sound = pygame.mixer.Sound(MOUSE_CLICK_SOUND)
+        self.win_music = pygame.mixer.Sound(WIN_MUSIC)
+        self.lose_music = pygame.mixer.Sound(LOSE_MUSIC)
+        self.menu_music = pygame.mixer.Sound(MENU_BG_MUSIC)
+        self.die_sound = pygame.mixer.Sound(DIE_SOUND)
+        self.powerup_sound = pygame.mixer.Sound(POWER_UP_SOUND)
+
 
     def draw_board1(self):
         maze_width = len(boards1[0]) * GRID_SIZE
@@ -83,14 +92,17 @@ class Game:
         
         if x < mouse_x < x + width and y < mouse_y < y + height:
             if click[0] == 1 and action:
+                self.click_sound.play()
                 action()
 
     def set_state(self, new_state, new_level):
+        # self.menu_music.stop()
         self.state = new_state
         if new_level:
             self.level = new_level  
 
     def level_menu(self):
+        self.menu_music.stop()
         self.state = STATE_LEVEL
         self.screen.fill("Black")
         self.draw_button("Level 1", 480, 150, 270, 50, COLORS["Pink"], lambda: self.set_state(STATE_PLAYING, 1), 25)
@@ -119,6 +131,7 @@ class Game:
             self.level_6()
 
     def exit_level_menu(self):
+        # self.menu_music.stop()
         self.state = "home"
         global screen_running
         screen_running = False
@@ -129,6 +142,7 @@ class Game:
         sys.exit()
 
     def home_screen(self):
+        self.menu_music.play()
         self.state = "home"
         self.screen.blit(self.background_image1, (350, 30))
         self.screen.blit(self.background_image2, (320, 380))
@@ -301,6 +315,7 @@ class Game:
                     sys.exit()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if button_rect.collidepoint(event.pos): 
+                        self.click_sound.play()
                         step = 2**31
             pygame.display.update()
             step += 1
@@ -391,13 +406,15 @@ class Game:
                 ghost = ghost_data["ghost"]
                 if (self.player.x_pos, self.player.y_pos) == (ghost.x_pos, ghost.y_pos):
                     if not self.player.powerup:
+                        self.die_sound.play()
                         self.player.lives -= 1
                         if self.player.lives == 0:
                             self.state = STATE_GAMEOVER
                             return
-                        time.sleep(0.2)
+                        time.sleep(0.8)
                         self.player.update_position(self.offset[0] + CELL_SIZE, self.offset[1] + CELL_SIZE)
                     else:
+                        self.powerup_sound.play()
                         ghost.dead = True
                         self.player.score += 50
                         self.screen.blit(BG_IMG, (ghost.x_pos, ghost.y_pos))
@@ -446,6 +463,7 @@ class Game:
         self.state = STATE_WIN
         self.screen.fill((0, 0, 0))  # Đặt nền màu đen
         font = pygame.font.Font("PressStart2P.ttf", 25)
+        self.win_music.play()
         win_text = font.render("YOU WIN!", True, (255, 255, 0))
         self.screen.blit(EMOJI_WIN_1, (425, 345))
         self.screen.blit(EMOJI_WIN_2, (725, 345))
@@ -565,6 +583,7 @@ class Game:
     def game_over(self):
         self.screen.fill((0, 0, 0))  # Đặt nền màu đen
         font = pygame.font.Font("PressStart2P.ttf", 20)
+        self.lose_music.play()
         text = font.render("GAME OVER", True, COLORS["Red"])
         self.screen.blit(EMOJI_LOSE, (390, 360))
         self.screen.blit(EMOJI_LOSE, (760, 360))
@@ -597,6 +616,7 @@ class Game:
                         return
 
     def how_to_play_screen(self):
+        self.menu_music.stop()
         self.state = STATE_HOW_TO_PLAY
         title_font = pygame.font.Font("PressStart2P.ttf", 30)  
         text_font = pygame.font.Font("PressStart2P.ttf", 18)   
@@ -639,6 +659,7 @@ class Game:
                 sys.exit()
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if button_rect.collidepoint(event.pos): 
+                    self.click_sound.play()
                     self.state = STATE_HOME
         pygame.display.flip()
 
