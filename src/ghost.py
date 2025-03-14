@@ -54,9 +54,9 @@ class Ghost:
                     pygame.quit()
                     sys.exit()
                 elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if button_rect.collidepoint(event.pos):
+                    if button_rect.collidepoint(event.pos): 
                         click_sound = pygame.mixer.Sound(MOUSE_CLICK_SOUND)
-                        click_sound.play() 
+                        click_sound.play()
                         return 
 
     def check_collision(self):
@@ -175,7 +175,6 @@ class Ghost:
         self.time, self.expanded, self.mem = elapsed_time, expanded_nodes, memory_used
         return []
     
-
     def move_ucs(self):
       
         start_time = time.time()
@@ -208,10 +207,10 @@ class Ghost:
 
             if (x, y) in visited:  # Nếu nút đã từng mở rộng thì bỏ qua
                 continue  
-            else:
-                visited.add((x, y))  # Đánh dấu đã thăm khi lấy ra khỏi hàng đợi
-                expanded.append((x, y))  
-                expanded_nodes += 1
+           
+            visited.add((x, y))  # Đánh dấu đã thăm khi lấy ra khỏi hàng đợi
+            expanded.append((x, y))  
+            expanded_nodes += 1
 
             if (x, y) == end:
                 elapsed_time = time.time() - start_time
@@ -273,15 +272,15 @@ class Ghost:
 
             if (x, y) in visited:  # Bỏ qua nếu đã thăm
                 continue
-            else:
-                visited.add((x, y))
-                expanded.append((x, y))
-                expanded_nodes += 1
+            
+            visited.add((x, y))
+            expanded.append((x, y))
+            expanded_nodes += 1
            
 
             if (x, y) == end:
                 elapsed_time = time.time() - start_time
-                memory_used = sys.getsizeof(visited)
+                memory_used = sys.getsizeof(visited) + max_pq_size
                 print(f"Path found! Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes")
                 self.path = path
                 self.time, self.expanded, self.mem = elapsed_time, expanded_nodes,  memory_used
@@ -289,8 +288,8 @@ class Ghost:
 
             for dx, dy in [(1, 0), (0, 1), (-1, 0), (0, -1)]:
                 next_x, next_y = x + dx, y + dy
-                if (0 <= next_x < len(self.map) and 0 <= next_y < len(self.map[0]) and self.map[next_x][next_y] != 1 and self.map[next_x][next_y] != 4 and (next_x, next_y) not in visited):
-                    new_g = g_n[(x, y)] + g_cost(next_x, next_y) 
+                if (0 <= next_x < len(self.map) and 0 <= next_y < len(self.map[0]) and self.map[next_x][next_y] != 1 and self.map[next_x][next_y] != 4 ):
+                    new_g = g_n[(x, y)] + g_cost(next_x, next_y)
                     new_f = new_g + heuristic(next_x, next_y)
 
                     if (next_x, next_y) not in g_n or new_g < g_n[(next_x, next_y)]:
@@ -305,7 +304,7 @@ class Ghost:
         self.time, self.expanded, self.mem = elapsed_time, expanded_nodes,  memory_used
         return []
     
-       
+
     def update_position(self, x, y):
         self.x_pos = x
         self.y_pos = y
@@ -316,4 +315,6 @@ class AStarSolver:
         self.y_pos = y_pos
         self.target = target
         self.map = map_data
+
+    # Power up: đổi ảnh, nếu bị ăn thì dead, trở về vị trí bắt dâu
  

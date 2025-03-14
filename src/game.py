@@ -10,6 +10,7 @@ class Game:
     def __init__(self): 
     # Menu screen
         pygame.init()
+        pygame.mixer.init()
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption(APP_CAPTION)
         self.font = pygame.font.Font("PressStart2P.ttf", 25)
@@ -33,15 +34,13 @@ class Game:
         self.blue_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, next_x = 26 , next_y = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_BLUE, direct=0, dead=False, powerup=False, board=self.board, board_offset = (0,0))
         self.orange_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, next_x = 26 , next_y = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_ORANGE, direct=0, dead=False, powerup=False, board=self.board, board_offset = (0,0))
         self.red_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, next_x = 26 , next_y = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_RED, direct=0, dead=False, powerup=False, board=self.board, board_offset = (0,0))
-        pygame.mixer.init()
-
+    
         self.click_sound = pygame.mixer.Sound(MOUSE_CLICK_SOUND)
         self.win_music = pygame.mixer.Sound(WIN_MUSIC)
         self.lose_music = pygame.mixer.Sound(LOSE_MUSIC)
         self.menu_music = pygame.mixer.Sound(MENU_BG_MUSIC)
         self.die_sound = pygame.mixer.Sound(DIE_SOUND)
         self.powerup_sound = pygame.mixer.Sound(POWER_UP_SOUND)
-
 
     def draw_board1(self):
         maze_width = len(boards1[0]) * GRID_SIZE
@@ -143,7 +142,6 @@ class Game:
 
     def home_screen(self):
         self.menu_music.play()
-        self.state = "home"
         self.screen.blit(self.background_image1, (350, 30))
         self.screen.blit(self.background_image2, (320, 380))
         self.draw_button("START GAME", 100, 650, 270, 60, COLORS["Green"], self.level_menu, 23)
