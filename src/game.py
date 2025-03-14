@@ -519,9 +519,9 @@ class Game:
         time_text = font1.render(f"Search time of the Blue ghost: {self.blue_ghost.time} s", True, COLORS["Blue"])
         self.screen.blit(time_text, (WIDTH // 2 - time_text.get_width() // 2, 130))
         memory_text = font1.render(f"Memory usage of the Blue ghost: {self.blue_ghost.mem} bytes", True, COLORS["Blue"])
-        self.screen.blit(memory_text, (WIDTH // 2 - memory_text.get_width() // 2, 150))
+        self.screen.blit(memory_text, (WIDTH // 2 - memory_text.get_width() // 2, 170))
         expanded_nodes_text = font1.render(f"Expanded nodes of the Blue ghost: {self.blue_ghost.expanded}", True, COLORS["Blue"])
-        self.screen.blit(expanded_nodes_text, (WIDTH // 2 - expanded_nodes_text.get_width() // 2, 170))
+        self.screen.blit(expanded_nodes_text, (WIDTH // 2 - expanded_nodes_text.get_width() // 2, 210))
 
         time_text = font1.render(f"Search time of the Pink ghost: {self.pink_ghost.time} s", True, COLORS["Pink"])
         self.screen.blit(time_text, (WIDTH // 2 - time_text.get_width() // 2, 290))
@@ -538,11 +538,11 @@ class Game:
         self.screen.blit(expanded_nodes_text, (WIDTH // 2 - expanded_nodes_text.get_width() // 2, 530))
 
         time_text = font1.render(f"Search time of the Orange ghost: {self.orange_ghost.time} s", True, COLORS["Orange"])
-        self.screen.blit(time_text, (WIDTH // 2 - time_text.get_width() // 2, 340))
+        self.screen.blit(time_text, (WIDTH // 2 - time_text.get_width() // 2, 610))
         memory_text = font1.render(f"Memory usage of the Orange ghost: {self.orange_ghost.mem} bytes", True, COLORS["Orange"])
-        self.screen.blit(memory_text, (WIDTH // 2 - memory_text.get_width() // 2, 150))
+        self.screen.blit(memory_text, (WIDTH // 2 - memory_text.get_width() // 2, 650))
         expanded_nodes_text = font1.render(f"Expanded nodes of the Orange ghost: {self.orange_ghost.expanded}", True, COLORS["Orange"])
-        self.screen.blit(expanded_nodes_text, (WIDTH // 2 - expanded_nodes_text.get_width() // 2, 170))
+        self.screen.blit(expanded_nodes_text, (WIDTH // 2 - expanded_nodes_text.get_width() // 2, 690))
 
         sub_font = pygame.font.Font("PressStart2P.ttf", 20)
         menu_text = sub_font.render("Press N to go to Level Menu", True, COLORS["Yellow"])
