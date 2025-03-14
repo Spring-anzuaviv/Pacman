@@ -31,7 +31,7 @@ class Game:
         self.player = Player(game = self, x_coord = 10 + 26, y_coord = 10 + 26, x_target= 10 +26, y_target= 10+26, speed = 2, direct="", dead=False, powerup=False, board=self.board, board_offset=(0,0))
         self.pink_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, next_x = 26 , next_y = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_PINK, direct=0, dead=False, powerup=False, board=self.board, board_offset = (0,0))
         self.blue_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, next_x = 26 , next_y = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_BLUE, direct=0, dead=False, powerup=False, board=self.board, board_offset = (0,0))
-        self.orange_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, next_x = 26 , next_y = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_YELLOW, direct=0, dead=False, powerup=False, board=self.board, board_offset = (0,0))
+        self.orange_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, next_x = 26 , next_y = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_ORANGE, direct=0, dead=False, powerup=False, board=self.board, board_offset = (0,0))
         self.red_ghost = Ghost(game = self, x_coord = 26 , y_coord = 26, next_x = 26 , next_y = 26, target = [26 * 20, 26 * 19], speed = 2, img=GHOST_RED, direct=0, dead=False, powerup=False, board=self.board, board_offset = (0,0))
 
     def draw_board1(self):
