@@ -4,6 +4,8 @@ from ghost import *
 import time
 import tracemalloc
 import pygame
+import random
+
 class Game:
     def __init__(self): 
     # Menu screen
@@ -130,7 +132,6 @@ class Game:
         self.state = "home"
         self.screen.blit(self.background_image1, (350, 30))
         self.screen.blit(self.background_image2, (320, 380))
-
         self.draw_button("Start Game", 200, 650, 270, 60, COLORS["Green"], self.level_menu, 50)
         self.draw_button("Exit", 800, 650, 270, 60, COLORS["Red"], self.exit_game, 50)
 
@@ -435,13 +436,8 @@ class Game:
         self.screen.blit(win_text, (WIDTH // 2 - win_text.get_width() // 2, HEIGHT // 2 - 50))
         
         sub_font = pygame.font.SysFont("timesnewroman", 40)
-        play_again_text = sub_font.render("Press Y to Play Again", True, COLORS["Yellow"])
         menu_text = sub_font.render("Press N to Go to Level Menu", True, COLORS["Yellow"])
-
-        play_again_rect = play_again_text.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 2 + 50))
         menu_rect = menu_text.get_rect(center=(self.screen.get_width() // 2, self.screen.get_height() // 2 + 100))
-
-        self.screen.blit(play_again_text, play_again_rect)
         self.screen.blit(menu_text, menu_rect)
         
         pygame.display.flip()
@@ -500,7 +496,7 @@ class Game:
         pygame.draw.rect(self.screen, (0, 0, 0, 150), (50, 50, WIDTH - 100, HEIGHT - 150), border_radius=20)
         font = pygame.font.SysFont("timesnewroman", 50, bold=True)
         level_text = font.render(f"Level {self.level} Complete!", True, COLORS["Yellow"])
-        self.screen.blit(level_text, (WIDTH // 2 - level_text.get_width() // 2, 70))
+        self.screen.blit(level_text, (WIDTH // 2 - level_text.get_width() // 2, 50))
 
         font1 = pygame.font.SysFont("timesnewroman", 32)
 
@@ -512,18 +508,18 @@ class Game:
         self.screen.blit(expanded_nodes_text, (WIDTH // 2 - expanded_nodes_text.get_width() // 2, 170))
 
         time_text = font1.render(f"Search time of the Pink ghost: {self.pink_ghost.time} s", True, COLORS["Pink"])
-        self.screen.blit(time_text, (WIDTH // 2 - time_text.get_width() // 2, 200))
+        self.screen.blit(time_text, (WIDTH // 2 - time_text.get_width() // 2, 290))
         memory_text = font1.render(f"Memory usage of the Pink ghost: {self.pink_ghost.mem} bytes", True, COLORS["Pink"])
-        self.screen.blit(memory_text, (WIDTH // 2 - memory_text.get_width() // 2, 220))
+        self.screen.blit(memory_text, (WIDTH // 2 - memory_text.get_width() // 2, 330))
         expanded_nodes_text = font1.render(f"Expanded nodes of the Pink ghost: {self.pink_ghost.expanded}", True, COLORS["Pink"])
-        self.screen.blit(expanded_nodes_text, (WIDTH // 2 - expanded_nodes_text.get_width() // 2, 240))
+        self.screen.blit(expanded_nodes_text, (WIDTH // 2 - expanded_nodes_text.get_width() // 2, 370))
 
         time_text = font1.render(f"Search time of the Red ghost: {self.red_ghost.time} s", True, COLORS["Red"])
-        self.screen.blit(time_text, (WIDTH // 2 - time_text.get_width() // 2, 270))
+        self.screen.blit(time_text, (WIDTH // 2 - time_text.get_width() // 2, 450))
         memory_text = font1.render(f"Memory usage of the Red ghost: {self.red_ghost.mem} bytes", True, COLORS["Red"])
-        self.screen.blit(memory_text, (WIDTH // 2 - memory_text.get_width() // 2, 290))
+        self.screen.blit(memory_text, (WIDTH // 2 - memory_text.get_width() // 2, 490))
         expanded_nodes_text = font1.render(f"Expanded nodes of the Red ghost: {self.red_ghost.expanded}", True, COLORS["Red"])
-        self.screen.blit(expanded_nodes_text, (WIDTH // 2 - expanded_nodes_text.get_width() // 2, 310))
+        self.screen.blit(expanded_nodes_text, (WIDTH // 2 - expanded_nodes_text.get_width() // 2, 530))
 
         time_text = font1.render(f"Search time of the Orange ghost: {self.orange_ghost.time} s", True, COLORS["Orange"])
         self.screen.blit(time_text, (WIDTH // 2 - time_text.get_width() // 2, 340))
@@ -534,7 +530,7 @@ class Game:
 
         sub_font = pygame.font.SysFont("timesnewroman", 40)
         menu_text = sub_font.render("Press N to go to Level Menu", True, COLORS["Yellow"])
-        menu_rect = menu_text.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 100))
+        menu_rect = menu_text.get_rect(center=(WIDTH // 2, HEIGHT - 70))
         self.screen.blit(menu_text, menu_rect)
 
         pygame.display.flip()
