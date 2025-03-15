@@ -30,7 +30,6 @@ class Ghost:
 
     def draw_path(self):
         # Pacman's position changes
-        print(self.path)
         end = self.target
         button_rect = pygame.Rect(20, 20, 190, 35)
         for x, y in self.path:
@@ -63,17 +62,15 @@ class Ghost:
         return [self.x_pos, self.y_pos] == self.target
         
     def move_bfs(self):
-        print("BFS")
+        # print("BFS")
         start_time = time.time()
         start = ((self.y_pos - self.offset[1]) // GRID_SIZE, (self.x_pos - self.offset[0]) // GRID_SIZE)
         end = ((self.target[1] - self.offset[1]) // GRID_SIZE, (self.target[0] - self.offset[0]) // GRID_SIZE)
-        print("Start node:", start)
-        print("Goal node:", end)
 
         if self.path and self.path[-1] == [self.target[0], self.target[1]]:
             elapsed_time = time.time() - start_time
             memory_used = sys.getsizeof(self.path)
-            print(f"Path already exists! Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes")
+            # print(f"Path already exists! Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes")
             return self.path
 
         queue = deque([[start]])
@@ -92,7 +89,7 @@ class Ghost:
             if (x, y) == end:
                 elapsed_time = time.time() - start_time
                 memory_used = sys.getsizeof(queue) + sys.getsizeof(visited)
-                print(f"Path found! Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes, Nodes: {expanded_nodes}")
+                # print(f"Path found! Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes, Nodes: {expanded_nodes}")
                 self.path = path
                 self.time, self.expanded, self.mem = elapsed_time, expanded_nodes, memory_used
                 return path
@@ -107,7 +104,7 @@ class Ghost:
                     if (next_x, next_y) == end:
                         elapsed_time = time.time() - start_time
                         memory_used = sys.getsizeof(queue) + sys.getsizeof(visited)
-                        print(f"Goal reached! Stopping early. Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes")
+                        # print(f"Goal reached! Stopping early. Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes")
                         self.path = new_path
                         self.time, self.expanded, self.mem = elapsed_time, expanded_nodes, memory_used
                         return new_path
@@ -117,13 +114,13 @@ class Ghost:
 
         elapsed_time = time.time() - start_time
         memory_used = sys.getsizeof(queue) + sys.getsizeof(visited)
-        print(f"No path found. Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes, Nodes: {expanded_nodes}")
+        # print(f"No path found. Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes, Nodes: {expanded_nodes}")
         self.path = []
         self.time, self.expanded, self.mem = elapsed_time, expanded_nodes, memory_used
         return []
 
     def move_dfs(self):
-        print("DFS")
+        # print("DFS")
         start_time = time.time()  
         path = []
         start = ((self.y_pos - self.offset[1]) // GRID_SIZE, (self.x_pos - self.offset[0]) // GRID_SIZE)
@@ -146,7 +143,7 @@ class Ghost:
             if (x, y) == end:
                 elapsed_time = time.time() - start_time  
                 memory_used = sys.getsizeof(visited) + max_stack_size  
-                print(f"Path found! Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes, Nodes expanded: {len(expanded)}")
+                # print(f"Path found! Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes, Nodes expanded: {len(expanded)}")
                 self.path = path
                 self.time, self.expanded, self.mem = elapsed_time, expanded_nodes,  memory_used
                 return path
@@ -162,7 +159,7 @@ class Ghost:
                     if (next_x, next_y) == end:
                         elapsed_time = time.time() - start_time
                         memory_used = sys.getsizeof(visited) + max_stack_size
-                        print(f"Goal generated! Early stopping. Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes, Nodes expanded: {len(expanded)}")
+                        # print(f"Goal generated! Early stopping. Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes, Nodes expanded: {len(expanded)}")
                         self.path = path
                         self.time, self.expanded, self.mem = elapsed_time, expanded_nodes,  memory_used
                         return new_path
@@ -171,7 +168,7 @@ class Ghost:
 
         elapsed_time = time.time() - start_time
         memory_used = sys.getsizeof(visited) + max_stack_size
-        print(f"No path found. Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes, Nodes expanded: {len(expanded)}")
+        # print(f"No path found. Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes, Nodes expanded: {len(expanded)}")
         self.time, self.expanded, self.mem = elapsed_time, expanded_nodes, memory_used
         return []
     
@@ -215,7 +212,7 @@ class Ghost:
             if (x, y) == end:
                 elapsed_time = time.time() - start_time
                 memory_used = sys.getsizeof(visited) + max_pq_size
-                print(f"Path found! Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes, Nodes expanded: {len(expanded)}")
+                # print(f"Path found! Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes, Nodes expanded: {len(expanded)}")
                 self.path = path
                 self.time, self.expanded, self.mem = elapsed_time, expanded_nodes,  memory_used
                 return path
@@ -231,12 +228,11 @@ class Ghost:
         memory_used = sys.getsizeof(visited) + max_pq_size
         self.time, self.expanded, self.mem = elapsed_time, expanded_nodes,  memory_used
 
-        print(f"No path found. Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes, Nodes expanded: {len(expanded)}")
+        # print(f"No path found. Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes, Nodes expanded: {len(expanded)}")
         return []
 
     def move_astar(self):
-        print("A*")
-
+        # print("A*")
         start_time = time.time()
 
         start = ((self.y_pos - self.offset[1]) // GRID_SIZE, (self.x_pos - self.offset[0]) // GRID_SIZE)
@@ -281,7 +277,7 @@ class Ghost:
             if (x, y) == end:
                 elapsed_time = time.time() - start_time
                 memory_used = sys.getsizeof(visited) + max_pq_size
-                print(f"Path found! Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes")
+                # print(f"Path found! Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes")
                 self.path = path
                 self.time, self.expanded, self.mem = elapsed_time, expanded_nodes,  memory_used
                 return path
@@ -300,7 +296,7 @@ class Ghost:
 
         elapsed_time = time.time() - start_time
         memory_used = sys.getsizeof(visited) + max_pq_size
-        print(f"No path found. Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes, Nodes expanded: {len(expanded)}")
+        # print(f"No path found. Time: {elapsed_time:.6f}s, Memory: {memory_used} bytes, Nodes expanded: {len(expanded)}")
         self.time, self.expanded, self.mem = elapsed_time, expanded_nodes,  memory_used
         return []
     

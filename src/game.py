@@ -183,7 +183,7 @@ class Game:
         self.blue_ghost.offset = boards1_offset
         self.blue_ghost.update_position(self.offset[0] + CELL_SIZE * 1, self.offset[1] + CELL_SIZE * 1)
         self.blue_ghost.target = [self.player.x_pos, self.player.y_pos]
-        print((self.blue_ghost.target[1], self.blue_ghost.target[0]))
+        # print((self.blue_ghost.target[1], self.blue_ghost.target[0]))
 
         path = self.blue_ghost.move_bfs()
         self.search_time, self.expanded_nodes, self.memory_usage = self.blue_ghost.time, self.blue_ghost.expanded, self.blue_ghost.mem
@@ -227,7 +227,7 @@ class Game:
         self.orange_ghost.offset = boards1_offset
         self.orange_ghost.update_position(self.offset[0] + CELL_SIZE, self.offset[1] + CELL_SIZE)
         self.orange_ghost.target = [self.player.x_pos, self.player.y_pos]
-        print((self.orange_ghost.target[1], self.orange_ghost.target[0]))
+        # print((self.orange_ghost.target[1], self.orange_ghost.target[0]))
 
         path = self.orange_ghost.move_ucs()
         self.search_time, self.expanded_nodes, self.memory_usage = self.orange_ghost.time, self.orange_ghost.expanded, self.orange_ghost.mem
@@ -249,7 +249,7 @@ class Game:
         self.red_ghost.offset = boards1_offset
         self.red_ghost.update_position(self.offset[0] + CELL_SIZE, self.offset[1] + CELL_SIZE)
         self.red_ghost.target = [self.player.x_pos, self.player.y_pos]
-        print((self.red_ghost.target[1], self.red_ghost.target[0]))
+        # print((self.red_ghost.target[1], self.red_ghost.target[0]))
 
         path = self.red_ghost.move_astar()
         self.search_time, self.expanded_nodes, self.memory_usage = self.red_ghost.time, self.red_ghost.expanded, self.red_ghost.mem
