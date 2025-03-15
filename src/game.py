@@ -285,29 +285,41 @@ class Game:
             paths.append(data["move_func"]()) 
 
         max_length = max(len(path) for path in paths)
-        step = 0  
+        steps = [0] * len(ghosts)  
 
-        while step < max_length:
-            self.screen.fill("black")  
-            self.draw_board1()  
-            self.screen.blit(PACMAN_LEFT_1, (self.blue_ghost.target[0], self.blue_ghost.target[1])) 
+        while any(steps[i] < len(paths[i]) for i in range(len(ghosts))):  
+            self.screen.fill("black")
+            self.draw_board1()
+            self.screen.blit(PACMAN_LEFT_1, (self.blue_ghost.target[0], self.blue_ghost.target[1]))
+
+            occupied_positions = set()  
+
             for i, data in enumerate(ghosts):
                 ghost = data["ghost"]
-                if step < len(paths[i]):
-                    ghost.update_position(paths[i][step][1] * CELL_SIZE + self.offset[0], paths[i][step][0] * CELL_SIZE + self.offset[1])
                 
+                if steps[i] < len(paths[i]):  
+                    new_x = paths[i][steps[i]][1] * CELL_SIZE + self.offset[0]
+                    new_y = paths[i][steps[i]][0] * CELL_SIZE + self.offset[1]
+
+                    if (new_x, new_y) not in occupied_positions:
+                        ghost.update_position(new_x, new_y)
+                        occupied_positions.add((new_x, new_y))  
+                        steps[i] += 1  
+                    else:
+                        occupied_positions.add((ghost.x_pos, ghost.y_pos))
+
                 if not ghost.check_collision():
                     ghost.draw()
-                time.sleep(0.1)
 
-            # Exit
+            time.sleep(0.2)
+
+            # Exit button
             button_rect = pygame.Rect(20, 20, 190, 35)
-
-            pygame.draw.rect(self.screen, (200, 0, 0), button_rect) 
+            pygame.draw.rect(self.screen, (200, 0, 0), button_rect)
             font = pygame.font.Font("PressStart2P.ttf", 15)
-            text = font.render("See result", True, (0, 0, 0))  
+            text = font.render("See result", True, (0, 0, 0))
             self.screen.blit(text, (button_rect.x + 20, button_rect.y + 10))
- 
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -315,10 +327,12 @@ class Game:
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if button_rect.collidepoint(event.pos): 
                         self.click_sound.play()
-                        step = 2**31
-            pygame.display.update()
-            step += 1
+                        steps[0] = 2**31
+                        steps[1] = 2**31
+                        steps[2] = 2**31
+                        steps[3] = 2**31
 
+            pygame.display.update()
         self.state = STATE_RESULT_4
 
 
@@ -358,7 +372,7 @@ class Game:
         frame_skip = 5
         clock = pygame.time.Clock()
         fps = 60
-        
+
         while running and self.state == STATE_PLAYING:
             clock.tick(fps)
             frame_count += 1
@@ -366,15 +380,22 @@ class Game:
             self.draw_board2(temp)  
 
             if frame_count % frame_skip == 0:
+                occupied_positions = set()  
                 step += 1
                 for i, ghost_data in enumerate(ghosts):
                     if step < len(paths[i]):
                         ghost = ghost_data["ghost"]
                         x, y = paths[i][step]
-                        ghost.update_position(y * CELL_SIZE + self.offset[0], x * CELL_SIZE + self.offset[1])
+                        if((x, y) not in occupied_positions):
+                            ghost.update_position(y * CELL_SIZE + self.offset[0], x * CELL_SIZE + self.offset[1])
+                            occupied_positions.add((x, y))
+                        else:
+                            # Back to initial pos
+                            ghost.update_position(ghosts["pos"][1] * CELL_SIZE + self.offset[0], ghosts["pos"][0] * CELL_SIZE + self.offset[1])
 
             for ghost_data in ghosts:
                 ghost_data["ghost"].draw()
+
             # Pacman and ghosts in same pos
             for ghost_data in ghosts:
                 ghost = ghost_data["ghost"]

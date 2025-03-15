@@ -48,7 +48,7 @@ class Ghost:
             self.game.screen.blit(text, (button_rect.x + 20, button_rect.y + 10))
 
             pygame.display.update()
-            time.sleep(0.5)  
+            time.sleep(0.2)  
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
